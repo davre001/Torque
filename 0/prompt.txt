@@ -1,0 +1,49 @@
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- package-lock.json: package-lock.json
+- package.json: package.json
+
+## My request:
+Update `evidence/README.md` to record that Entire hooks are approved, commit that document, and verify the Entire checkpoint.
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- package-lock.json: package-lock.json
+- package.json: package.json
+
+## My request:
+WHY DID SESSION 1 FAIL ?
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- package-lock.json: package-lock.json
+- package.json: package.json
+
+## My request:
+I MEAN THE HOOK ; SESSION 1 FAILED
+
+---
+
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- .env: .env
+- package-lock.json: package-lock.json
+- package.json: package.json
+
+## My request:
+Torque’s frontend runs with `npm run dev`. Python neatlogs SDK is installed in `.venv`; local Doctor passed, and its synthetic trace appeared in the dashboard. The backend agent is not implemented yet. Entire hooks are enabled and approved. Checkpoint `01M4K5QBAVZ507XR140XFW7586` and GitHub main are synced. First update `evidence/README.md` with the checkpoint ID, then inspect the project plans before implementing the backend. Never display or commit `.env`. &#x20;
+
+Update `evidence/README.md`: replace the pending checkpoint note with ID `01M4K5QBAVZ507XR140XFW7586` and link `https://entire.io/gh/davre001/Torque/commit/c081469dacf1dfa4ac8e291f19a3a4142244f94b`. Commit and sync the change.
