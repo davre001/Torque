@@ -1,0 +1,12 @@
+{
+  "name": "torque",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Torque - Multi-agent PR automation",
+  "scripts": {
+    "dev": "npm --prefix frontend/ui run dev",
+    "build": "npm --prefix frontend/ui run build",
+    "start": "npm --prefix frontend/ui run start",
+    "lint": "npm --prefix frontend/ui run lint"
+  }
+}

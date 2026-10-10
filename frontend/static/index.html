@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Torque — Turn Issues Into Pull Requests</title>
+  <meta name="description" content="Torque is an autonomous agent that turns a GitHub issue into a verified pull request — and recovers when it fails." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background grid -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <div class="app-shell">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 8 L16 16 L22 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
+        </svg>
+        <span class="logo-text">Torque</span>
+      </div>
+      <nav class="header-nav" aria-label="Status indicators">
+        <span class="nav-chip" id="agent-chip" aria-live="polite">
+          <span class="chip-dot" id="chip-dot"></span>
+          <span id="chip-label">Idle</span>
+        </span>
+      </nav>
+    </header>
+
+    <!-- Hero input section -->
+    <main class="main">
+      <section class="hero" aria-labelledby="hero-heading">
+        <p class="hero-eyebrow">Multi-agent PR automation</p>
+        <h1 class="hero-heading" id="hero-heading">
+          Turn a GitHub issue<br />into a verified pull request.
+        </h1>
+        <p class="hero-sub">Paste an issue. Torque investigates, fixes, tests, and opens a PR — recovering from failure with its own trace.</p>
+
+        <!-- Input form -->
+        <form class="run-form" id="run-form" role="form" aria-label="Start a Torque run">
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 3.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 9c-1.67 0-3.14-.85-4-2.15.02-1.32 2.67-2.05 4-2.05s3.98.73 4 2.05c-.86 1.3-2.33 2.15-4 2.15z" fill="currentColor"/>
+            </svg>
+            <input
+              type="url"
+              id="issue-url"
+              name="issue_url"
+              class="url-input"
+              placeholder="https://github.com/org/repo/issues/42"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="GitHub issue URL"
+              required
+            />
+            <button type="submit" class="run-btn" id="run-btn" aria-label="Run Torque">
+              <span class="btn-text">Run Torque</span>
+              <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="form-hint" id="form-error" role="alert" aria-live="assertive"></p>
+        </form>
+      </section>
+
+      <!-- Run dashboard — hidden until a run starts -->
+      <section class="dashboard" id="dashboard" aria-label="Run status dashboard" hidden>
+
+        <!-- Status bar -->
+        <div class="status-bar" id="status-bar">
+          <div class="status-left">
+            <span class="status-badge" id="status-badge" data-status="queued">queued</span>
+            <span class="status-issue" id="status-issue"></span>
+          </div>
+          <div class="status-right">
+            <span class="attempt-counter" id="attempt-counter"></span>
+          </div>
+        </div>
+
+        <!-- Pipeline -->
+        <div class="pipeline-section">
+          <h2 class="section-label">Pipeline</h2>
+          <ol class="pipeline" id="pipeline" aria-label="Agent pipeline">
+            <li class="pipeline-step" id="step-investigator" data-step="investigator">
+              <div class="step-icon-wrap">
+                <svg class="step-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M13 13l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="step-body">
+                <span class="step-name">Investigator</span>
+                <span class="step-desc" id="desc-investigator">Reads the issue, searches codebase via Entire</span>
+              </div>
+              <span class="step-status-icon" aria-hidden="true"></span>
+            </li>
+            <li class="pipeline-connector" aria-hidden="true"></li>
+            <li class="pipeline-step" id="step-implementer" data-step="implementer">
+              <div class="step-icon-wrap">
+                <svg class="step-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M5 8l-3 2 3 2M15 8l3 2-3 2M11 5l-2 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="step-body">
+                <span class="step-name">Implementer</span>
+                <span class="step-desc" id="desc-implementer">Edits code in an isolated worktree, runs tests</span>
+              </div>
+              <span class="step-status-icon" aria-hidden="true"></span>
+            </li>
+            <li class="pipeline-connector" aria-hidden="true"></li>
+            <li class="pipeline-step" id="step-recovery" data-step="recovery">
+              <div class="step-icon-wrap">
+                <svg class="step-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M4 10a6 6 0 1 1 1 3.46" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M4 14v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="step-body">
+                <span class="step-name">Recovery</span>
+                <span class="step-desc" id="desc-recovery">Reads neatlogs failure trace, changes strategy</span>
+              </div>
+              <span class="step-status-icon" aria-hidden="true"></span>
+            </li>
+            <li class="pipeline-connector" aria-hidden="true"></li>
+            <li class="pipeline-step" id="step-verifier" data-step="verifier">
+              <div class="step-icon-wrap">
+                <svg class="step-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M5 10l4 4 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </div>
+              <div class="step-body">
+                <span class="step-name">Verifier</span>
+                <span class="step-desc" id="desc-verifier">Checks diff and tests against acceptance criteria</span>
+              </div>
+              <span class="step-status-icon" aria-hidden="true"></span>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Attempts -->
+        <div class="attempts-section" id="attempts-section">
+          <h2 class="section-label">Attempts</h2>
+          <ul class="attempts-list" id="attempts-list" aria-label="Run attempts" aria-live="polite">
+            <li class="attempt-empty" id="attempt-empty">No attempts yet</li>
+          </ul>
+        </div>
+
+        <!-- Result -->
+        <div class="result-section" id="result-section" hidden>
+          <h2 class="section-label">Result</h2>
+          <div class="result-card" id="result-card">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Agent explanation cards (shown when idle) -->
+      <section class="agents-overview" id="agents-overview" aria-label="Agent overview">
+        <h2 class="section-label">How it works</h2>
+        <div class="agent-cards">
+          <article class="agent-card" aria-label="Investigator agent">
+            <div class="agent-card-num">01</div>
+            <h3 class="agent-card-title">Investigator</h3>
+            <p class="agent-card-desc">Reads the issue and uses Entire for precise code context, producing a structured diagnosis and plan.</p>
+          </article>
+          <article class="agent-card" aria-label="Implementer agent">
+            <div class="agent-card-num">02</div>
+            <h3 class="agent-card-title">Implementer</h3>
+            <p class="agent-card-desc">Makes changes in an isolated worktree and runs the real test suite. Test result is a hard signal.</p>
+          </article>
+          <article class="agent-card" aria-label="Recovery agent">
+            <div class="agent-card-num">03</div>
+            <h3 class="agent-card-title">Recovery</h3>
+            <p class="agent-card-desc">Inspects the failed neatlogs trace and decides a new strategy before retrying up to the attempt limit.</p>
+          </article>
+          <article class="agent-card" aria-label="Verifier agent">
+            <div class="agent-card-num">04</div>
+            <h3 class="agent-card-title">Verifier</h3>
+            <p class="agent-card-desc">Checks the diff and test output against the issue's acceptance criteria before opening the PR.</p>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Built for <strong>neatHack</strong> · October 2026</span>
+      <span class="footer-sep">·</span>
+      <span>neatlogs · Entire · cfo.ai</span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
