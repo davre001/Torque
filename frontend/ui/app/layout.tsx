@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${spaceMono.variable} dark`}
+      className={`${spaceGrotesk.variable} ${spaceMono.variable}`}
     >
-      <body className="min-h-screen bg-[#0D1117] text-[#E6EDF3] antialiased">
+      <body className="min-h-screen bg-white text-zinc-950 antialiased selection:bg-black selection:text-white">
         {children}
       </body>
     </html>

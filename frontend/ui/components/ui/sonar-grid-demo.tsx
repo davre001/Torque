@@ -11,10 +11,10 @@ const settings = {
   pingEvery: 2.4,
   interactive: true,
   spacing: 26,
-  baseOpacity: 0.28,
-  useThemeColor: true,
-  color: "#F0813A",
-  eyebrow: "Now in public beta",
+  baseOpacity: 0.18,
+  useThemeColor: false,
+  color: "#000000",
+  eyebrow: "Autonomous Recovery Agent",
   headline: "Signals, not noise.",
   subline: "Every ping is a real event from your infrastructure. Tap anywhere to send one.",
 }
@@ -41,30 +41,32 @@ export default function Demo(props: Partial<typeof settings>) {
       interactive={s.interactive}
       spacing={s.spacing}
       baseOpacity={s.baseOpacity}
-      color={s.useThemeColor ? undefined : s.color}
+      color={s.color}
       pingArea={[0.22, 0.18, 0.78, 0.82]}
-      className="bg-background flex min-h-[max(560px,100svh)] w-full flex-col"
+      className="bg-white text-zinc-950 flex min-h-[max(560px,100svh)] w-full flex-col"
     >
+      {/* Soft wash in white */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_34%_30%_at_50%_50%,var(--color-background)_0%,transparent_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(255,255,255,0.92)_0%,transparent_100%)]"
       />
+
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-8 py-24 text-center">
         <div className="flex max-w-2xl flex-col items-center">
           <motion.p
             {...enter(0)}
-            className="text-muted-foreground border-border mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium"
+            className="glass-pill mb-5 inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-medium text-zinc-800"
           >
-            <span aria-hidden="true" className="bg-primary size-1.5 rounded-full" />
+            <span aria-hidden="true" className="bg-black size-1.5 rounded-full animate-pulse" />
             {s.eyebrow}
           </motion.p>
           <motion.h1
             {...enter(0.08)}
-            className="text-foreground text-5xl font-semibold tracking-tight text-balance sm:text-6xl md:text-7xl"
+            className="text-black text-5xl font-semibold tracking-tight text-balance sm:text-6xl md:text-7xl"
           >
             {s.headline}
           </motion.h1>
-          <motion.p {...enter(0.16)} className="text-muted-foreground mt-6 max-w-xl text-base text-pretty sm:text-lg">
+          <motion.p {...enter(0.16)} className="text-zinc-600 mt-6 max-w-xl text-base text-pretty sm:text-lg">
             {s.subline}
           </motion.p>
           <motion.div {...enter(0.24)} className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -72,7 +74,7 @@ export default function Demo(props: Partial<typeof settings>) {
               type="button"
               id="cta-primary"
               data-slot="cta-primary"
-              className="group bg-primary text-primary-foreground focus-visible:ring-ring/50 inline-flex h-11 cursor-pointer items-center gap-2 rounded-full px-6 text-sm font-medium shadow-sm transition-[transform,box-shadow] duration-200 outline-none hover:shadow-md focus-visible:ring-[3px] active:scale-[0.98]"
+              className="glass-btn-primary inline-flex h-11 cursor-pointer items-center gap-2 rounded-full px-6 text-sm font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-black/20"
             >
               Start listening
               <ArrowRight
@@ -83,7 +85,7 @@ export default function Demo(props: Partial<typeof settings>) {
             <a
               href="#docs"
               data-slot="cta-secondary"
-              className="bg-background/70 text-foreground border-border hover:bg-accent focus-visible:ring-ring/50 inline-flex h-11 cursor-pointer items-center rounded-full border px-6 text-sm font-medium backdrop-blur transition-[background-color,transform] duration-200 outline-none focus-visible:ring-[3px] active:scale-[0.98]"
+              className="glass-btn-secondary inline-flex h-11 cursor-pointer items-center rounded-full px-6 text-sm font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-black/20"
             >
               Read the docs
             </a>
