@@ -19,7 +19,8 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 
 ## cfo.ai
 
-- Pending: export a business plan covering pricing, inference and infrastructure costs, revenue, and runway into `business/` and link it here.
+- Created the financial model with cfo.ai: [business plan and assumptions](../business/README.md), [spreadsheet export](../business/torque-financial-plan.xlsx), and [dashboard screenshots](../business/screenshots/).
+- Covers proposed pricing, inference and infrastructure costs, revenue scenarios, cash funding gaps, runway, and sensitivity. Forecasts are assumptions rather than actual business results; the business README records a discrepancy between the narrative and the exported conservative cash-flow result.
 
 ## Demo and submission
 
