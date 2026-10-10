@@ -1,0 +1,74 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M1VKSCYJNYRS2DND4BBEPZ",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T23:20:27.6876645Z",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "save_step_count": 1,
+  "files_touched": [
+    "business/README.md",
+    "business/screenshots/monthly-financial-plan.png",
+    "business/screenshots/torque-assumptions.png",
+    "business/screenshots/torque-plan-summary.png",
+    "business/screenshots/unit-economics-and-sensitivity.png",
+    "business/torque-financial-plan.xlsx",
+    "evidence/README.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "89a4da630891",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 385487,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 11454848,
+    "output_tokens": 16421,
+    "api_call_count": 134,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 12
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T23:20:27.4261126Z",
+    "agent_lines": 65,
+    "agent_removed": 1,
+    "human_added": 0,
+    "human_modified": 28,
+    "human_removed": 0,
+    "total_committed": 93,
+    "total_lines_changed": 94,
+    "agent_percentage": 70.2127659574468,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 7114,
+      "user_lines_removed": 7010,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".codex/hooks.json": 88,
+        ".gitignore": 4,
+        "frontend/ui/package-lock.json": 7010,
+        "package-lock.json": 12
+      },
+      "user_removed_per_file": {
+        "frontend/ui/package-lock.json": 7010
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 88,
+      "user_lines_removed": 0,
+      "agent_lines_added": 109,
+      "agent_lines_removed": 29,
+      "user_added_per_file": {
+        ".codex/hooks.json": 88
+      }
+    }
+  ]
+}
