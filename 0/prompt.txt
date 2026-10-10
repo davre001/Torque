@@ -1,0 +1,9 @@
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- package-lock.json: package-lock.json
+- package.json: package.json
+
+## My request:
+Update `evidence/README.md` to record that Entire hooks are approved, commit that document, and verify the Entire checkpoint.
