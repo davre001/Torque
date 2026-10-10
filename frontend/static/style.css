@@ -4,22 +4,22 @@
    Font:    Space Grotesk + Space Mono
    ────────────────────────────────────────────── */
 
-/* ── Tokens ── */
+/* ── Tokens (Monochrome & Glassmorphism) ── */
 :root {
-  --navy:        #0D1117;
-  --navy-1:      #161B22;
-  --navy-2:      #1C2333;
-  --navy-3:      #242B3C;
-  --amber:       #F0813A;
-  --amber-dim:   #c86228;
-  --amber-glow:  rgba(240, 129, 58, 0.15);
-  --amber-glow2: rgba(240, 129, 58, 0.06);
+  --navy:        #ffffff;
+  --navy-1:      rgba(255, 255, 255, 0.75);
+  --navy-2:      rgba(255, 255, 255, 0.9);
+  --navy-3:      #f4f4f5;
+  --amber:       #000000;
+  --amber-dim:   #27272a;
+  --amber-glow:  rgba(0, 0, 0, 0.08);
+  --amber-glow2: rgba(0, 0, 0, 0.04);
 
-  --text-primary:   #E6EDF3;
-  --text-secondary: #8B949E;
-  --text-muted:     #484F58;
-  --border:         rgba(255,255,255,0.07);
-  --border-active:  rgba(240, 129, 58, 0.4);
+  --text-primary:   #09090b;
+  --text-secondary: #52525b;
+  --text-muted:     #71717a;
+  --border:         rgba(0, 0, 0, 0.08);
+  --border-active:  rgba(0, 0, 0, 0.35);
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -61,8 +61,8 @@ body {
   inset: 0;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
 }
@@ -74,7 +74,7 @@ body {
   transform: translateX(-50%);
   width: 800px;
   height: 600px;
-  background: radial-gradient(ellipse at center, rgba(240, 129, 58, 0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
   z-index: 0;
   pointer-events: none;
   animation: glowPulse 6s ease-in-out infinite;
