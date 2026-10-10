@@ -58,7 +58,10 @@ export function Header() {
 					},
 				)}
 			>
-				<WordmarkIcon className="h-4" />
+				<div className="flex items-center gap-2">
+					<img src="/logo.png" alt="Torque Logo" className="h-6 w-6 object-contain" />
+					<span className="font-bold tracking-tight text-black text-sm">Torque</span>
+				</div>
 				<div className="hidden items-center gap-2 md:flex">
 					{links.map((link, i) => (
 						<a key={i} className={buttonVariants({ variant: 'ghost' })} href={link.href}>

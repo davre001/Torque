@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: "Torque — Turn Issues Into Pull Requests",
   description:
     "An autonomous multi-agent system that turns a GitHub issue into a verified pull request — and recovers when it fails.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

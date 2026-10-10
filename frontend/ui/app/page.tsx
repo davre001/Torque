@@ -295,25 +295,11 @@ export default function TorquePage() {
         >
           {/* Brand Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white shadow-sm">
-              <svg
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                aria-hidden="true"
-              >
-                <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2.5" />
-                <path
-                  d="M16 8 L16 16 L22 20"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="16" cy="16" r="2.5" fill="currentColor" />
-              </svg>
-            </div>
+            <img
+              src="/logo.png"
+              alt="Torque Logo"
+              className="h-8 w-8 object-contain transition-transform duration-300 hover:rotate-12 cursor-pointer"
+            />
             <div className="flex items-center gap-1.5">
               <span className="text-base font-bold tracking-tight text-black">Torque</span>
               <span className="glass-pill rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-zinc-700 font-semibold">
@@ -972,7 +958,8 @@ export default function TorquePage() {
       {/* Glassmorphic Footer */}
       <footer className="glass-header w-full py-6 mt-auto">
         <div className="mx-auto flex max-w-7xl flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-8 text-xs text-zinc-500">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="Torque Logo" className="h-5 w-5 object-contain" />
             <span>Built for neatHack · October 2026</span>
           </div>
           <div className="flex items-center gap-4 font-mono font-medium text-zinc-700">
