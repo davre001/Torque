@@ -18,6 +18,11 @@ import {
 } from "lucide-react";
 import { SonarGrid } from "@/components/ui/sonar-grid";
 import Demo from "@/components/ui/sonar-grid-demo";
+import HeaderDemo from "@/components/ui/header-2-demo";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
+import { useScroll } from "@/components/ui/use-scroll";
+import { cn } from "@/lib/utils";
 
 type AgentStatus =
   | "idle"
@@ -52,7 +57,10 @@ const PRESET_ISSUES = [
 ];
 
 export default function TorquePage() {
-  const [viewMode, setViewMode] = React.useState<"torque" | "demo">("torque");
+  const [viewMode, setViewMode] = React.useState<"torque" | "sonar-demo" | "header-demo">("torque");
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const scrolled = useScroll(12);
+
   const [issueUrl, setIssueUrl] = React.useState(
     "https://github.com/tiangolo/fastapi/issues/4821"
   );
@@ -63,8 +71,9 @@ export default function TorquePage() {
   const [prUrl, setPrUrl] = React.useState<string | null>(null);
   const [planSummary, setPlanSummary] = React.useState<string | null>(null);
   const timerRef = React.useRef<NodeJS.Timeout[]>([]);
+  const inputSectionRef = React.useRef<HTMLDivElement | null>(null);
 
-  // Check URL query parameters for ?demo=1 on initial load (as specified in implementation.md)
+  // Check URL query parameters for ?demo=1 on initial load (implementation.md spec)
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -73,6 +82,18 @@ export default function TorquePage() {
       }
     }
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  React.useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const clearTimers = () => {
     timerRef.current.forEach((t) => clearTimeout(t));
@@ -227,6 +248,10 @@ export default function TorquePage() {
     if (status !== "idle") resetRun();
   };
 
+  const scrollToInput = () => {
+    inputSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <SonarGrid
       id="torque-viewport"
@@ -248,17 +273,34 @@ export default function TorquePage() {
         className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.6)_100%)]"
       />
 
-      {/* Glassmorphic Header */}
-      <header className="glass-header sticky top-0 z-40 w-full">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
+      {/* Floating Island Header with Scroll Effect & Glassmorphism */}
+      <header
+        className={cn(
+          "sticky top-0 z-50 mx-auto w-full max-w-5xl border-b border-transparent md:rounded-2xl md:border md:transition-all md:duration-300 md:ease-out",
+          {
+            "bg-white/80 supports-[backdrop-filter]:bg-white/65 border-black/10 backdrop-blur-xl md:top-4 md:max-w-4xl md:shadow-lg shadow-black/5":
+              scrolled && !mobileMenuOpen,
+            "bg-white/95 border-b border-black/10": mobileMenuOpen,
+            "bg-white/40 border-b border-black/[0.06]": !scrolled && !mobileMenuOpen,
+          }
+        )}
+      >
+        <nav
+          className={cn(
+            "flex h-16 w-full items-center justify-between px-4 sm:px-6 md:transition-all md:duration-300 md:ease-out",
+            {
+              "md:h-13 md:px-4": scrolled,
+            }
+          )}
+        >
           {/* Brand Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-black text-white shadow-md shadow-black/15">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white shadow-sm">
               <svg
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-4 w-4"
                 aria-hidden="true"
               >
                 <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2.5" />
@@ -272,48 +314,66 @@ export default function TorquePage() {
                 <circle cx="16" cy="16" r="2.5" fill="currentColor" />
               </svg>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-bold tracking-tight text-black">Torque</span>
-              <span className="glass-pill rounded-full px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-zinc-700 font-semibold">
+            <div className="flex items-center gap-1.5">
+              <span className="text-base font-bold tracking-tight text-black">Torque</span>
+              <span className="glass-pill rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-zinc-700 font-semibold">
                 neatHack
               </span>
             </div>
           </div>
 
-          {/* Navigation Controls */}
-          <div className="flex items-center gap-3">
-            {/* View toggle */}
-            <div className="glass-pill flex rounded-full p-1 text-xs">
-              <button
-                type="button"
-                id="view-toggle-app"
-                onClick={() => setViewMode("torque")}
-                className={`rounded-full px-3 py-1 font-medium transition-all ${
-                  viewMode === "torque"
-                    ? "bg-black text-white shadow-sm"
-                    : "text-zinc-600 hover:text-black"
-                }`}
-              >
-                App Interface
-              </button>
-              <button
-                type="button"
-                id="view-toggle-demo"
-                onClick={() => setViewMode("demo")}
-                className={`rounded-full px-3 py-1 font-medium transition-all ${
-                  viewMode === "demo"
-                    ? "bg-black text-white shadow-sm"
-                    : "text-zinc-600 hover:text-black"
-                }`}
-              >
-                Sonar Demo
-              </button>
-            </div>
+          {/* Center Navigation Links (Hidden on mobile) */}
+          <div className="hidden md:flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setViewMode("torque")}
+              className={buttonVariants({
+                variant: viewMode === "torque" ? "secondary" : "ghost",
+                size: "sm",
+                className: cn(
+                  "text-xs font-medium cursor-pointer transition-colors",
+                  viewMode === "torque" ? "bg-black text-white hover:bg-black/90 hover:text-white" : "text-zinc-600 hover:text-black"
+                ),
+              })}
+            >
+              App Interface
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("sonar-demo")}
+              className={buttonVariants({
+                variant: viewMode === "sonar-demo" ? "secondary" : "ghost",
+                size: "sm",
+                className: cn(
+                  "text-xs font-medium cursor-pointer transition-colors",
+                  viewMode === "sonar-demo" ? "bg-black text-white hover:bg-black/90 hover:text-white" : "text-zinc-600 hover:text-black"
+                ),
+              })}
+            >
+              Sonar Demo
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("header-demo")}
+              className={buttonVariants({
+                variant: viewMode === "header-demo" ? "secondary" : "ghost",
+                size: "sm",
+                className: cn(
+                  "text-xs font-medium cursor-pointer transition-colors",
+                  viewMode === "header-demo" ? "bg-black text-white hover:bg-black/90 hover:text-white" : "text-zinc-600 hover:text-black"
+                ),
+              })}
+            >
+              Header Demo
+            </button>
+          </div>
 
-            {/* Glass Status Pill */}
+          {/* Right Action & Status Area */}
+          <div className="hidden sm:flex items-center gap-2.5">
+            {/* Live Status Pill */}
             <div
               id="status-badge"
-              className="glass-pill hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-mono"
+              className="glass-pill inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-mono"
             >
               <span
                 className={`h-2 w-2 rounded-full ${
@@ -328,14 +388,112 @@ export default function TorquePage() {
                 {status === "idle" ? "Idle" : status}
               </span>
             </div>
+
+            <Button
+              size="sm"
+              onClick={scrollToInput}
+              className="glass-btn-primary rounded-xl text-xs h-8 px-3.5 cursor-pointer"
+            >
+              <span>Run Torque</span>
+              <ArrowRight className="h-3 w-3 ml-1" />
+            </Button>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden h-9 w-9 border-black/10 bg-white/70 backdrop-blur-md"
+            aria-label="Toggle navigation menu"
+          >
+            <MenuToggleIcon open={mobileMenuOpen} className="size-4" duration={300} />
+          </Button>
+        </nav>
+
+        {/* Mobile Slide-down Drawer */}
+        <div
+          className={cn(
+            "bg-white/95 backdrop-blur-2xl fixed top-16 right-0 bottom-0 left-0 z-50 flex flex-col overflow-hidden border-y border-black/10 md:hidden transition-all duration-300",
+            mobileMenuOpen ? "block" : "hidden"
+          )}
+        >
+          <div className="flex h-full w-full flex-col justify-between p-6 gap-y-4">
+            <div className="grid gap-y-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("torque");
+                  setMobileMenuOpen(false);
+                }}
+                className={buttonVariants({
+                  variant: viewMode === "torque" ? "secondary" : "ghost",
+                  className: "justify-start text-sm font-medium",
+                })}
+              >
+                App Interface
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("sonar-demo");
+                  setMobileMenuOpen(false);
+                }}
+                className={buttonVariants({
+                  variant: viewMode === "sonar-demo" ? "secondary" : "ghost",
+                  className: "justify-start text-sm font-medium",
+                })}
+              >
+                Sonar Grid Demo
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("header-demo");
+                  setMobileMenuOpen(false);
+                }}
+                className={buttonVariants({
+                  variant: viewMode === "header-demo" ? "secondary" : "ghost",
+                  className: "justify-start text-sm font-medium",
+                })}
+              >
+                Header Component Demo
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-4 border-t border-black/10">
+              <Button
+                variant="outline"
+                className="w-full text-sm"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  resetRun();
+                }}
+              >
+                Reset Run
+              </Button>
+              <Button
+                className="w-full text-sm glass-btn-primary"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  startRun();
+                }}
+              >
+                Run Torque Demo
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      {viewMode === "demo" ? (
+      {/* Main Content Area based on View Mode */}
+      {viewMode === "sonar-demo" ? (
         <main className="flex-1">
           <Demo />
+        </main>
+      ) : viewMode === "header-demo" ? (
+        <main className="flex-1">
+          <HeaderDemo />
         </main>
       ) : (
         <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-8 py-8 md:py-12 flex flex-col gap-8">
@@ -358,7 +516,7 @@ export default function TorquePage() {
           </section>
 
           {/* Issue Input & Run Form */}
-          <section className="w-full max-w-3xl mx-auto">
+          <section ref={inputSectionRef} className="w-full max-w-3xl mx-auto">
             <div className="glass-input-container p-3 sm:p-3.5 rounded-2xl">
               <form
                 onSubmit={(e) => {
@@ -382,40 +540,41 @@ export default function TorquePage() {
 
                 <div className="flex items-center gap-2">
                   {status !== "idle" && (
-                    <button
+                    <Button
                       type="button"
                       id="reset-run-btn"
+                      variant="outline"
                       onClick={resetRun}
-                      className="glass-btn-secondary inline-flex h-12 w-12 items-center justify-center rounded-xl"
+                      className="glass-btn-secondary h-12 w-12 rounded-xl p-0"
                       title="Reset run"
                     >
                       <RotateCcw className="h-4 w-4" />
-                    </button>
+                    </Button>
                   )}
 
-                  <button
+                  <Button
                     type="submit"
                     id="run-torque-btn"
                     disabled={status !== "idle" && status !== "completed"}
-                    className="glass-btn-primary flex-1 sm:flex-none inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="glass-btn-primary flex-1 sm:flex-none h-12 rounded-xl px-6 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {status === "idle" ? (
                       <>
                         <span>Run Torque</span>
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4 ml-1.5" />
                       </>
                     ) : status === "completed" ? (
                       <>
                         <span>Run Again</span>
-                        <Play className="h-4 w-4" />
+                        <Play className="h-4 w-4 ml-1.5" />
                       </>
                     ) : (
                       <>
-                        <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                        <span>Running Suture...</span>
+                        <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin mr-1.5" />
+                        <span>Running Torque...</span>
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
 
@@ -718,7 +877,7 @@ export default function TorquePage() {
           )}
 
           {/* 4 Agent Architecture Grid ("How It Works") */}
-          <section className="w-full max-w-5xl mx-auto pt-6">
+          <section id="how-it-works" className="w-full max-w-5xl mx-auto pt-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-black tracking-tight">
                 How Torque Works
