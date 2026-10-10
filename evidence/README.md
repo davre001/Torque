@@ -14,7 +14,7 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 
 - Entire is enabled for Codex in this repository.
 - The installed Entire hooks for Codex are approved by the repository owner (2026-10-10).
-- Pending: capture an agent-assisted commit and record its checkpoint ID and accessible link.
+- Captured agent-assisted commit: checkpoint `01M4K5QBAVZ507XR140XFW7586`, linked to [commit `c081469`](https://entire.io/gh/davre001/Torque/commit/c081469dacf1dfa4ac8e291f19a3a4142244f94b).
 - Verify captured work with `entire checkpoint list` and `entire checkpoint explain <checkpoint-id>`.
 
 ## cfo.ai
