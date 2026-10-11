@@ -272,7 +272,7 @@ export function SonarGrid({
     <div
       ref={setHost}
       data-slot="sonar-grid"
-      className={cn("relative isolate overflow-hidden", interactive && "cursor-crosshair", className)}
+      className={cn("relative isolate overflow-hidden", className)}
       {...rest}
     >
       <canvas
