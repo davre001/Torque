@@ -1,0 +1,81 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MF4JCJJ81BJQKQ267MZS8Z",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T03:13:53.5902216Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    ".env.example",
+    ".github/workflows/torque-remote-tests.yml",
+    "backend.md",
+    "backend/README.md",
+    "backend/REMOTE_RUNNER.md",
+    "backend/execution.py",
+    "backend/pipeline.py",
+    "backend/recipes.remote.json",
+    "backend/remote_job.py",
+    "backend/runtime.py",
+    "backend/tools/actions_runner.py",
+    "backend/tools/sandbox.py",
+    "background_worker.md",
+    "tests/test_actions_runner.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "609907919317",
+  "checkpoint_transcript_start": 2068,
+  "transcript_lines_at_start": 2068,
+  "compact_transcript_start": 305,
+  "token_usage": {
+    "input_tokens": 220961,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 6537088,
+    "output_tokens": 16685,
+    "api_call_count": 40
+  },
+  "session_metrics": {
+    "turn_count": 54
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T03:13:53.0731827Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 3,
+    "total_committed": 0,
+    "total_lines_changed": 3,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 404,
+      "user_lines_removed": 3,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".env.example": 6,
+        ".github/workflows/torque-remote-tests.yml": 44,
+        "backend.md": 2,
+        "backend/README.md": 5,
+        "backend/REMOTE_RUNNER.md": 32,
+        "backend/execution.py": 2,
+        "backend/pipeline.py": 5,
+        "backend/recipes.remote.json": 16,
+        "backend/remote_job.py": 54,
+        "backend/runtime.py": 16,
+        "backend/tools/actions_runner.py": 134,
+        "backend/tools/sandbox.py": 2,
+        "background_worker.md": 5,
+        "tests/test_actions_runner.py": 81
+      },
+      "user_removed_per_file": {
+        "backend/runtime.py": 3
+      }
+    }
+  ]
+}

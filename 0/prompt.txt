@@ -1,0 +1,49 @@
+# Context from my IDE setup:
+
+## Open tabs:
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- .env.example: .env.example
+- README.md: backend/README.md
+
+## My request:
+commit the changes and push
+
+---
+
+# Context from my IDE setup:
+
+## Active file: changes.md
+
+## My request:
+install docker in the workspace
+
+---
+
+# Context from my IDE setup:
+
+## Active file: changes.md
+
+## My request:
+must we use docker?
+
+---
+
+# Context from my IDE setup:
+
+## Active file: changes.md
+
+## My request:
+try this; **A remote Linux runner:** keeps testing off your laptop and avoids its Windows limitations.
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_91b2bb967f4e43c1b0b4deb3ffe39e6c\",0]","question":"Do you already have a Linux server or VM we can use for the runner? If so, provide its hostname/IP and SSH username only—keep passwords and private keys out of chat.","answer":"I need to create a Linux server"}]
+</send_user_message_question_reply>
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_92db4b8d62e34ecea949c51086c92302\",0]","question":"May I commit and push the new remote-runner workflow to Torque? It must be on GitHub’s default branch before we can run a live trial.","answer":"Commit and push the workflow"}]
+</send_user_message_question_reply>

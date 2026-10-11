@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MF4JCJJ81BJQKQ267MZS8Z",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    ".env.example",
+    ".github/workflows/torque-remote-tests.yml",
+    "backend.md",
+    "backend/README.md",
+    "backend/REMOTE_RUNNER.md",
+    "backend/execution.py",
+    "backend/pipeline.py",
+    "backend/recipes.remote.json",
+    "backend/remote_job.py",
+    "backend/runtime.py",
+    "backend/tools/actions_runner.py",
+    "backend/tools/sandbox.py",
+    "background_worker.md",
+    "tests/test_actions_runner.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 220961,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 6537088,
+    "output_tokens": 16685,
+    "api_call_count": 40
+  }
+}
