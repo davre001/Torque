@@ -40,3 +40,13 @@ The worker stops before model calls if its isolated runner or recipe is unavaila
 Verified patches remain unpublished.
 
 Runtime database, checkouts, and logs will live under ignored `var/`. Selected sanitized run evidence belongs in `evidence/runs/`. Tests will be implemented alongside actual behavior.
+
+## Controlled PR publication implementation
+
+- [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
+- [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
+- [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
+- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [ ] GitHub App authentication and publication for connected visitors.
+
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.

@@ -71,3 +71,13 @@ Initialize telemetry once per worker process. Each issue run has an independent 
 Worker validation includes competing claims, heartbeat during a long operation, expired-owner writes rejected, kill/restart after each stage, cancellation during tests, API restart while a job runs, budgets across retries, and a crash between PR creation and persistence. Prove a duplicate delivery cannot create a second PR.
 
 Deployment gate: one trusted local operator initially. Public use requires per-tenant storage/authentication, queue capacity limits, isolated sandboxes, operational recovery, and GitHub App credentials; these are later work.
+
+## Controlled PR publication implementation
+
+- [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
+- [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
+- [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
+- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [ ] GitHub App authentication and publication for connected visitors.
+
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.

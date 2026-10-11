@@ -130,3 +130,13 @@ If an isolated runner is unavailable, restrict the prototype to an explicitly tr
 Required tests cover URL/path rejection, state transitions, duplicate jobs, lease ownership, retries and budgets, patch rejection, test failure blocking publication, cancellation, restart interruption, provider errors, trace unavailability, and idempotent PR creation. The end-to-end browser case must exercise all three reduced-motion criteria rather than inspect only HTML strings.
 
 Before demo: verify an actual finalized neatlogs trace, inspect Entire context/checkpoints, link the cfo.ai plan, capture a genuine failure/recovery comparison, and replace README commands that reference nonexistent files. Keep raw runs ignored and export only selected sanitized evidence.
+
+## Controlled PR publication implementation
+
+- [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
+- [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
+- [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
+- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [ ] GitHub App authentication and publication for connected visitors.
+
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.

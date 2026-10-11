@@ -106,3 +106,13 @@ Replace Next.js simulation events with `POST /api/runs` and persisted polling. H
 ## Integration acceptance
 
 Check actual gateway and Gemini model access with small operator-authorized calls; verify token permissions on the selected destination without unsolicited writes. Then verify a real instrumented run, trace readback, Entire context evidence, controlled branch/PR publication, repeated publication idempotency, and absence of credentials in git, artifacts, API responses, and traces. Quota/auth failures must produce honest terminal or pending states, never simulated success.
+
+## Controlled PR publication implementation
+
+- [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
+- [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
+- [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
+- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [ ] GitHub App authentication and publication for connected visitors.
+
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.

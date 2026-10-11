@@ -81,7 +81,14 @@ def create_app(settings=None):
     @app.post("/api/runs/{run_id}/publish")
     def publish(run_id: str, user=Depends(operator)):
         existing(run_id,user)
-        raise HTTPException(409,"Publication is unavailable until isolated verification and destination authorization are implemented")
+        from backend.publication import publish_run
+        from backend.models import PipelineError
+        try:
+            return publish_run(store,run_id,user)
+        except Conflict as exc:
+            raise HTTPException(409,str(exc)) from None
+        except PipelineError as exc:
+            raise HTTPException(502,str(exc)) from None
 
     return app
 

@@ -16,6 +16,7 @@ def main():
     commands.add_parser("preflight")
     commands.add_parser("run").add_argument("issue_url")
     commands.add_parser("status").add_argument("run_id")
+    commands.add_parser("publish").add_argument("run_id")
     args = parser.parse_args()
     settings = Settings.load()
     store = Store(settings.database)
@@ -35,6 +36,13 @@ def main():
         if record is None:
             parser.error("Run not found")
         print(json.dumps(record,indent=2))
+    elif args.command == "publish":
+        from backend.publication import publish_run
+        from backend.models import Conflict, PipelineError
+        try:
+            print(json.dumps(publish_run(store,args.run_id),indent=2))
+        except (Conflict,PipelineError) as exc:
+            parser.error(str(exc))
     else:
         logging.basicConfig(level=logging.INFO,format="%(asctime)s %(name)s: %(message)s")
         # Signed artifact URLs must not appear in HTTP client logs.

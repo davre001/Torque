@@ -3,9 +3,10 @@
 Implemented: SQLite history/queue, separate worker, cancellation/leases, pinned source
 snapshots, bounded file edits, Claude/LiteLLM and Gemini adapters, agent roles, verification
 gates, bounded recovery, atomic artifacts, and worker-owned Neatlogs tracing.
-The pipeline is verified with controlled fixtures; live provider calls, Docker/browser
-execution, and finalized dashboard traces remain unverified. PR publication and
-GitHub visitor login are still pending.
+The demo pipeline has passed live provider calls and independent remote browser tests.
+Explicit controlled-fork draft PR publication is implemented and tested with mocked GitHub
+responses; live publication and finalized dashboard traces remain unverified.
+GitHub visitor login is still pending.
 
 Install from the repository root:
 
@@ -20,7 +21,7 @@ Set these in the existing root `.env`:
 
 - `TORQUE_OPERATOR_TOKEN`: a new random local access token, separate from GitHub/provider keys.
 - `TORQUE_ALLOWED_REPOSITORIES=GabrieleLozupone/kokon`: explicit read-only demo scope.
-- Existing `GITHUB_TOKEN` is used only by the worker; public issue reads also work without it.
+- Existing `GITHUB_TOKEN` authenticates source reads and explicit publication; public issue reads also work without it.
 - `TORQUE_RECIPES_FILE`: operator-reviewed mapping based on `backend/recipes.example.json`.
 - Explicit conservative cost rates for both models, using the four new variables in `.env.example`.
   Use zero only for verified free quota; blank rates fail preflight.
@@ -63,7 +64,7 @@ are never automatically replayed. History and events survive API restarts.
 Events currently return paginated JSON, not SSE; Next.js is not yet connected.
 The worker performs investigation with Gemini, implementation with Claude via LiteLLM,
 independent Docker tests, Gemini review, and up to two Claude recovery diagnoses.
-A passing run stops at `ready_to_publish`; publication remains disabled.
+A passing run stops at `ready_to_publish`. See [PR publication](PUBLICATION.md) for explicit publication to a controlled destination.
 Failed tests cannot be overridden by model approval. Infrastructure failures cannot
 count as bug reproduction. Recovery is labeled `local-artifacts` until hosted readback exists.
 

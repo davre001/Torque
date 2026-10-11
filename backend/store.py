@@ -51,6 +51,9 @@ class Store:
                     created_at REAL NOT NULL, data TEXT NOT NULL);
                 CREATE INDEX IF NOT EXISTS events_run ON events(run_id,id);
                 CREATE INDEX IF NOT EXISTS jobs_state ON jobs(state,lease_until);
+                CREATE TABLE IF NOT EXISTS publications (
+                    run_id TEXT PRIMARY KEY REFERENCES runs(run_id), destination TEXT NOT NULL,
+                    owner TEXT, lease_until REAL, commit_sha TEXT, pr_url TEXT);
                 PRAGMA user_version=1;
             """)
 
@@ -137,8 +140,50 @@ class Store:
                 raise KeyError(run_id)
             if row[0] in TERMINAL:
                 raise Conflict("Run is already finished")
+            if row[0] == Status.PUBLISHING:
+                raise Conflict("Publication cannot be cancelled after GitHub writes start; inspect the PR or retry publication")
             status = Status.CANCELLED if row[0] == Status.QUEUED else row[0]
             db.execute("UPDATE runs SET cancel_requested=1,status=?,updated_at=? WHERE run_id=?", (status,self.clock(),run_id))
             if status == Status.CANCELLED:
                 db.execute("UPDATE jobs SET state='done' WHERE run_id=? AND state='queued'", (run_id,))
             self._event(db,run_id,{"status":status,"cancel_requested":True})
+
+    def claim_publication(self,run_id,user_id,destination):
+        with self.transaction() as db:
+            run=db.execute("SELECT * FROM runs WHERE run_id=? AND user_id=?",(run_id,user_id)).fetchone()
+            if not run or run['status'] not in {Status.READY,Status.PUBLISHING}:
+                raise Conflict("Only a verified ready-to-publish run can be published")
+            if not json.loads(run['result']).get('verified') or run['cancel_requested']:
+                raise Conflict("Run is not verified or was cancelled")
+            publication=db.execute("SELECT * FROM publications WHERE run_id=?",(run_id,)).fetchone()
+            if publication:
+                if publication['destination'] != destination:
+                    raise Conflict("Publication destination cannot change after the first request")
+                if publication['owner'] and publication['lease_until'] > self.clock():
+                    raise Conflict("Publication is already in progress")
+            owner=uuid.uuid4().hex
+            db.execute("INSERT INTO publications(run_id,destination,owner,lease_until) VALUES(?,?,?,?) "
+                       "ON CONFLICT(run_id) DO UPDATE SET owner=excluded.owner,lease_until=excluded.lease_until",
+                       (run_id,destination,owner,self.clock()+900))
+            db.execute("UPDATE runs SET status='publishing',current_agent='publishing',error=NULL,updated_at=? WHERE run_id=?",
+                       (self.clock(),run_id))
+            self._event(db,run_id,{'status':'publishing','destination':destination})
+            return owner
+
+    def finish_publication(self,run_id,owner,*,pr_url=None,commit_sha=None,error=None):
+        with self.transaction() as db:
+            row=db.execute("SELECT * FROM publications WHERE run_id=? AND owner=? AND lease_until>?",
+                           (run_id,owner,self.clock())).fetchone()
+            if not row:
+                raise Conflict("Publication lease expired; reconcile with a new publish request")
+            status=Status.COMPLETED if pr_url else Status.READY
+            run=db.execute("SELECT result FROM runs WHERE run_id=?",(run_id,)).fetchone()
+            result=json.loads(run[0])
+            if pr_url:
+                result.update(publication_available=True,published_commit_sha=commit_sha,
+                              destination_repository=row['destination'])
+            db.execute("UPDATE runs SET status=?,current_agent=NULL,pr_url=?,error=?,result=?,updated_at=? WHERE run_id=?",
+                       (status,pr_url,error,json.dumps(result),self.clock(),run_id))
+            db.execute("UPDATE publications SET owner=NULL,lease_until=NULL,commit_sha=?,pr_url=? WHERE run_id=?",
+                       (commit_sha,pr_url,run_id))
+            self._event(db,run_id,{'status':status,'pr_url':pr_url,'error':error})
