@@ -1,0 +1,57 @@
+{
+  "run_id": "4abf1613f01745df8eb4f3b10f6fc3a6",
+  "user_id": "github:141245473",
+  "issue_url": "https://github.com/davre001/kokon/issues/2",
+  "status": "failed",
+  "current_agent": null,
+  "created_at": 1791746256.8910563,
+  "updated_at": 1791746436.8837447,
+  "cancel_requested": false,
+  "idempotency_key": "cfebecc5-a847-437d-9cc8-dfafc1540bf7",
+  "error": "Model provider request failed (HTTP 503); verify credentials, model alias, and quota",
+  "pr_url": null,
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "baseline.json",
+        "sha256": "b3789535ccaaafc4db431010dab21b26d29c2f3035e63be36fb3e476757cefff"
+      },
+      {
+        "name": "failure.json",
+        "sha256": "652a6dde6141fa119a444c19fe81f8d1636260f4fe9738e10173fd45e7552c48"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "cb993331d55f84c379e0fefa9d975099",
+    "test_image": "sha256:e5316d5801b48ea63d5f75bfad5faef025865ea953467e11b5671cce9dbeaf70",
+    "acceptance_suite_sha256": "200e6e6bd518167824c1f851e3a2fd0b1fb478320d1b9c576c495974c8469239",
+    "budget": {
+      "calls": 2,
+      "tokens": 43252,
+      "estimated_cost_usd": 0.0,
+      "usage": [
+        {
+          "model": "gemini-3.5-flash",
+          "usage": "request-failed-reserved",
+          "input_tokens": 17530,
+          "output_tokens": 4096,
+          "estimated_cost_usd": 0.0,
+          "http_status": 503
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "usage": "request-failed-reserved",
+          "input_tokens": 17530,
+          "output_tokens": 4096,
+          "estimated_cost_usd": 0.0,
+          "http_status": 503
+        }
+      ]
+    },
+    "source_sha": "995b078b79819c0049db3eef96fc6bd91b016b12",
+    "source_repository": "davre001/kokon",
+    "baseline_passed": false
+  },
+  "attempts": []
+}

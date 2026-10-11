@@ -90,6 +90,7 @@ def test_worker_failure_does_not_expose_exception_secrets(store):
 def test_api_queue_auth_history_events_and_conflicts(tmp_path,monkeypatch):
     # Readiness must not depend on the developer's real .env configuration.
     monkeypatch.setenv("GEMINI_MODEL","")
+    monkeypatch.setenv("TORQUE_PROVIDER_MODE", "mixed")
     app = create_app(Settings(tmp_path/"api.db","local-test-token",
                               allowed_repositories=("gabrielelozupone/kokon",)))
     headers = {"Authorization":"Bearer local-test-token", "Idempotency-Key":"request-1"}

@@ -67,3 +67,27 @@ origin and App callback hostname. This public setting contains only the API addr
 Keep the separate worker running to execute queued jobs. Source installation access
 and reviewed recipes remain required; installing the App on your fork does not grant
 access to the upstream source repository. Live browser acceptance remains pending.
+
+## Controlled user-run trial
+
+The local deployment enables `davre001/kokon` with the reviewed reduced-motion
+recipe. Its default branch must remain at
+`995b078b79819c0049db3eef96fc6bd91b016b12`: the Actions runner uses the identical
+upstream revision and rejects changed fork revisions before test dispatch.
+This explicitly reviewed fork support does not enable arbitrary repositories.
+
+Submit https://github.com/davre001/kokon/issues/2 through the authenticated
+workspace, not the operator CLI. Save the resulting user-owned run and finalized
+trace, then verify publication separately. Progress and permission evidence are
+tracked in [the user-run evidence checklist](../evidence/github-app/README.md).
+
+For the currently approved trial, `TORQUE_PROVIDER_MODE=claude-only` routes every
+agent role through the configured LiteLLM Claude client, with Claude rates charged
+against the shared run budget. Repeated Gemini investigation requests returned 503;
+this is an explicit operator-selected mode, not an automatic provider fallback.
+Set the mode back to `mixed` and restart the worker to restore Gemini reasoning.
+
+Structured model responses receive at most one format-repair request when strict
+JSON/schema parsing fails. The retry shares the original token, call, dollar, and
+wall-time limits; malformed output is never echoed or accepted by relaxing the
+schema. Provider transport retries remain separately bounded.

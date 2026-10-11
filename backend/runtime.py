@@ -25,12 +25,26 @@ def rates(prefix):
         raise PipelineError("Configure nonnegative conservative input/output cost rates for both models")
     return values
 
+def provider_mode():
+    mode = os.getenv('TORQUE_PROVIDER_MODE', 'mixed')
+    if mode not in {'mixed', 'claude-only'}:
+        raise PipelineError('TORQUE_PROVIDER_MODE must be mixed or claude-only')
+    return mode
+
 def readiness():
     reasons = []
-    for name in ("LITELLM_API_KEY","LITELLM_BASE_URL","LITELLM_MODEL","GEMINI_API_KEY","GEMINI_MODEL","NEATLOGS_API_KEY"):
+    try:
+        mode = provider_mode()
+    except PipelineError as exc:
+        reasons.append(str(exc))
+        mode = 'mixed'
+    names = ["LITELLM_API_KEY","LITELLM_BASE_URL","LITELLM_MODEL","NEATLOGS_API_KEY"]
+    if mode == 'mixed':
+        names += ["GEMINI_API_KEY", "GEMINI_MODEL"]
+    for name in names:
         if not os.getenv(name):
             reasons.append(name+" missing")
-    for prefix in ("LITELLM","GEMINI"):
+    for prefix in (("LITELLM","GEMINI") if mode == 'mixed' else ("LITELLM",)):
         try:
             rates(prefix)
         except PipelineError:
@@ -81,7 +95,9 @@ class AgentProcessor:
             raise PipelineError("Unsupported TORQUE_RUNNER")
         runner.preflight()  # Fail before constructing providers or spending credits.
         limits = Limits.load()
-        model_rates = rates("GEMINI"),rates("LITELLM")
+        mode = provider_mode()
+        claude_rates = rates("LITELLM")
+        reasoning_rates = rates("GEMINI") if mode == 'mixed' else claude_rates
         clients = []
         try:
             from backend.integrations.neatlogs_read import TraceReader
@@ -89,14 +105,16 @@ class AgentProcessor:
             clients.append(trace_reader)
             github = GitHub(github_token)
             clients.append(github)
-            gemini = Gemini(os.getenv("GEMINI_API_KEY",""),os.getenv("GEMINI_MODEL",""),self.telemetry.wrap)
-            clients.append(gemini)
             claude = LiteLLM(os.getenv("LITELLM_API_KEY",""),os.getenv("LITELLM_BASE_URL",""),
                              os.getenv("LITELLM_MODEL",""),self.telemetry.wrap)
             clients.append(claude)
+            reasoning = claude
+            if mode == 'mixed':
+                reasoning = Gemini(os.getenv("GEMINI_API_KEY",""),os.getenv("GEMINI_MODEL",""),self.telemetry.wrap)
+                clients.append(reasoning)
             budget = Budget(limits)
             providers = [StructuredProvider(adapter,budget,*costs,checkpoint,limits.transport_retries)
-                         for adapter,costs in zip((gemini,claude),model_rates)]
+                         for adapter,costs in zip((reasoning,claude),(reasoning_rates,claude_rates))]
             Pipeline(github=github,prepare=snapshot,runner=runner,
                      investigator_provider=providers[0],implementer_provider=providers[1],
                      budget=budget,recipe=recipe,workspaces=workspace_root(),

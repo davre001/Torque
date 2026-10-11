@@ -1,0 +1,154 @@
+{
+  "run_id": "b220ce7e5cda4e14963c74fc04ad8711",
+  "user_id": "github:141245473",
+  "issue_url": "https://github.com/davre001/kokon/issues/2",
+  "status": "completed",
+  "current_agent": null,
+  "created_at": 1791748580.0885603,
+  "updated_at": 1791749016.9868317,
+  "cancel_requested": false,
+  "idempotency_key": "1312d8dc-b81b-4b9b-9eac-08d768574d57",
+  "error": null,
+  "pr_url": "https://github.com/davre001/kokon/pull/3",
+  "result": {
+    "verified": true,
+    "artifacts": [
+      {
+        "name": "baseline.json",
+        "sha256": "c762140bcdb30302bb5916401ca86b7b6748dc3315689b50a1cc9cec28a37ca9"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "847a4ab312861966f6404c358aed9ae85125da0381ad77d636541ba6b4262fcc"
+      },
+      {
+        "name": "patch-1.json",
+        "sha256": "1b08f84f33bf9b590599c7ad11cef90eb76da763cf4abae473c08c71f7820fbe"
+      },
+      {
+        "name": "tests-1.json",
+        "sha256": "9fffec8210657548d926bc194d07b234b1143450e5fc260314b33fe853aa8079"
+      },
+      {
+        "name": "attempt-1.json",
+        "sha256": "02031bd91e0344235bed30c98fd0f0a0bbdef90c900b19585d93e634f23e006c"
+      },
+      {
+        "name": "verified.json",
+        "sha256": "8a29cc72bdc3f5f10d435d7664014fa32bcb0388ea7596dd5dff517d3ee1b76e"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "228da4f22bcbe4aeabf7bc797c9d89d1",
+    "test_image": "sha256:80d9833bd424771006b3dd019698ec3247d653aa6c9ecea89eff1ca23dd3a1e3",
+    "acceptance_suite_sha256": "200e6e6bd518167824c1f851e3a2fd0b1fb478320d1b9c576c495974c8469239",
+    "budget": {
+      "calls": 4,
+      "tokens": 26057,
+      "estimated_cost_usd": 0.08868300000000001,
+      "usage": [
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 2597,
+          "output_tokens": 319,
+          "estimated_cost_usd": 0.012576
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 2621,
+          "output_tokens": 161,
+          "estimated_cost_usd": 0.010278
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 17189,
+          "output_tokens": 249,
+          "estimated_cost_usd": 0.055302
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 2774,
+          "output_tokens": 147,
+          "estimated_cost_usd": 0.010527
+        }
+      ]
+    },
+    "source_sha": "995b078b79819c0049db3eef96fc6bd91b016b12",
+    "source_repository": "davre001/kokon",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "The hero reel video autoplays via IntersectionObserver regardless of the user's prefers-reduced-motion preference. The fix is to check the media query before calling reel.play() in the vio IntersectionObserver callback, so that with reduced motion enabled the video stays paused until the user explicitly clicks the play button. The manual playback button handler should remain unchanged so users can still choose to play with sound.",
+      "acceptance_criteria": [
+        "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+        "Manual playback still works when reduced motion is enabled.",
+        "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+      ],
+      "files": [
+        "site/index.html"
+      ]
+    },
+    "verified_content_sha256": "2923e1c029fbe096bfae8ac72a1bfc5ff7a5044a46a14089a11d4dd2250aac3d",
+    "patch_sha256": "2923e1c029fbe096bfae8ac72a1bfc5ff7a5044a46a14089a11d4dd2250aac3d",
+    "summary": "Check prefers-reduced-motion before calling reel.play() in the IntersectionObserver callback. If reduced motion is enabled, the video stays paused on intersection; the manual button handler is unchanged so users can still choose to play.",
+    "publication_available": true,
+    "published_commit_sha": "439aa67ae375da02f3e67073c65f58382f4f7e95",
+    "destination_repository": "davre001/kokon"
+  },
+  "attempts": [
+    {
+      "number": 1,
+      "patch_sha256": "2923e1c029fbe096bfae8ac72a1bfc5ff7a5044a46a14089a11d4dd2250aac3d",
+      "tests_passed": true,
+      "review": {
+        "approved": true,
+        "rationale": "The single-line diff wraps the reel.play() call in a prefers-reduced-motion check identical to the one already used elsewhere in the file. When reduced motion is enabled, autoplay is suppressed (criterion 0). The reelBtn click handler is untouched, so manual playback still works (criterion 1). When reduced motion is not enabled, the matchMedia condition is false and play() is called exactly as before (criterion 2). The change is minimal and focused; no other behavior is altered. All three acceptance criteria are satisfied and the automated tests confirm this.",
+        "satisfied_criteria": [
+          0,
+          1,
+          2
+        ]
+      },
+      "budget": {
+        "calls": 4,
+        "tokens": 26057,
+        "estimated_cost_usd": 0.08868300000000001,
+        "usage": [
+          {
+            "model": "claude-sonnet-4.6",
+            "usage": "provider-reported",
+            "input_tokens": 2597,
+            "output_tokens": 319,
+            "estimated_cost_usd": 0.012576
+          },
+          {
+            "model": "claude-sonnet-4.6",
+            "usage": "provider-reported",
+            "input_tokens": 2621,
+            "output_tokens": 161,
+            "estimated_cost_usd": 0.010278
+          },
+          {
+            "model": "claude-sonnet-4.6",
+            "usage": "provider-reported",
+            "input_tokens": 17189,
+            "output_tokens": 249,
+            "estimated_cost_usd": 0.055302
+          },
+          {
+            "model": "claude-sonnet-4.6",
+            "usage": "provider-reported",
+            "input_tokens": 2774,
+            "output_tokens": 147,
+            "estimated_cost_usd": 0.010527
+          }
+        ]
+      },
+      "trace_id": "228da4f22bcbe4aeabf7bc797c9d89d1",
+      "test_trace_id": "91127a5c3232e6b8ede2fd241d23dc71"
+    }
+  ]
+}

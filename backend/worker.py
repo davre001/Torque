@@ -61,10 +61,15 @@ class Worker:
             self._finish(run_id,owner,Status.INTERRUPTED,"Worker shutdown requested")
         except PipelineError as exc:
             self._finish(run_id,owner,Status.FAILED,str(exc))
-        except Exception:
+        except Exception as exc:
             # Exceptions may include API credentials; do not store raw messages.
             self._finish(run_id,owner,Status.FAILED,"Execution failed; check backend configuration and integration readiness")
-            log.error("Job failed: %s",run_id)
+            # Exception type and frame locations aid diagnosis without messages,
+            # arguments, locals, or signed URLs that may contain credentials.
+            import traceback
+            frames = traceback.extract_tb(exc.__traceback__)
+            location = ' -> '.join(f'{frame.name}:{frame.lineno}' for frame in frames[-6:])
+            log.error("Job failed: %s (%s; %s)",run_id,type(exc).__name__,location)
         finally:
             finished.set()
             thread.join(timeout=self.settings.heartbeat_seconds+1)

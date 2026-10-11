@@ -1,10 +1,51 @@
 {
   "gabrielelozupone/kokon": {
     "image": "remote-managed",
-    "command": ["python", "/acceptance/test_reduced_motion.py"],
-    "context_files": ["site/index.html"],
-    "investigation_terms": {"site/index.html": ["reel", "prefers-reduced-motion", "IntersectionObserver"]},
-    "editable_files": ["site/index.html"],
+    "command": [
+      "python",
+      "/acceptance/test_reduced_motion.py"
+    ],
+    "context_files": [
+      "site/index.html"
+    ],
+    "investigation_terms": {
+      "site/index.html": [
+        "reel",
+        "prefers-reduced-motion",
+        "IntersectionObserver"
+      ]
+    },
+    "editable_files": [
+      "site/index.html"
+    ],
+    "acceptance_criteria": [
+      "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+      "Manual playback still works when reduced motion is enabled.",
+      "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+    ],
+    "suite_directory": "remote-managed",
+    "timeout_seconds": 120,
+    "require_baseline_failure": true
+  },
+  "davre001/kokon": {
+    "image": "remote-managed",
+    "command": [
+      "python",
+      "/acceptance/test_reduced_motion.py"
+    ],
+    "context_files": [
+      "site/index.html"
+    ],
+    "investigation_terms": {
+      "site/index.html": [
+        "reel",
+        "prefers-reduced-motion",
+        "IntersectionObserver"
+      ]
+    },
+    "editable_files": [
+      "site/index.html"
+    ],
     "acceptance_criteria": [
       "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
       "Manual playback still works when reduced motion is enabled.",

@@ -1,0 +1,11 @@
+{
+  "summary": "The hero reel video autoplays via IntersectionObserver regardless of the user's prefers-reduced-motion preference. The fix is to check the media query before calling reel.play() in the vio IntersectionObserver callback, so that with reduced motion enabled the video stays paused until the user explicitly clicks the play button. The manual playback button handler should remain unchanged so users can still choose to play with sound.",
+  "acceptance_criteria": [
+    "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+    "Manual playback still works when reduced motion is enabled.",
+    "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+  ],
+  "files": [
+    "site/index.html"
+  ]
+}

@@ -2,9 +2,9 @@
 
 Frontend API wiring is now implemented in `/workspace`: credentialed requests, CSRF,
 persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
-The labeled landing preview remains separate. Connected-user browser acceptance is pending.
+The labeled landing preview remains separate. A live connected-user issue-to-PR run is saved under `evidence/github-app/`; disconnect/history acceptance remains pending.
 
-Status: live operator/provider/browser/PR evidence, finalized trace readback, and controlled live hosted recovery are saved. Live connected-user execution remains pending. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
+Status: live operator/provider/browser/PR evidence, finalized trace readback, and controlled live hosted recovery are saved. Live connected-user execution and publication are verified in the saved Claude-only trial. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
 
 ## Integration progress checklist
 
@@ -32,12 +32,12 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [ ] Implement a supported Entire context adapter and save actual target-repository context evidence.
 - [x] Review shared hook/settings files and commit appropriate configuration without local state.
 - [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
-- [ ] Verify a live connected-user browser run with source installation access and a supported recipe.
+- [x] Verify a live connected-user browser run with source installation access and a supported recipe; run `b220ce7e5cda4e14963c74fc04ad8711`, PR #3.
 - [x] Show installed repository eligibility and reject browser submissions without an enabled source and reviewed test recipe before queueing.
 - [ ] Verify secrets stay out of responses, sandbox environments, Git history, traces, and exported artifacts.
 - [ ] Replace financial cost assumptions with measured run data when available.
 
-Scope update: the requested landing-page Connect GitHub → authenticated workspace → confirmed disconnect flow makes GitHub App identity/installation onboarding part of the current frontend integration work. See `changes.md` for its acceptance checklist. The personal-token path remains useful for local backend development, but cannot substitute for authenticating visitors. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
+Scope update: the requested landing-page Connect GitHub â†’ authenticated workspace â†’ confirmed disconnect flow makes GitHub App identity/installation onboarding part of the current frontend integration work. See `changes.md` for its acceptance checklist. The personal-token path remains useful for local backend development, but cannot substitute for authenticating visitors. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
 
 - [ ] Configure GitHub App user authorization and repository installations for the requested connection flow.
 - [x] Implement connect/callback/session/disconnect endpoints, secure sessions, and per-user repository/run ownership checks.
@@ -119,7 +119,7 @@ Check actual gateway and Gemini model access with small operator-authorized call
 - [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
 - [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
-- [ ] GitHub App authentication and publication for connected visitors.
+- [x] GitHub App authentication and publication for the controlled connected-user trial; broader users/repositories remain unverified.
 
 Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
 
@@ -142,7 +142,7 @@ Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted h
 - [x] User-scoped worker/publication credentials; local operator PAT is never substituted for a visitor.
 - [x] Disconnect invalidation, cooperative cancellation, publication/disconnect fencing, and signed authorization-revoked webhook.
 - [x] Tests for OAuth replay, session expiry, secure cookies, CSRF, cross-user access, installation permissions, and revocation.
-- [ ] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
-- [ ] Wire landing-page connection and workspace UI to these backend endpoints.
+- [x] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance on the reviewed fork.
+- [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
 The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

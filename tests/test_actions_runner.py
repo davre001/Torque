@@ -38,6 +38,15 @@ def test_remote_scope_is_explicit(tmp_path):
     assert runner.source == "a"*40
     runner.close()
 
+def test_demo_fork_requires_identical_reviewed_source_revision(tmp_path):
+    runner = ActionsRunner(recipe(tmp_path),client=client(lambda r:None))
+    with pytest.raises(PipelineError,match="verified upstream revision"):
+        runner.bind_source("davre001","kokon","a"*40)
+    runner.bind_source("davre001","kokon","995b078b79819c0049db3eef96fc6bd91b016b12")
+    assert runner.source == "995b078b79819c0049db3eef96fc6bd91b016b12"
+    runner.close()
+
+
 def test_remote_dispatch_returns_correlated_test_result(tmp_path,monkeypatch):
     monkeypatch.setenv("TORQUE_ACTIONS_TOKEN","fixture-token")
     requests = []
@@ -65,6 +74,28 @@ def test_remote_dispatch_returns_correlated_test_result(tmp_path,monkeypatch):
     result = runner.run(tmp_path,lambda:None)
     assert result.passed
     runner.close()
+
+def test_completed_result_retries_transport_without_redispatch(tmp_path):
+    runner = ActionsRunner(recipe(tmp_path),client=client(lambda r: pytest.fail('No dispatch expected')),pause=lambda _:None)
+    results = iter([httpx.ReadTimeout('signed secret URL'), RemoteResult(exit_code=0,output='PASS',command=['remote'],assertions_passed=3)])
+    def retrieve(*args):
+        value = next(results)
+        if isinstance(value,Exception): raise value
+        return value
+    runner._result = retrieve
+    assert runner._completed_result({},'fixture',lambda:None).passed
+    runner.close()
+
+
+def test_completed_result_failure_omits_signed_url(tmp_path):
+    runner = ActionsRunner(recipe(tmp_path),client=client(lambda r:None),pause=lambda _:None)
+    def retrieve(*args): raise httpx.ReadTimeout('signed secret URL')
+    runner._result = retrieve
+    with pytest.raises(PipelineError,match='result download failed') as error:
+        runner._completed_result({},'fixture',lambda:None)
+    assert 'signed secret' not in str(error.value)
+    runner.close()
+
 
 def test_redirect_is_preserved_without_forwarding_credentials(tmp_path):
     runner = ActionsRunner(recipe(tmp_path),client=client(lambda request:httpx.Response(

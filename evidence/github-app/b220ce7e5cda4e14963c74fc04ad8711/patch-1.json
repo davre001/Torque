@@ -1,0 +1,16 @@
+{
+  "summary": "Check prefers-reduced-motion before calling reel.play() in the IntersectionObserver callback. If reduced motion is enabled, the video stays paused on intersection; the manual button handler is unchanged so users can still choose to play.",
+  "edits": [
+    {
+      "path": "site/index.html",
+      "original_sha256": "c6ebc346bb5df3028315ad98b8947024071b0effefd701265b77c38b661f890d",
+      "content": null,
+      "replacements": [
+        {
+          "search": "  const vio = new IntersectionObserver(([en]) => { if (en.isIntersecting) reel.play().catch(() => {}); else reel.pause(); }, { threshold: 0.3 });",
+          "replacement": "  const vio = new IntersectionObserver(([en]) => { if (en.isIntersecting) { if (!matchMedia(\"(prefers-reduced-motion: reduce)\").matches) reel.play().catch(() => {}); } else reel.pause(); }, { threshold: 0.3 });"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "run_id": "b220ce7e5cda4e14963c74fc04ad8711",
+  "verification": "live-connected-github-app-user",
+  "provider_mode": "claude-only",
+  "files": {
+    "acceptance-readback.json": "a7fe08cae9af23c635634d1dd104af16b20859762ac5daa73c323a18a3646be1",
+    "attempt-1.json": "02031bd91e0344235bed30c98fd0f0a0bbdef90c900b19585d93e634f23e006c",
+    "baseline.json": "c762140bcdb30302bb5916401ca86b7b6748dc3315689b50a1cc9cec28a37ca9",
+    "patch-1.json": "1b08f84f33bf9b590599c7ad11cef90eb76da763cf4abae473c08c71f7820fbe",
+    "plan.json": "847a4ab312861966f6404c358aed9ae85125da0381ad77d636541ba6b4262fcc",
+    "publication.json": "66b827931f1abc4c7eb9b3550e35be0eaa18579a3f9b97cf850259ac65bc6e11",
+    "run.json": "3a488280565adc2e69dff901d4b41a8a48c0914c0e81fd4ac0a5457d208fbf29",
+    "tests-1.json": "9fffec8210657548d926bc194d07b234b1143450e5fc260314b33fe853aa8079",
+    "verified.json": "8a29cc72bdc3f5f10d435d7664014fa32bcb0388ea7596dd5dff517d3ee1b76e",
+    "workflow-readback.json": "11cc48b2c1f24bd0125e700ec9d1b408b979bad1a1883db4790f63195271955c"
+  }
+}

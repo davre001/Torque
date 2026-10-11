@@ -52,8 +52,13 @@ class ActionsRunner:
         self.workflow_sha = sha
 
     def bind_source(self,owner,repo,sha):
-        if f"{owner}/{repo}".lower() != "gabrielelozupone/kokon" or not re.fullmatch("[a-f0-9]{40}",sha):
+        repository = f"{owner}/{repo}".lower()
+        if repository not in {"gabrielelozupone/kokon", "davre001/kokon"} or not re.fullmatch("[a-f0-9]{40}",sha):
             raise PipelineError("The first remote runner supports only the pinned public kokon demo")
+        # remote_job downloads upstream. The reviewed fork is valid only when its
+        # complete source tree is the identical upstream commit, not just one file.
+        if repository == "davre001/kokon" and sha != "995b078b79819c0049db3eef96fc6bd91b016b12":
+            raise PipelineError("The reviewed demo fork must retain the verified upstream revision")
         if self.recipe.editable_files != ["site/index.html"] or len(self.recipe.acceptance_criteria) != 3:
             raise PipelineError("Remote kokon recipe must retain its one-file edit scope and three criteria")
         self.source = sha
@@ -86,7 +91,7 @@ class ActionsRunner:
                     if run["head_sha"] != self.workflow_sha:
                         raise PipelineError("Remote job ran a different workflow revision")
                     if run["status"] == "completed":
-                        result = self._result(run,request_id)
+                        result = self._completed_result(run,request_id,checkpoint)
                         return result
                 self.pause(3)
             raise PipelineError("Remote test job timed out")
@@ -96,6 +101,18 @@ class ActionsRunner:
                     self._request("POST",f"/repos/{self.repository}/actions/runs/{run['id']}/cancel")
                 except PipelineError:
                     pass  # Server timeout still bounds the job if cancellation fails.
+
+    def _completed_result(self, run, request_id, checkpoint):
+        for attempt in range(2):
+            checkpoint()
+            try:
+                return self._result(run, request_id)
+            except httpx.HTTPError:
+                if attempt:
+                    raise PipelineError('Remote acceptance result download failed; check network access') from None
+                self.pause(1)
+            except (zipfile.BadZipFile, KeyError, ValueError):
+                raise PipelineError('Remote acceptance result is malformed; verification stopped') from None
 
     def _result(self,run,request_id):
         artifacts = self._request("GET",f"/repos/{self.repository}/actions/runs/{run['id']}/artifacts").json()["artifacts"]

@@ -1,0 +1,74 @@
+{
+  "checked_at_utc": "2026-10-11T19:04:20Z",
+  "verification": "live-github-app-read-permissions-only",
+  "github_login": "davre001",
+  "user_id": "github:141245473",
+  "operator_pat_used": false,
+  "repositories": [
+    {
+      "full_name": "davre001/connect",
+      "id": 1410295275,
+      "installation_id": 170259871,
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "app_permissions": {
+        "issues": "read",
+        "contents": "write",
+        "metadata": "read",
+        "pull_requests": "write"
+      },
+      "run_supported": false,
+      "run_reason": "Repository is not enabled for this Torque deployment."
+    },
+    {
+      "full_name": "davre001/Torque",
+      "id": 1412356662,
+      "installation_id": 170259871,
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "app_permissions": {
+        "issues": "read",
+        "contents": "write",
+        "metadata": "read",
+        "pull_requests": "write"
+      },
+      "run_supported": false,
+      "run_reason": "Repository is not enabled for this Torque deployment."
+    },
+    {
+      "full_name": "davre001/kokon",
+      "id": 1414291470,
+      "installation_id": 170259871,
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "app_permissions": {
+        "issues": "read",
+        "contents": "write",
+        "metadata": "read",
+        "pull_requests": "write"
+      },
+      "run_supported": true,
+      "run_reason": null
+    }
+  ],
+  "source_revision": "995b078b79819c0049db3eef96fc6bd91b016b12",
+  "browser_run_verified": false,
+  "publication_verified": false,
+  "demo_issue_url": "https://github.com/davre001/kokon/issues/2",
+  "demo_issue_created_with": "github-app-user-token"
+}

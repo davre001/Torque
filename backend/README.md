@@ -8,7 +8,7 @@ Explicit controlled-fork draft PR publication is implemented and tested with moc
 responses and a published controlled-fork demo. Finalized trace readback and a controlled
 live hosted recovery drill are saved; see [Neatlogs recovery](NEATLOGS_RECOVERY.md).
 GitHub App visitor login, per-user permissions and frontend polling are implemented;
-live connected-user execution remains pending. See [GitHub App setup](GITHUB_APP.md).
+live controlled connected-user execution and publication are verified in [user-run evidence](../evidence/github-app/README.md). See [GitHub App setup](GITHUB_APP.md).
 
 Install from the repository root:
 

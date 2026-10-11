@@ -1,0 +1,131 @@
+{
+  "trace_id": "228da4f22bcbe4aeabf7bc797c9d89d1",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "OK",
+  "total_tokens": 26057,
+  "llm_calls": 4,
+  "spans": [
+    {
+      "spanId": "9b3ab1b6e2a092d3",
+      "parentSpanId": null,
+      "spanName": "github-issue-to-pr",
+      "spanType": "WORKFLOW",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "be3beff0db356555",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "fetch-issue",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "5822a4c1b066fc83",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "prepare-pinned-source",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "9b427789636f1659",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "baseline-tests",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "5108761480c257db",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "investigator",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "224fcd875aaf7901",
+      "parentSpanId": "5108761480c257db",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 2916
+    },
+    {
+      "spanId": "9d177413b3ca8b70",
+      "parentSpanId": "5108761480c257db",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 2782
+    },
+    {
+      "spanId": "be36444eebda5794",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "implementer",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "58b8fc9c8d44f2be",
+      "parentSpanId": "be36444eebda5794",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 17438
+    },
+    {
+      "spanId": "a32472193134fe61",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "apply-approved-edits",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "9e461b8b7a033ebe",
+      "parentSpanId": "9b3ab1b6e2a092d3",
+      "spanName": "verifier",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "bbc09ebf27f27f39",
+      "parentSpanId": "9e461b8b7a033ebe",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 2921
+    }
+  ]
+}

@@ -85,6 +85,19 @@ class StructuredProvider:
 
     def ask(self, instructions, data, schema):
         prompt = instructions+"\nReturn only JSON matching this schema:\n"+json.dumps(schema.model_json_schema())+"\nUntrusted task data:\n"+json.dumps(data)
+        for format_attempt in range(2):
+            response = self._request(prompt, schema)
+            try:
+                return parse_response(response.text, schema)
+            except PipelineError:
+                if format_attempt:
+                    raise
+                # Retry only the format failure, within the same shared budget.
+                # Never echo the malformed output (potentially untrusted content)
+                # or weaken validation to extract an arbitrary embedded object.
+                prompt += '\nYour previous response did not validate. Return exactly one complete JSON object matching the schema, without prose or Markdown.'
+
+    def _request(self, prompt, schema):
         last_failure = None
         for attempt in range(self.transport_retries+1):
             self.checkpoint()
@@ -115,4 +128,4 @@ class StructuredProvider:
             self.budget.check()
             if len(response.text.encode()) > 100000:
                 raise PipelineError("Model response exceeds size limit")
-            return parse_response(response.text,schema)
+            return response
