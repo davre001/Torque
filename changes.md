@@ -120,7 +120,7 @@ Done when: all visible navigation goes somewhere useful, normal run submission i
 - [ ] Display actual Entire context/checkpoint references without claiming provider SDK calls automatically create coding-agent checkpoints.
 - [ ] Distinguish live trace readback from local-artifact fallback during recovery. Keep synthetic Doctor traces separate from real application evidence.
 - [ ] Validate backend-provided external URLs before rendering links, especially in the legacy HTML renderer. HTML escaping does not by itself reject unsafe URL schemes. Use approved HTTPS hosts and `rel="noopener noreferrer"` for new-tab links.
-- [ ] Add a concise evidence link to the repository's real `evidence/` and `business/` documents for judges, if useful. cfo.ai belongs in supporting business evidence, not as a fictional runtime agent stage.
+- [ ] Add a concise evidence link to the repository's real `evidence/` and `cfo.ai/` documents for judges, if useful. cfo.ai belongs in supporting business evidence, not as a fictional runtime agent stage.
 
 Done when: every success/test/recovery claim is backed by the matching recorded run and reviewers can inspect its artifacts.
 

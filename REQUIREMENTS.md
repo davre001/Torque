@@ -16,7 +16,7 @@ Suture must take a real GitHub issue URL, investigate the codebase, implement a 
 |---|---|---|
 | Use **neatlogs** | Trace every agent run (model and tool calls, retries, failures, cost/latency) | Public/shareable trace links or screenshots in `/evidence` |
 | Use **Entire** | Checkpoints and/or Entire graph / agentic search for repository context | Checkpoint IDs or graph/search output in the repository and evidence |
-| Use **cfo.ai** | Business plan covering pricing, costs, revenue, and runway | `/business/cfo-plan.md` (or an export) is included in the submission |
+| Use **cfo.ai** | Business plan covering pricing, costs, revenue, and runway | `/cfo.ai/README.md` (or an export) is included in the submission |
 | Code written during event | Commits dated **October 10–12, 2026** only | Public repository shows commit timestamps |
 | Public repository | Open source; judges can clone and inspect | Repository URL included in the X submission |
 | Demo video ≤ 3 min | Explains the agent and all three tools (architecture, runtime, results) | MP4, YouTube, or Loom link |

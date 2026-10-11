@@ -92,7 +92,7 @@ suture/
 ├── tools/            # GitHub, Entire, test runner, trace reader, repo edit
 ├── runs/             # Per-run state records
 ├── evidence/         # Traces, checkpoints, before/after material
-├── business/         # cfo.ai plan
+├── cfo.ai/         # cfo.ai plan
 ├── frontend/         # Minimal web UI
 ├── demo/             # Demo script and assets
 └── README.md
