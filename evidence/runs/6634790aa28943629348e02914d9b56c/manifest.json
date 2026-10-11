@@ -1,0 +1,59 @@
+{
+  "run_id": "6634790aa28943629348e02914d9b56c",
+  "artifacts": [
+    {
+      "name": "baseline.json",
+      "original_sha256": "e50305b2c9d1251ac70ba9b7dede3122b7cd43b21a1574ee5f2c75da95fdec28",
+      "exported_sha256": "e50305b2c9d1251ac70ba9b7dede3122b7cd43b21a1574ee5f2c75da95fdec28",
+      "redacted": false
+    },
+    {
+      "name": "plan.json",
+      "original_sha256": "06ee19ae60fcb1f79c70fef9b76b74f29428b2c5dd97c908f0807fd33f52b0ec",
+      "exported_sha256": "06ee19ae60fcb1f79c70fef9b76b74f29428b2c5dd97c908f0807fd33f52b0ec",
+      "redacted": false
+    },
+    {
+      "name": "patch-1.json",
+      "original_sha256": "3c5cc2d3908bea0e11d5da0838f6357c20807048d1c9bf474763b3f615e2d243",
+      "exported_sha256": "3c5cc2d3908bea0e11d5da0838f6357c20807048d1c9bf474763b3f615e2d243",
+      "redacted": false
+    },
+    {
+      "name": "tests-1.json",
+      "original_sha256": "8ee2bb0ed17f4a43c78fe57dea81a02c218edeb596322ac00b94ea9f6f0ae0b3",
+      "exported_sha256": "8ee2bb0ed17f4a43c78fe57dea81a02c218edeb596322ac00b94ea9f6f0ae0b3",
+      "redacted": false
+    },
+    {
+      "name": "attempt-1.json",
+      "original_sha256": "1f585cf7bafc493ce919ae6290df16447fc238dd0920c81e99420246b1338635",
+      "exported_sha256": "1f585cf7bafc493ce919ae6290df16447fc238dd0920c81e99420246b1338635",
+      "redacted": false
+    },
+    {
+      "name": "verified.json",
+      "original_sha256": "3034aa6fa7a4793b5053f6b973bf4866b6f573b6407a916b4c046ff37fe7bec2",
+      "exported_sha256": "3034aa6fa7a4793b5053f6b973bf4866b6f573b6407a916b4c046ff37fe7bec2",
+      "redacted": false
+    }
+  ],
+  "github_actions": [
+    {
+      "url": "https://github.com/davre001/Torque/actions/runs/38116222563",
+      "name": "Torque test b4f51f316fb7492e91d6f1b5f6984b0f",
+      "created_at": "2026-10-11T05:52:53Z",
+      "conclusion": "success",
+      "association": "time-correlated; backend did not persist workflow IDs"
+    },
+    {
+      "url": "https://github.com/davre001/Torque/actions/runs/38116159905",
+      "name": "Torque test b3ecc58ace5742749f717c0eaf01a570",
+      "created_at": "2026-10-11T05:51:43Z",
+      "conclusion": "success",
+      "association": "time-correlated; backend did not persist workflow IDs"
+    }
+  ],
+  "publication": "No PR was created. Publication remains disabled.",
+  "telemetry": "Trace ID recorded locally; dashboard readback not independently verified in this export."
+}

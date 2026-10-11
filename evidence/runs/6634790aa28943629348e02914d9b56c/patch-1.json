@@ -1,0 +1,16 @@
+{
+  "summary": "Wrap the reel autoplay in a prefers-reduced-motion check so the video stays paused on scroll when reduced motion is enabled, while manual playback via the button still works and normal autoplay is unchanged when reduced motion is not enabled.",
+  "edits": [
+    {
+      "path": "site/index.html",
+      "original_sha256": "c6ebc346bb5df3028315ad98b8947024071b0effefd701265b77c38b661f890d",
+      "content": null,
+      "replacements": [
+        {
+          "search": "  const reel = $(\"reel\"), reelBtn = $(\"reel-btn\");\n  const vio = new IntersectionObserver(([en]) => { if (en.isIntersecting) reel.play().catch(() => {}); else reel.pause(); }, { threshold: 0.3 });\n  vio.observe(reel);",
+          "replacement": "  const reel = $(\"reel\"), reelBtn = $(\"reel-btn\");\n  const prefersReducedMotion = matchMedia(\"(prefers-reduced-motion: reduce)\").matches;\n  const vio = new IntersectionObserver(([en]) => { if (en.isIntersecting) { if (!prefersReducedMotion) reel.play().catch(() => {}); } else reel.pause(); }, { threshold: 0.3 });\n  vio.observe(reel);"
+        }
+      ]
+    }
+  ]
+}

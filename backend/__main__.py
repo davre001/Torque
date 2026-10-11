@@ -1,6 +1,7 @@
 """Run with python -m backend; CLI submissions use the same durable queue."""
 import argparse
 import json
+import logging
 import signal
 from backend.config import Settings
 from backend.models import SubmitRun, parse_issue
@@ -35,6 +36,10 @@ def main():
             parser.error("Run not found")
         print(json.dumps(record,indent=2))
     else:
+        logging.basicConfig(level=logging.INFO,format="%(asctime)s %(name)s: %(message)s")
+        # Signed artifact URLs must not appear in HTTP client logs.
+        logging.getLogger("httpx").setLevel(logging.WARNING)
+        logging.getLogger("httpcore").setLevel(logging.WARNING)
         processor = AgentProcessor()
         worker = Worker(store,settings,processor)
         signal.signal(signal.SIGINT,worker.stop)

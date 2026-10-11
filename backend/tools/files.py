@@ -40,3 +40,31 @@ def read_files(root, names, max_bytes=100000):
             raise PipelineError("Only UTF-8 text files are supported") from exc
         result[name] = {"content":text,"sha256":hashlib.sha256(data).hexdigest()}
     return result
+
+def investigation_context(context,terms_by_file,max_bytes=16000):
+    """Select labeled excerpts using operator-reviewed terms, never model instructions."""
+    result = {}
+    for name,record in context.items():
+        terms = terms_by_file.get(name)
+        if terms is None:
+            result[name] = dict(record)
+            continue
+        if not terms or len(terms) > 10 or any(not term or len(term) > 80 for term in terms):
+            raise PipelineError("Invalid investigation context terms")
+        lines = record["content"].splitlines(keepends=True)
+        selected = set()
+        for index,line in enumerate(lines):
+            if any(term in line for term in terms):
+                selected.update(range(max(0,index-12),min(len(lines),index+13)))
+        if not selected:
+            raise PipelineError("Reviewed investigation terms did not match; review the recipe")
+        excerpts,previous = [], -2
+        for index in sorted(selected):
+            if index != previous+1:
+                excerpts.append(f"\n[Excerpt starts at original line {index+1}]\n")
+            excerpts.append(lines[index])
+            previous = index
+        result[name] = {**record,"content":"".join(excerpts),"is_excerpt":True}
+    if sum(len(record["content"].encode("utf-8")) for record in result.values()) > max_bytes:
+        raise PipelineError("Investigation context exceeds size limit; review context selection")
+    return result

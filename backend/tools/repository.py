@@ -3,10 +3,14 @@ import io
 from pathlib import Path
 import re
 import stat
+import time
+import logging
 import zipfile
 import httpx
 from backend.models import PipelineError
 from backend.tools.files import safe_path
+
+log = logging.getLogger(__name__)
 
 def extract_archive(data, root, max_bytes=128_000_000):
     root = Path(root)
@@ -53,12 +57,23 @@ def snapshot(owner, repository, sha, root, checkpoint):
         raise PipelineError("Source revision must be immutable")
     checkpoint()
     content = bytearray()
+    last_check = time.monotonic()
+    last_progress = last_check
+    log.info("Downloading pinned source archive")
     with httpx.stream("GET",f"https://codeload.github.com/{owner}/{repository}/zip/{sha}",
                       timeout=30,follow_redirects=False) as response:
         response.raise_for_status()
-        for chunk in response.iter_bytes():
-            checkpoint()
+        for chunk in response.iter_bytes(chunk_size=65536):
+            now = time.monotonic()
+            if now - last_check >= 0.5:
+                checkpoint()
+                last_check = now
             content.extend(chunk)
             if len(content) > 128_000_000:
                 raise PipelineError("Repository archive exceeds download limit")
+            if now - last_progress >= 10:
+                log.info("Source download: %.1f MiB",len(content)/1048576)
+                last_progress = now
+    checkpoint()
+    log.info("Source downloaded; validating archive")
     return extract_archive(content,root)

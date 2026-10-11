@@ -1,0 +1,43 @@
+{
+  "number": 1,
+  "patch_sha256": "041ded274194f4acb322f586b5bc9af4c6e22f21fa4d721d4e505350200037b0",
+  "tests_passed": true,
+  "review": {
+    "approved": true,
+    "rationale": "The change checks `prefers-reduced-motion: reduce` before triggering `reel.play()` on intersection. When reduced motion is enabled, autoplay on scroll is suppressed while manual playback via the watch button remains fully functional. When reduced motion is disabled, autoplay on scroll behaves as before.",
+    "satisfied_criteria": [
+      0,
+      1,
+      2
+    ]
+  },
+  "budget": {
+    "calls": 3,
+    "tokens": 23856,
+    "estimated_cost_usd": 0.05654100000000001,
+    "usage": [
+      {
+        "model": "gemini-3.5-flash",
+        "usage": "provider-reported",
+        "input_tokens": 2529,
+        "output_tokens": 685,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 17152,
+        "output_tokens": 339,
+        "estimated_cost_usd": 0.056541
+      },
+      {
+        "model": "gemini-3.5-flash",
+        "usage": "provider-reported",
+        "input_tokens": 2467,
+        "output_tokens": 684,
+        "estimated_cost_usd": 0.0
+      }
+    ]
+  },
+  "trace_id": "65f1c230ec0f31c423c81d7f0e33ed02"
+}

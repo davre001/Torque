@@ -3,6 +3,7 @@
     "image": "REPLACE_WITH_REVIEWED_IMAGE_AT_SHA256_DIGEST",
     "command": ["python", "/acceptance/test_reduced_motion.py"],
     "context_files": ["site/index.html"],
+    "investigation_terms": {"site/index.html": ["reel", "prefers-reduced-motion", "IntersectionObserver"]},
     "editable_files": ["site/index.html"],
     "acceptance_criteria": [
       "With reduced motion enabled, the demo video remains paused until the user chooses playback.",

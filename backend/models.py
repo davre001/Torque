@@ -2,7 +2,7 @@
 from enum import StrEnum
 import re
 from typing import Literal
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 class Status(StrEnum):
     QUEUED = "queued"
@@ -58,10 +58,21 @@ class Plan(Record):
     acceptance_criteria: list[str] = Field(min_length=1,max_length=12)
     files: list[str] = Field(min_length=1,max_length=10)
 
+class Replacement(Record):
+    search: str = Field(min_length=1,max_length=20000)
+    replacement: str = Field(max_length=20000)
+
 class Edit(Record):
     path: str
     original_sha256: str = Field(pattern="^[0-9a-f]{64}$")
-    content: str
+    content: str | None = None
+    replacements: list[Replacement] | None = Field(default=None,min_length=1,max_length=20)
+
+    @model_validator(mode="after")
+    def one_edit_format(self):
+        if (self.content is None) == (self.replacements is None):
+            raise ValueError("Specify either content or replacements")
+        return self
 
 class Patch(Record):
     summary: str = Field(min_length=1,max_length=4000)

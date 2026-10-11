@@ -2,11 +2,14 @@
 from contextlib import nullcontext
 from pathlib import Path
 import hashlib
+import logging
 from backend.agents import investigator, implementer, verifier, recovery
 from backend.artifacts import Artifacts
 from backend.models import PipelineError, Status, parse_issue
 from backend.tools.files import read_files
 from backend.tools.patches import apply_patch
+
+log = logging.getLogger(__name__)
 
 class Pipeline:
     def __init__(self, *, github, prepare, runner, investigator_provider,
@@ -51,6 +54,7 @@ class Pipeline:
                 run = store.get(run_id)
                 source_owner,repo,_ = parse_issue(run["issue_url"])
                 with self.span("fetch-issue"):
+                    log.info("Fetching issue and source revision for run %s",run_id)
                     issue = self.github.issue(run["issue_url"])
                     if issue["state"] != "open":
                         raise PipelineError("Issue is closed; choose an open issue")
@@ -67,6 +71,7 @@ class Pipeline:
                     raise PipelineError("Every editable file must also be a context file")
                 originals = {name:context[name]["content"] for name in self.recipe.editable_files}
                 with self.span("baseline-tests"):
+                    log.info("Starting baseline tests for run %s",run_id)
                     baseline = self.runner.run(workspace,check)
                 save("baseline",baseline.model_dump())
                 result["baseline_passed"] = baseline.passed
@@ -107,7 +112,8 @@ class Pipeline:
                         raise PipelineError("Acceptance test infrastructure failed; stopping without agent recovery")
                     changed = read_files(workspace,self.recipe.context_files)
                     with self.span("verifier","AGENT",attempt=number):
-                        review = verifier.verify(self.investigator_provider,plan,changed,tests)
+                        review = verifier.verify(self.investigator_provider,plan,changed,tests,
+                                                 recipe=self.recipe,originals=originals)
                     attempt = {"number":number,"patch_sha256":patch_hash,"tests_passed":tests.passed,
                                "review":review.model_dump(),"budget":self.budget.snapshot(),
                                "trace_id":result.get("trace_id")}

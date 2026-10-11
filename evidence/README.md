@@ -8,7 +8,8 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 - Synthetic Doctor probe trace: `219851050b14a47507240e0e09bbaa15`.
 - The probe timed out during readback; the trace subsequently appeared in the dashboard, as confirmed by the team.
 - This synthetic trace does not verify the application's agent instrumentation.
-- Pending: actual failed agent run and recovered successful run, with dashboard links and a comparison of the failure, fix, latency, and cost where available.
+- Successful live agent run: `6634790aa28943629348e02914d9b56c`, with local trace ID `65f1c230ec0f31c423c81d7f0e33ed02`. See the [sanitized demo evidence](runs/6634790aa28943629348e02914d9b56c/README.md).
+- Pending: dashboard trace link/screenshots, plus a separately documented failed run and recovery comparison. The saved successful run passed on its first implementation attempt; it does not demonstrate an in-run recovery retry.
 
 ## Entire
 
@@ -23,6 +24,8 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 - Covers proposed pricing, inference and infrastructure costs, revenue scenarios, cash funding gaps, runway, and sensitivity. Forecasts are assumptions rather than actual business results; the business README records a discrepancy between the narrative and the exported conservative cash-flow result.
 
 ## Demo and submission
+
+- Saved [verified live demo run](runs/6634790aa28943629348e02914d9b56c/README.md): baseline bug reproduced, all three browser assertions passed, and Gemini approved the patch. Three model calls used 23,856 tokens at an estimated $0.056541. No PR was published; publication remains disabled.
 
 - Record the issue URL, verified pull request, real test results, and failure-to-recovery sequence.
 - Save public build-log links tagged `#neatHack`.

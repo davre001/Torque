@@ -1,0 +1,11 @@
+{
+  "summary": "Check for prefers-reduced-motion before autoplaying the demo reel video in site/index.html so that the video stays paused on scroll when reduced motion is enabled, while maintaining manual playback functionality and existing autoplay behavior when reduced motion is disabled.",
+  "acceptance_criteria": [
+    "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+    "Manual playback still works when reduced motion is enabled.",
+    "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+  ],
+  "files": [
+    "site/index.html"
+  ]
+}

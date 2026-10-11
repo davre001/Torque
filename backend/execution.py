@@ -12,6 +12,7 @@ class Recipe(Record):
     image: str
     command: list[str] = Field(min_length=1,max_length=30)
     context_files: list[str] = Field(min_length=1,max_length=30)
+    investigation_terms: dict[str,list[str]] = Field(default_factory=dict)
     editable_files: list[str] = Field(min_length=1,max_length=10)
     acceptance_criteria: list[str] = Field(min_length=1,max_length=12)
     suite_directory: str

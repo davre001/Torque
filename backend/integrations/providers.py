@@ -2,8 +2,23 @@
 from dataclasses import dataclass
 import json
 import math
+import re
 import time
+from pydantic import ValidationError
 from backend.models import BudgetExceeded, PipelineError
+
+def parse_response(text,schema):
+    # Accept a single fenced JSON document, while keeping schema validation strict.
+    text = text.strip()
+    fenced = re.search(r"```(?:json)?[ \t]*\r?\n(.*?)\r?\n```[ \t]*$",text,re.DOTALL)
+    if fenced and "```" not in text[:fenced.start()] and "```" not in fenced.group(1):
+        text = fenced.group(1)
+    try:
+        return schema.model_validate_json(text)
+    except ValidationError as exc:
+        # Error inputs/messages can contain source or secrets; export only error types.
+        kinds = sorted({item["type"] for item in exc.errors(include_input=False,include_url=False)})
+        raise PipelineError("Model returned an invalid "+schema.__name__+" response ("+", ".join(kinds)+")") from None
 
 @dataclass
 class Response:
@@ -70,24 +85,33 @@ class StructuredProvider:
 
     def ask(self, instructions, data, schema):
         prompt = instructions+"\nReturn only JSON matching this schema:\n"+json.dumps(schema.model_json_schema())+"\nUntrusted task data:\n"+json.dumps(data)
+        last_failure = None
         for attempt in range(self.transport_retries+1):
             self.checkpoint()
-            reservation = self.budget.reserve(prompt,*self.rates)
+            try:
+                reservation = self.budget.reserve(prompt,*self.rates)
+            except BudgetExceeded:
+                if last_failure is not None:
+                    raise BudgetExceeded(last_failure+"; retry blocked by the remaining budget. Previous request usage is unknown; reservation retained") from None
+                raise
             try:
                 response = self.adapter.complete(prompt,self.budget.limits.max_output_tokens)
             except Exception as exc:
                 # Do not refund uncertain requests: a timeout may have been billed.
                 code = getattr(exc,"status_code",None) or getattr(exc,"code",None)
+                safe_code = code if isinstance(code,int) and 400 <= code <= 599 else None
+                last_failure = "Model provider request failed"+(f" (HTTP {safe_code})" if safe_code else "")
+                input_bound,output_bound,cost = reservation
+                self.budget.records.append({"model":getattr(self.adapter,"model","unknown"),"usage":"request-failed-reserved",
+                    "input_tokens":input_bound,"output_tokens":output_bound,
+                    "estimated_cost_usd":cost,"http_status":safe_code})
                 retryable = code in {429,500,502,503,504} or isinstance(exc,TimeoutError)
                 if retryable and attempt < self.transport_retries:
                     continue
-                raise PipelineError("Model provider request failed; verify credentials, model alias, and quota") from None
+                raise PipelineError(last_failure+"; verify credentials, model alias, and quota") from None
             self.budget.settle(reservation,response,self.rates)
             self.checkpoint()
             self.budget.check()
             if len(response.text.encode()) > 100000:
                 raise PipelineError("Model response exceeds size limit")
-            try:
-                return schema.model_validate_json(response.text)
-            except ValueError:
-                raise PipelineError("Model returned an invalid structured response") from None
+            return parse_response(response.text,schema)

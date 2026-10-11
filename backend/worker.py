@@ -18,6 +18,7 @@ class Worker:
         if claimed is None:
             return False
         run_id, owner = claimed
+        log.info("Processing run %s",run_id)
         finished, lost = threading.Event(), threading.Event()
 
         def renew():

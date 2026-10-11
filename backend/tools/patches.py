@@ -16,7 +16,20 @@ def apply_patch(root, patch, editable_files, max_bytes=100000):
         previous = target.read_bytes()
         if hashlib.sha256(previous).hexdigest() != edit.original_sha256:
             raise PipelineError("Patch source hash is stale")
-        content = edit.content.encode("utf-8")
+        if edit.replacements is not None:
+            try:
+                text = previous.decode("utf-8")
+            except UnicodeDecodeError:
+                raise PipelineError("Patch target is not UTF-8") from None
+            for replacement in edit.replacements:
+                if text.count(replacement.search) != 1:
+                    raise PipelineError("Patch search must match exactly once")
+                text = text.replace(replacement.search,replacement.replacement,1)
+                if len(text.encode("utf-8")) > max_bytes:
+                    raise PipelineError("Patch exceeds size limit")
+            content = text.encode("utf-8")
+        else:
+            content = edit.content.encode("utf-8")
         total += len(previous) + len(content)
         if total > max_bytes or b"\x00" in content:
             raise PipelineError("Patch exceeds size limit or contains binary content")

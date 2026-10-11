@@ -10,7 +10,7 @@ class Gemini:
         from google.genai import types
         self.model = model
         self.client = wrap(genai.Client(api_key=key,http_options=types.HttpOptions(
-            timeout=45000,retry_options=types.HttpRetryOptions(attempts=1))))
+            timeout=120000,retry_options=types.HttpRetryOptions(attempts=1))))
 
     def complete(self,prompt,max_output_tokens):
         from google.genai import types

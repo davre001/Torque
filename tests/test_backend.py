@@ -87,7 +87,9 @@ def test_worker_failure_does_not_expose_exception_secrets(store):
     assert store.get(run_id)["status"] == "failed"
     assert "secret-provider-key" not in str(store.get(run_id))
 
-def test_api_queue_auth_history_events_and_conflicts(tmp_path):
+def test_api_queue_auth_history_events_and_conflicts(tmp_path,monkeypatch):
+    # Readiness must not depend on the developer's real .env configuration.
+    monkeypatch.setenv("GEMINI_MODEL","")
     app = create_app(Settings(tmp_path/"api.db","local-test-token",
                               allowed_repositories=("gabrielelozupone/kokon",)))
     headers = {"Authorization":"Bearer local-test-token", "Idempotency-Key":"request-1"}
