@@ -12,6 +12,7 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Record the synthetic Doctor trace appearing in the dashboard; hosted readback initially timed out.
 - [x] Enable/approve Entire development hooks and capture checkpoint evidence.
 - [x] Commit cfo.ai financial model, screenshots, and assumptions summary.
+- [x] Implement read-only issue fetching with strict GitHub URL parsing and mocked API tests.
 - [ ] Verify the actual LiteLLM URL, model alias, permissions, usage reporting, and quota.
 - [ ] Verify Gemini access to the configured model and handle its rate/quota limits.
 - [ ] Implement shared provider adapters, role routing, timeouts, and spending accounting.

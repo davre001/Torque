@@ -8,11 +8,11 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 
 - [x] Create core modules and agent/tool package placeholders.
 - [x] Identify kokon issue #4 as the first demo candidate.
-- [ ] Add a reproducible Python dependency manifest and installation instructions.
+- [x] Add runtime/development dependency manifests, installed-environment lock, and installation instructions.
 - [ ] Load root configuration, preserve deployment overrides, and validate execution limits.
 - [ ] Implement typed run, attempt, plan, verification, and error records.
-- [ ] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
-- [ ] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.
+- [x] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
+- [x] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.
 - [ ] Implement submit, status, cancel, publish, and readiness endpoints; add SSE only if needed.
 - [ ] Validate issue URLs, run IDs, caller ownership, and configured repository destinations.
 - [ ] Prepare a pinned checkout and capture baseline test results.
@@ -28,6 +28,11 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [ ] Verify the end-to-end run and export actual traces, tests, PR, and recovery evidence.
 
 ## Outcome and scope
+
+Implemented milestone: configuration, state enums/validated submission records, SQLite queue and history,
+authenticated local-operator API, separate worker, and read-only issue lookup.
+See [backend/README.md](backend/README.md) for actual commands. Provider execution, visitor auth,
+isolated tests, and publication remain pending. JSON event polling is implemented; SSE is pending.
 
 Scope update: `changes.md` now specifies a public landing page and a separate authenticated workspace. Real Connect GitHub and Disconnect behavior require GitHub App identity/installation onboarding, server-side sessions, and per-user ownership checks in the current requested scope. The local single-operator path below remains the first development milestone; it does not fulfill multi-user connection behavior by itself.
 

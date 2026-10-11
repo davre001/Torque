@@ -8,11 +8,11 @@ The worker is a separate process. FastAPI only submits jobs and reads state; it 
 
 - [x] Select SQLite and one separate worker with concurrency one for the prototype.
 - [x] Create `backend/worker.py` and `backend/store.py` placeholders.
-- [ ] Implement queue schema, atomic job claims, ownership tokens, and state transitions.
-- [ ] Implement `python -m backend worker` and define CLI/worker coordination.
-- [ ] Implement heartbeats during slow operations and reject expired-owner writes.
+- [x] Implement queue schema, atomic job claims, ownership tokens, and persisted worker state.
+- [x] Implement `python -m backend worker`; CLI submissions enqueue for that worker.
+- [x] Implement heartbeats during slow operations and reject expired-owner writes.
 - [ ] Persist attempt outcomes and atomic artifact records before advancing stages.
-- [ ] Detect expired jobs and reconcile interrupted runs on startup.
+- [x] Detect expired jobs on claim/startup and mark interrupted without replay.
 - [ ] Bound job restarts, transport retries, and agent recovery independently.
 - [ ] Implement cancellation checks and test-process-tree termination.
 - [ ] Implement graceful shutdown, interruption records, and one-time telemetry teardown.
