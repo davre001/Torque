@@ -1,6 +1,7 @@
 """Root environment settings. Deployment variables take precedence."""
 from dataclasses import dataclass
 import os
+import math
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -18,7 +19,7 @@ class Settings:
     def __post_init__(self):
         if self.heartbeat_seconds <= 0 or self.lease_seconds <= 2 * self.heartbeat_seconds:
             raise ValueError("Lease must exceed twice the positive heartbeat interval")
-        if self.poll_seconds <= 0:
+        if not math.isfinite(self.poll_seconds) or self.poll_seconds <= 0:
             raise ValueError("Poll interval must be positive")
 
     @classmethod

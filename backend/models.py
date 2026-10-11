@@ -1,7 +1,8 @@
 """Run states and strict GitHub issue validation."""
 from enum import StrEnum
 import re
-from pydantic import BaseModel, field_validator
+from typing import Literal
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 class Status(StrEnum):
     QUEUED = "queued"
@@ -42,3 +43,46 @@ class Conflict(ValueError):
 
 class Cancelled(RuntimeError):
     pass
+
+class PipelineError(RuntimeError):
+    """Safe operator-facing error; must contain no provider exception payload."""
+
+class BudgetExceeded(PipelineError):
+    pass
+
+class Record(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+class Plan(Record):
+    summary: str = Field(min_length=1,max_length=4000)
+    acceptance_criteria: list[str] = Field(min_length=1,max_length=12)
+    files: list[str] = Field(min_length=1,max_length=10)
+
+class Edit(Record):
+    path: str
+    original_sha256: str = Field(pattern="^[0-9a-f]{64}$")
+    content: str
+
+class Patch(Record):
+    summary: str = Field(min_length=1,max_length=4000)
+    edits: list[Edit] = Field(min_length=1,max_length=10)
+
+class Review(Record):
+    approved: bool
+    rationale: str = Field(min_length=1,max_length=4000)
+    satisfied_criteria: list[int]
+
+class Recovery(Record):
+    strategy: str = Field(min_length=1,max_length=4000)
+
+class TestResult(Record):
+    exit_code: int
+    output: str
+    timed_out: bool = False
+    command: list[str]
+    failure_kind: Literal["assertion","infrastructure","timeout"] | None = None
+    assertions_passed: int = Field(default=0,ge=0)
+
+    @property
+    def passed(self):
+        return self.exit_code == 0 and not self.timed_out and self.failure_kind is None

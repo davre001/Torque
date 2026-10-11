@@ -14,6 +14,9 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement separate worker, heartbeat renewal, cancellation, and interrupted-job recovery.
 - [x] Replace legacy API BackgroundTasks with authenticated queue/status/history routes.
 - [x] Implement and test read-only GitHub issue lookup.
+- [x] Implement provider adapters, bounded agent roles, patch validation, and fixture-tested verification/recovery.
+- [x] Add pinned source snapshots, atomic artifacts, and Docker-only test execution interface.
+- [x] Add Neatlogs worker lifecycle and prepare independent kokon browser acceptance tests.
 - [ ] Implement configuration and provider/GitHub preflight checks.
 - [ ] Implement typed records, SQLite persistence, and durable job ownership.
 - [ ] Implement and verify the separate worker lifecycle.
@@ -28,6 +31,10 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 
 Design: [implementation](backend_implementation.md), [background worker](background_worker.md), [integrations](integration.md).
 
-Python source lives in `backend/`; design documents live at the root. The queue/API/worker milestone is implemented; agent and tool modules remain pending. Runnable commands and limitations are in [backend/README.md](backend/README.md). The worker currently fetches issue context and records an explicit incomplete-pipeline failure. It does not call models or create PRs.
+Python source lives in `backend/`; design documents live at the root. The queue and agent
+pipeline are implemented and tested using controlled fixtures. Live Docker/provider/trace
+acceptance remains pending. Commands and configuration are in [backend/README.md](backend/README.md).
+The worker stops before model calls if its isolated runner or recipe is unavailable.
+Verified patches remain unpublished.
 
 Runtime database, checkouts, and logs will live under ignored `var/`. Selected sanitized run evidence belongs in `evidence/runs/`. Tests will be implemented alongside actual behavior.

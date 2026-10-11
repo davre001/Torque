@@ -98,6 +98,9 @@ class Store:
                 db.execute("UPDATE runs SET status='interrupted',current_agent=NULL,updated_at=?,error=? WHERE run_id=?", (self.clock(),"Worker lease expired; inspect artifacts before starting a new run",row[0]))
                 db.execute("UPDATE jobs SET state='done',owner=NULL WHERE run_id=?", (row[0],))
                 self._event(db,row[0],{"status":"interrupted"})
+            # Prototype concurrency is one across worker processes, not one per process.
+            if db.execute("SELECT 1 FROM jobs WHERE state='running' LIMIT 1").fetchone():
+                return None
             row = db.execute("SELECT jobs.run_id FROM jobs JOIN runs USING(run_id) WHERE jobs.state='queued' ORDER BY runs.created_at LIMIT 1").fetchone()
             if not row:
                 return None
@@ -118,6 +121,8 @@ class Store:
         status = Status(status)
         with self.transaction() as db:
             self._owns(db,run_id,owner)
+            if status == Status.COMPLETED and not db.execute("SELECT 1 FROM runs WHERE run_id=? AND pr_url IS NOT NULL", (run_id,)).fetchone():
+                raise Conflict("Completed runs require an actual recorded PR URL")
             db.execute("UPDATE runs SET status=?,current_agent=?,updated_at=?,error=?,result=COALESCE(?,result) WHERE run_id=?", (status,None if status in TERMINAL else status,self.clock(),error,json.dumps(result) if result is not None else None,run_id))
             if attempt is not None:
                 db.execute("INSERT INTO attempts VALUES(?,?,?)", (run_id,attempt["number"],json.dumps(attempt)))

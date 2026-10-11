@@ -1,7 +1,8 @@
-"""First execution milestone: read-only issue investigation, never fake a PR."""
+"""Coordinator exports; investigate retains the read-only diagnostic milestone."""
 import os
 from backend.models import Status
 from backend.integrations.github import GitHub
+from backend.pipeline import Pipeline
 
 def investigate(store, run_id, owner, checkpoint):
     checkpoint()

@@ -11,6 +11,9 @@ The worker is a separate process. FastAPI only submits jobs and reads state; it 
 - [x] Implement queue schema, atomic job claims, ownership tokens, and persisted worker state.
 - [x] Implement `python -m backend worker`; CLI submissions enqueue for that worker.
 - [x] Implement heartbeats during slow operations and reject expired-owner writes.
+- [x] Enforce prototype concurrency one across competing worker processes.
+- [x] Persist local attempt/test/recovery artifacts atomically before advancing pipeline state.
+- [x] Separate bounded transport retries from the maximum two agent recovery retries.
 - [ ] Persist attempt outcomes and atomic artifact records before advancing stages.
 - [x] Detect expired jobs on claim/startup and mark interrupted without replay.
 - [ ] Bound job restarts, transport retries, and agent recovery independently.

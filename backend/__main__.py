@@ -4,7 +4,7 @@ import json
 import signal
 from backend.config import Settings
 from backend.models import SubmitRun, parse_issue
-from backend.orchestrator import investigate
+from backend.runtime import AgentProcessor, readiness
 from backend.store import Store
 from backend.worker import Worker
 
@@ -22,7 +22,7 @@ def main():
     if args.command == "preflight":
         print(json.dumps({"storage":"ready","operator_access_configured":bool(settings.operator_token),
                           "allowed_repositories":list(settings.allowed_repositories),
-                          "agent_pipeline_ready":False}))
+                          "agent_pipeline":readiness()}))
     elif args.command == "run":
         issue = SubmitRun(issue_url=args.issue_url)
         owner, repo, _ = parse_issue(issue.issue_url)
@@ -35,13 +35,17 @@ def main():
             parser.error("Run not found")
         print(json.dumps(record,indent=2))
     else:
-        worker = Worker(store,settings,investigate)
+        processor = AgentProcessor()
+        worker = Worker(store,settings,processor)
         signal.signal(signal.SIGINT,worker.stop)
         signal.signal(signal.SIGTERM,worker.stop)
-        if args.once:
-            worker.once()
-        else:
-            worker.run()
+        try:
+            if args.once:
+                worker.once()
+            else:
+                worker.run()
+        finally:
+            processor.close()
 
 if __name__ == "__main__":
     main()

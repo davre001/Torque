@@ -37,9 +37,12 @@ def create_app(settings=None):
 
     @app.get("/health")
     def health():
+        from backend.runtime import readiness
+        pipeline = readiness()
         return {"status":"ok", "storage":"sqlite", "execution":"separate-worker",
                 "operator_access_configured":bool(settings.operator_token),
-                "agent_pipeline_ready":False, "github_login_ready":False}
+                "agent_pipeline_ready":pipeline["configured"],
+                "agent_pipeline":pipeline, "github_login_ready":False}
 
     @app.post("/api/runs", status_code=201)
     def submit(body: SubmitRun, user=Depends(operator),

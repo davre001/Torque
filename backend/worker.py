@@ -1,7 +1,7 @@
 """Single-job worker with independent lease renewal and cooperative shutdown."""
 import logging
 import threading
-from backend.models import Cancelled, LeaseLost, Status
+from backend.models import Cancelled, LeaseLost, PipelineError, Status
 
 log = logging.getLogger(__name__)
 
@@ -52,6 +52,8 @@ class Worker:
             self._finish(run_id,owner,Status.CANCELLED)
         except InterruptedError:
             self._finish(run_id,owner,Status.INTERRUPTED,"Worker shutdown requested")
+        except PipelineError as exc:
+            self._finish(run_id,owner,Status.FAILED,str(exc))
         except Exception:
             # Exceptions may include API credentials; do not store raw messages.
             self._finish(run_id,owner,Status.FAILED,"Execution failed; check backend configuration and integration readiness")

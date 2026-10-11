@@ -4,3 +4,5 @@ httpx>=0.28,<1
 pydantic>=2.10,<3
 python-dotenv>=1.2,<2
 neatlogs>=1.4.26,<2
+openai>=2,<3
+google-genai>=1,<3

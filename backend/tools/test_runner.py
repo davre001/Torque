@@ -1,1 +1,5 @@
-"""Configured test recipes, bounded logs, and exit results (planned)."""
+"""Public test-runner interface; execution is Docker-only."""
+from backend.models import TestResult
+from backend.tools.sandbox import DockerRunner
+
+__all__ = ["DockerRunner", "TestResult"]

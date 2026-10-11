@@ -13,6 +13,9 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Enable/approve Entire development hooks and capture checkpoint evidence.
 - [x] Commit cfo.ai financial model, screenshots, and assumptions summary.
 - [x] Implement read-only issue fetching with strict GitHub URL parsing and mocked API tests.
+- [x] Implement both provider SDK adapters and structured role routing; live access remains unchecked.
+- [x] Implement explicit estimated budgets, bounded transport retries, and usage-required responses (zero rates only for verified free quota).
+- [x] Add worker-owned Neatlogs lifecycle/client wrappers and content masking; dashboard acceptance remains unchecked.
 - [ ] Verify the actual LiteLLM URL, model alias, permissions, usage reporting, and quota.
 - [ ] Verify Gemini access to the configured model and handle its rate/quota limits.
 - [ ] Implement shared provider adapters, role routing, timeouts, and spending accounting.

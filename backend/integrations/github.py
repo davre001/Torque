@@ -17,7 +17,21 @@ class GitHub:
         issue = response.json()
         if "pull_request" in issue:
             raise ValueError("URL identifies a pull request, not an issue")
-        return {"title":issue["title"][:500],"state":issue["state"],"url":url}
+        return {"title":issue["title"][:500],"state":issue["state"],"url":url,
+                "body":(issue.get("body") or "")[:20000]}
+
+    def revision(self, owner, repository):
+        from urllib.parse import quote
+        response = self.client.get(f"/repos/{owner}/{repository}")
+        response.raise_for_status()
+        branch = response.json()["default_branch"]
+        response = self.client.get(f"/repos/{owner}/{repository}/commits/{quote(branch,safe='')}")
+        response.raise_for_status()
+        sha = response.json()["sha"]
+        import re
+        if not re.fullmatch("[0-9a-f]{40}",sha):
+            raise ValueError("Invalid GitHub revision")
+        return sha
 
     def close(self):
         self.client.close()

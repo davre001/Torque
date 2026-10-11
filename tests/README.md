@@ -11,3 +11,8 @@ Run the backend foundation tests from the repository root:
 lease expiry/renewal, cancellation, redacted failures, authenticated API routes,
 and mocked GitHub reads. It does not verify live model calls, sandboxed repository
 tests, visitor login, or PR publication.
+
+`test_pipeline.py` adds deterministic failure/recovery fixtures, test-gate enforcement,
+budgets, immutable source/patch validation, artifacts, and telemetry masking.
+The independent browser script under `tests/acceptance` is excluded from ordinary
+pytest collection and must run inside its reviewed Docker image.

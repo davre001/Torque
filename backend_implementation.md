@@ -1,6 +1,8 @@
 # Torque backend implementation plan
 
-Status: design draft, October 11, 2026. This document describes planned behavior, not implemented capabilities. Related plans: [worker](background_worker.md), [integrations](integration.md). The existing root `implementation.md` remains the historical frontend plan.
+Status: implementation in progress, October 11, 2026. Checklists distinguish tested code from
+pending live acceptance. Related plans: [worker](background_worker.md), [integrations](integration.md).
+The existing root `implementation.md` remains the historical frontend plan.
 
 ## Implementation progress checklist
 
@@ -9,17 +11,17 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Create core modules and agent/tool package placeholders.
 - [x] Identify kokon issue #4 as the first demo candidate.
 - [x] Add runtime/development dependency manifests, installed-environment lock, and installation instructions.
-- [ ] Load root configuration, preserve deployment overrides, and validate execution limits.
-- [ ] Implement typed run, attempt, plan, verification, and error records.
+- [x] Load root configuration, preserve deployment overrides, and validate execution limits.
+- [x] Implement typed submission, plan, patch, review, recovery, and test records; attempts persist structured JSON.
 - [x] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
 - [x] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.
 - [ ] Implement submit, status, cancel, publish, and readiness endpoints; add SSE only if needed.
 - [ ] Validate issue URLs, run IDs, caller ownership, and configured repository destinations.
 - [ ] Prepare a pinned checkout and capture baseline test results.
 - [ ] Implement bounded file access, structured patch validation, and credential-free sandbox tests.
-- [ ] Implement Investigator context gathering and acceptance criteria.
-- [ ] Implement model-generated edits through restricted tools.
-- [ ] Implement Verifier with required tests as a hard publication gate.
+- [x] Implement Investigator with bounded context and immutable operator criteria (fixture-tested).
+- [x] Implement structured model edits through allowlisted, source-hash-checked file tools.
+- [x] Implement Verifier with required tests as a hard gate (fixture-tested; live acceptance pending).
 - [ ] Implement trace-informed Recovery and distinct retry/budget counters.
 - [ ] Persist verified patch/head records and enforce authorized publication.
 - [ ] Reproduce the kokon bug and automate all three playback acceptance criteria.
@@ -31,8 +33,16 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 
 Implemented milestone: configuration, state enums/validated submission records, SQLite queue and history,
 authenticated local-operator API, separate worker, and read-only issue lookup.
-See [backend/README.md](backend/README.md) for actual commands. Provider execution, visitor auth,
-isolated tests, and publication remain pending. JSON event polling is implemented; SSE is pending.
+See [backend/README.md](backend/README.md) for actual commands. Live provider/isolated-test
+acceptance, visitor auth, and publication remain pending. JSON event polling is implemented; SSE is pending.
+
+Second milestone: provider adapters, four agent roles, immutable public-source snapshots,
+restricted edits, estimated budgets, Docker-only runner, test-result classification, local
+failure recovery, and atomic verified-content artifacts are implemented. Fixture tests
+exercise failure and recovery; live provider/Docker/browser/Neatlogs checks are pending.
+The kokon browser suite is prepared under tests/acceptance/kokon but has not run.
+Readback-driven recovery, runtime Entire context, visitor authentication, and publication
+remain unchecked. No invented Git head SHA is recorded: verified source bytes have a digest.
 
 Scope update: `changes.md` now specifies a public landing page and a separate authenticated workspace. Real Connect GitHub and Disconnect behavior require GitHub App identity/installation onboarding, server-side sessions, and per-user ownership checks in the current requested scope. The local single-operator path below remains the first development milestone; it does not fulfill multi-user connection behavior by itself.
 
