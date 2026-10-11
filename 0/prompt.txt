@@ -397,3 +397,51 @@ confirm that background worker will use a separate worker  with a SQLite queue n
 
 ## My request:
 before you start building , in those backend related mds , add checklist , to help keep track of whats present and what's left
+
+---
+
+# Context from my IDE setup:
+
+## Active file: background_worker.md
+
+## Open tabs:
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+
+## My request:
+**confirm this if its in the plan; GitHub access:** connecting GitHub to neatlogs doesn’t give Torque permission to read issues or create PRs. The backend needs its own GitHub authentication.
+
+---
+
+# Context from my IDE setup:
+
+## Active file: background_worker.md
+
+## Open tabs:
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+
+## My request:
+one last thing before we start; check this ; **Entire sync:** one checkpoint is currently pending upload. Hooks are running, though Entire reports attribution warnings after the merges.
+
+---
+
+# Context from my IDE setup:
+
+## Active file: background_worker.md
+
+## Open tabs:
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+
+## My request:
+**check this too; Shared setup files:** `.gitignore`, `.entire/`, and `.codex/` remain uncommitted. We should review and commit the appropriate configuration so teammates get consistent setup.
