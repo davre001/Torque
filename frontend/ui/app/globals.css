@@ -161,3 +161,82 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.35);
 }
+
+/* ── Entrance & Appearing Animations ── */
+@keyframes appearFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes appearScaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-appear-fade-up {
+  animation: appearFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.animate-appear-fade-in {
+  animation: appearFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.animate-appear-scale-up {
+  animation: appearScaleUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-250 { animation-delay: 250ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* In-view reveal helper transitions */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-appear-fade-up,
+  .animate-appear-fade-in,
+  .animate-appear-scale-up {
+    animation: none !important;
+  }
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

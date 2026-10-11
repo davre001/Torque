@@ -11,16 +11,20 @@ export function Header() {
 
 	const links = [
 		{
-			label: 'Features',
-			href: '#features',
+			label: 'How it works',
+			href: '#how-it-works',
 		},
 		{
-			label: 'Pipeline',
-			href: '#pipeline',
+			label: 'Getting started',
+			href: '#getting-started',
 		},
 		{
-			label: 'About',
-			href: '#about',
+			label: 'Why Torque',
+			href: '#why-torque',
+		},
+		{
+			label: 'FAQ',
+			href: '#faq',
 		},
 	];
 
@@ -68,8 +72,12 @@ export function Header() {
 							{link.label}
 						</a>
 					))}
-					<Button variant="outline">Sign In</Button>
-					<Button>Get Started</Button>
+					<a
+						href="#workspace-preview"
+						className={buttonVariants({ variant: 'default', size: 'sm', className: 'rounded-xl' })}
+					>
+						Get Started
+					</a>
 				</div>
 				<Button size="icon" variant="outline" onClick={() => setOpen(!open)} className="md:hidden">
 					<MenuToggleIcon open={open} className="size-5" duration={300} />
@@ -98,16 +106,20 @@ export function Header() {
 									className: 'justify-start',
 								})}
 								href={link.href}
+								onClick={() => setOpen(false)}
 							>
 								{link.label}
 							</a>
 						))}
 					</div>
 					<div className="flex flex-col gap-2">
-						<Button variant="outline" className="w-full">
-							Sign In
-						</Button>
-						<Button className="w-full">Get Started</Button>
+						<a
+							href="#workspace-preview"
+							onClick={() => setOpen(false)}
+							className={buttonVariants({ className: 'w-full rounded-xl' })}
+						>
+							Get Started
+						</a>
 					</div>
 				</div>
 			</div>
