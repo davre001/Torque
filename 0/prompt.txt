@@ -577,3 +577,15 @@ n https://github.com/GabrieleLozupone/kokon/issues/4
   },
   "attempts": []
 }
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- REMOTE_RUNNER.md: backend/REMOTE_RUNNER.md
+- torque-remote-tests.yml: .github/workflows/torque-remote-tests.yml
+
+## My request:
+SO?
