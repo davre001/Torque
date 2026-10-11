@@ -1,6 +1,10 @@
 # Torque integration plan
 
-Status: draft. Credentials are locally configured but provider access and runtime instrumentation still need verification. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
+Frontend API wiring is now implemented in `/workspace`: credentialed requests, CSRF,
+persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
+The labeled landing preview remains separate. Connected-user browser acceptance is pending.
+
+Status: implemented single-operator integrations with live provider/browser/PR evidence; hosted trace readback and public-user integration remain pending. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
 
 ## Integration progress checklist
 
@@ -13,20 +17,20 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Enable/approve Entire development hooks and capture checkpoint evidence.
 - [x] Commit cfo.ai financial model, screenshots, and assumptions summary.
 - [x] Implement read-only issue fetching with strict GitHub URL parsing and mocked API tests.
-- [x] Implement both provider SDK adapters and structured role routing; live access remains unchecked.
+- [x] Implement both provider SDK adapters and structured role routing; live access verified in the saved demo.
 - [x] Implement explicit estimated budgets, bounded transport retries, and usage-required responses (zero rates only for verified free quota).
 - [x] Add worker-owned Neatlogs lifecycle/client wrappers and content masking; dashboard acceptance remains unchecked.
-- [ ] Verify the actual LiteLLM URL, model alias, permissions, usage reporting, and quota.
-- [ ] Verify Gemini access to the configured model and handle its rate/quota limits.
-- [ ] Implement shared provider adapters, role routing, timeouts, and spending accounting.
-- [ ] Initialize neatlogs once per process and instrument each actual model/tool call without duplicates.
+- [x] Verify LiteLLM model access and usage reporting in the live run; total remaining credit balance is not independently audited.
+- [x] Verify Gemini 3.5 Flash access; implement bounded provider errors/retries and token limits.
+- [x] Implement shared provider adapters, role routing, timeouts, and spending accounting.
+- [x] Initialize worker Neatlogs once and wrap model/tool calls; finalized dashboard span-tree acceptance remains pending.
 - [ ] Obtain separate authorized neatlogs read credentials and implement failure-trace retrieval.
 - [ ] Verify finalized application traces and genuine trace-driven recovery.
-- [ ] Verify GitHub source/destination identities and token permissions; select the demo fork.
-- [ ] Implement issue fetching, authenticated branch writes, and idempotent verified PR publication.
+- [x] Verify GitHub source/destination identities and token permissions; select the demo fork.
+- [x] Implement issue fetching, authenticated branch writes, and idempotent verified PR publication.
 - [ ] Verify authorization separately before any upstream public contribution.
 - [ ] Implement a supported Entire context adapter and save actual target-repository context evidence.
-- [ ] Review shared hook/settings files and commit appropriate configuration without local state.
+- [x] Review shared hook/settings files and commit appropriate configuration without local state.
 - [ ] Replace frontend simulation with real API polling and handle all planned statuses.
 - [ ] Verify secrets stay out of responses, sandbox environments, Git history, traces, and exported artifacts.
 - [ ] Replace financial cost assumptions with measured run data when available.
@@ -48,12 +52,12 @@ Load the root `.env` with `python-dotenv` before creating SDK clients. Environme
 | `LITELLM_BASE_URL` | Actual organiser-provided API base URL |
 | `LITELLM_MODEL` | Exact gateway alias for the selected Claude model |
 | `GEMINI_API_KEY` | Google AI Studio credential |
-| `GEMINI_MODEL` | User-selected `gemini-3.8-flash`; confirm account access before relying on it |
+| `GEMINI_MODEL` | `gemini-3.5-flash`, verified in the saved demo; availability is account-dependent |
 | `GITHUB_TOKEN` | Local operator's repository-scoped credential |
 
-Additional proposed settings: database/workspace locations, allowed source/destination repositories, max recovery retries (2), model/token/dollar limits, test recipe, and API development origins. Add them to the example when implementation defines the actual names.
+Database/workspace paths, source allowlist, publication destination, retry/model/token/dollar limits, test recipes, runner settings, and development origins are defined in `.env.example` and backend configuration.
 
-Route implementation and recovery to Claude through LiteLLM; route investigation summaries and verification reasoning to Gemini. First establish a Claude-only execution path, then add Gemini. Test results remain authoritative regardless of model choice. Do not silently switch provider when quotas fail; persist the error and apply only a configured fallback within the same budget.
+Route implementation and recovery to Claude through LiteLLM; route investigation summaries and verification reasoning to Gemini. The implemented path uses Gemini for investigation/review and Claude for edits/recovery. Test results remain authoritative regardless of model choice. Do not silently switch provider when quotas fail; persist the error and apply only a configured fallback within the same budget.
 
 If the gateway supports OpenAI-compatible chat completions, use a client configured with its explicit URL/key and model alias. This is distinct from calling Anthropic directly and does not require an invented Anthropic key. Confirm tool calling, structured response, usage accounting, and context limits for the actual gateway. Use Google's official `google-genai` SDK for direct Gemini access; its default endpoint handles routing without a custom Gemini URL.
 
@@ -112,7 +116,31 @@ Check actual gateway and Gemini model access with small operator-authorized call
 - [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
 - [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
 - [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
-- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [ ] GitHub App authentication and publication for connected visitors.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
+
+## Next work in order
+
+1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
+2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
+3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
+4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
+5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
+6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
+
+Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+
+## GitHub App backend milestone
+
+- [x] OAuth connect/callback with browser-bound one-time state and S256 PKCE.
+- [x] Encrypted server-side user credentials, expiring opaque sessions, secure production cookies, CSRF checks, and exact-origin CORS.
+- [x] GitHub App installation/repository permission checks and per-user run ownership.
+- [x] User-scoped worker/publication credentials; local operator PAT is never substituted for a visitor.
+- [x] Disconnect invalidation, cooperative cancellation, publication/disconnect fencing, and signed authorization-revoked webhook.
+- [x] Tests for OAuth replay, session expiry, secure cookies, CSRF, cross-user access, installation permissions, and revocation.
+- [ ] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
+- [ ] Wire landing-page connection and workspace UI to these backend endpoints.
+
+The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

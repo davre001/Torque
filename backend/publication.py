@@ -165,7 +165,7 @@ class Publisher:
         self.client.close()
 
 
-def publish_run(store,run_id,user_id='operator'):
+def publish_run(store,run_id,user_id='operator',destination=None):
     run=store.get(run_id,user_id)
     if run is None:
         raise Conflict('Run not found')
@@ -173,8 +173,17 @@ def publish_run(store,run_id,user_id='operator'):
         return run
     if run['status'] not in {'ready_to_publish','publishing'}:
         raise Conflict('Only a verified ready-to-publish run can be published')
-    destination=os.getenv('TORQUE_PUBLISH_REPOSITORY','')
-    publisher=Publisher(os.getenv('GITHUB_TOKEN',''),destination)
+    if user_id == 'operator':
+        destination=destination or os.getenv('TORQUE_PUBLISH_REPOSITORY','')
+        token=os.getenv('GITHUB_TOKEN','')
+    else:
+        from backend.github_auth import GitHubAuth
+        auth=GitHubAuth(store)
+        source_owner,source_repo,_=parse_issue(run['issue_url'])
+        auth.authorize(user_id,f'{source_owner}/{source_repo}')
+        destination=destination or f'{source_owner}/{source_repo}'
+        token=auth.authorize(user_id,destination,write=True)
+    publisher=Publisher(token,destination)
     owner=None
     try:
         source_owner,source_repo,_=parse_issue(run['issue_url'])

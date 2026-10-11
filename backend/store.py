@@ -150,6 +150,8 @@ class Store:
 
     def claim_publication(self,run_id,user_id,destination):
         with self.transaction() as db:
+            if user_id != "operator" and not db.execute("SELECT 1 FROM github_connections WHERE user_id=? AND revoked=0 AND expires>?",(user_id,self.clock())).fetchone():
+                raise Conflict("GitHub disconnected or authorization expired")
             run=db.execute("SELECT * FROM runs WHERE run_id=? AND user_id=?",(run_id,user_id)).fetchone()
             if not run or run['status'] not in {Status.READY,Status.PUBLISHING}:
                 raise Conflict("Only a verified ready-to-publish run can be published")

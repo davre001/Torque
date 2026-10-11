@@ -2,7 +2,7 @@
 from contextlib import asynccontextmanager
 import secrets
 from typing import Annotated
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from backend.config import Settings
 from backend.models import Conflict, SubmitRun, parse_issue
 from backend.store import Store
@@ -10,18 +10,37 @@ from backend.store import Store
 def create_app(settings=None):
     settings = settings or Settings.load()
     store = Store(settings.database)
+    from backend.github_auth import GitHubAuth
+    auth = GitHubAuth(store)
 
     @asynccontextmanager
     async def lifespan(app):
         store.initialize()
+        auth.initialize()
         yield
 
     app = FastAPI(title="Torque backend", lifespan=lifespan)
-    app.state.store = store
+    from fastapi.middleware.cors import CORSMiddleware
+    app.add_middleware(CORSMiddleware,allow_origins=[auth.origin],allow_credentials=True,
+                       allow_methods=["GET","POST"],allow_headers=["Content-Type","X-CSRF-Token","Idempotency-Key"])
 
-    def operator(authorization: Annotated[str | None, Header()] = None):
+    @app.middleware("http")
+    async def private_responses(request, call_next):
+        response=await call_next(request)
+        if request.url.path.startswith("/api/"):
+            response.headers["Cache-Control"]="no-store"
+            response.headers["Referrer-Policy"]="no-referrer"
+        return response
+
+    app.state.store = store
+    app.state.github_auth = auth
+    auth.routes(app)
+
+    def operator(request: Request, authorization: Annotated[str | None, Header()] = None):
+        if authorization is None and request.cookies.get(auth.cookie):
+            return auth.authenticate(request)
         if not settings.operator_token:
-            raise HTTPException(503, "Set TORQUE_OPERATOR_TOKEN for local operator access; GitHub login is not implemented yet")
+            raise HTTPException(503, "Set TORQUE_OPERATOR_TOKEN for local operator access; or configure GitHub App login")
         expected = "Bearer " + settings.operator_token
         if authorization is None or not secrets.compare_digest(authorization.encode(), expected.encode()):
             raise HTTPException(401, "Operator authentication required", headers={"WWW-Authenticate":"Bearer"})
@@ -42,7 +61,7 @@ def create_app(settings=None):
         return {"status":"ok", "storage":"sqlite", "execution":"separate-worker",
                 "operator_access_configured":bool(settings.operator_token),
                 "agent_pipeline_ready":pipeline["configured"],
-                "agent_pipeline":pipeline, "github_login_ready":False}
+                "agent_pipeline":pipeline, "github_login_ready":auth.configured}
 
     @app.post("/api/runs", status_code=201)
     def submit(body: SubmitRun, user=Depends(operator),
@@ -50,6 +69,8 @@ def create_app(settings=None):
         owner, repo, _ = parse_issue(body.issue_url)
         if f"{owner}/{repo}".lower() not in settings.allowed_repositories:
             raise HTTPException(403, "Repository must be explicitly listed in TORQUE_ALLOWED_REPOSITORIES")
+        if user != 'operator':
+            auth.authorize(user,f'{owner}/{repo}')
         try:
             run_id = store.submit(body.issue_url,user,idempotency_key)
         except Conflict as exc:
@@ -79,12 +100,12 @@ def create_app(settings=None):
         return existing(run_id,user)
 
     @app.post("/api/runs/{run_id}/publish")
-    def publish(run_id: str, user=Depends(operator)):
+    def publish(run_id: str, user=Depends(operator), destination: str | None = Query(None,max_length=140)):
         existing(run_id,user)
         from backend.publication import publish_run
         from backend.models import PipelineError
         try:
-            return publish_run(store,run_id,user)
+            return publish_run(store,run_id,user,destination=destination)
         except Conflict as exc:
             raise HTTPException(409,str(exc)) from None
         except PipelineError as exc:

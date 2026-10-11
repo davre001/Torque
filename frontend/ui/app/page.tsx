@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { githubLogin } from "@/lib/api";
 import {
   ArrowRight,
   CheckCircle2,
@@ -234,13 +235,8 @@ export default function TorqueLandingPage() {
     return true;
   };
 
-  // Scroll to input section and focus the input field
-  const handleConnectGitHub = () => {
-    inputSectionRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
-    setTimeout(() => {
-      issueInputRef.current?.focus();
-    }, 350);
-  };
+  // Connect through the real GitHub App authorization flow.
+  const handleConnectGitHub = githubLogin;
 
   // UI Preview Simulation (clearly labeled as a UI preview per changes.md)
   const startPreviewRun = () => {

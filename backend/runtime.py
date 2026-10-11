@@ -14,7 +14,7 @@ from backend.pipeline import Pipeline
 from backend.tools.repository import snapshot
 from backend.tools.sandbox import DockerRunner
 
-SECRET_NAMES = ("NEATLOGS_API_KEY","LITELLM_API_KEY","GEMINI_API_KEY","GITHUB_TOKEN","TORQUE_OPERATOR_TOKEN","NEATLOGS_TOKEN","TORQUE_ACTIONS_TOKEN")
+SECRET_NAMES = ("NEATLOGS_API_KEY","LITELLM_API_KEY","GEMINI_API_KEY","GITHUB_TOKEN","TORQUE_OPERATOR_TOKEN","NEATLOGS_TOKEN","TORQUE_ACTIONS_TOKEN","GITHUB_APP_CLIENT_SECRET","GITHUB_APP_WEBHOOK_SECRET","TORQUE_SESSION_ENCRYPTION_KEY")
 
 def rates(prefix):
     try:
@@ -57,7 +57,18 @@ class AgentProcessor:
     def __call__(self,store,run_id,owner,checkpoint):
         if not os.getenv("NEATLOGS_API_KEY"):
             raise PipelineError("Neatlogs project key is required for agent execution")
-        source_owner,repo,_ = parse_issue(store.get(run_id)["issue_url"])
+        run = store.get(run_id)
+        source_owner,repo,_ = parse_issue(run["issue_url"])
+        github_token=os.getenv("GITHUB_TOKEN", "")
+        if run["user_id"] != "operator":
+            from backend.github_auth import GitHubAuth
+            from fastapi import HTTPException
+            try:
+                github_token=GitHubAuth(store).authorize(run["user_id"], f"{source_owner}/{repo}")
+            except HTTPException:
+                raise PipelineError("GitHub authorization expired, disconnected, or repository access revoked") from None
+        if github_token and github_token not in self.telemetry.redactor.secrets:
+            self.telemetry.redactor.secrets += (github_token,)
         recipe = load_recipes().get(f"{source_owner}/{repo}".lower())
         if recipe is None:
             raise PipelineError("No reviewed acceptance recipe for this repository")
@@ -73,7 +84,7 @@ class AgentProcessor:
         model_rates = rates("GEMINI"),rates("LITELLM")
         clients = []
         try:
-            github = GitHub(os.getenv("GITHUB_TOKEN",""))
+            github = GitHub(github_token)
             clients.append(github)
             gemini = Gemini(os.getenv("GEMINI_API_KEY",""),os.getenv("GEMINI_MODEL",""),self.telemetry.wrap)
             clients.append(gemini)
@@ -87,7 +98,7 @@ class AgentProcessor:
                      investigator_provider=providers[0],implementer_provider=providers[1],
                      budget=budget,recipe=recipe,workspaces=workspace_root(),
                      artifacts=ROOT/"var"/"artifacts",telemetry=self.telemetry,
-                     secrets=self.secrets)(store,run_id,owner,checkpoint)
+                     secrets=(*self.secrets,github_token))(store,run_id,owner,checkpoint)
         finally:
             for client in reversed(clients):
                 client.close()

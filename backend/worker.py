@@ -34,7 +34,13 @@ class Worker:
                 raise LeaseLost("Lease renewal failed")
             if self.stopping.is_set():
                 raise InterruptedError("Worker shutdown requested")
-            if self.store.get(run_id)["cancel_requested"]:
+            record=self.store.get(run_id)
+            if record["user_id"] != "operator":
+                from backend.github_auth import GitHubAuth
+                from fastapi import HTTPException
+                try: GitHubAuth(self.store).token(record["user_id"])
+                except HTTPException: raise Cancelled("GitHub connection expired or disconnected") from None
+            if record["cancel_requested"]:
                 raise Cancelled("Cancellation requested")
             # Validate ownership even between heartbeat ticks.
             self.store.heartbeat(run_id,owner,self.settings.lease_seconds)

@@ -1,5 +1,8 @@
 # Torque backend implementation plan
 
+Workspace milestone: real session-based `/workspace` and landing OAuth buttons are
+implemented. User runs are polled from the API; live connected-user acceptance remains pending.
+
 Status: implementation in progress, October 11, 2026. Checklists distinguish tested code from
 pending live acceptance. Related plans: [worker](background_worker.md), [integrations](integration.md).
 The existing root `implementation.md` remains the historical frontend plan.
@@ -15,34 +18,37 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Implement typed submission, plan, patch, review, recovery, and test records; attempts persist structured JSON.
 - [x] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
 - [x] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.
-- [ ] Implement submit, status, cancel, publish, and readiness endpoints; add SSE only if needed.
-- [ ] Validate issue URLs, run IDs, caller ownership, and configured repository destinations.
-- [ ] Prepare a pinned checkout and capture baseline test results.
-- [ ] Implement bounded file access, structured patch validation, and credential-free sandbox tests.
+- [x] Implement submit, status, history, cancel, publish, readiness, and JSON event-polling endpoints; SSE is optional.
+- [x] Validate issue URLs, run IDs, caller ownership, and configured repository destinations.
+- [x] Prepare a pinned checkout and capture baseline test results.
+- [x] Implement bounded file access, structured patch validation, and credential-free sandbox tests.
 - [x] Implement Investigator with bounded context and immutable operator criteria (fixture-tested).
 - [x] Implement structured model edits through allowlisted, source-hash-checked file tools.
-- [x] Implement Verifier with required tests as a hard gate (fixture-tested; live acceptance pending).
-- [ ] Implement trace-informed Recovery and distinct retry/budget counters.
-- [ ] Persist verified patch/head records and enforce authorized publication.
-- [ ] Reproduce the kokon bug and automate all three playback acceptance criteria.
-- [ ] Test invalid paths, budgets, failures, cancellation, restart interruption, and duplicate publication.
+- [x] Implement Verifier with required tests as a hard gate (fixture-tested and live demo passed).
+- [x] Implement local-artifact Recovery and distinct transport/recovery budget counters.
+- [ ] Implement authorized hosted-trace-informed Recovery.
+- [x] Persist verified patch/head records and enforce authorized publication.
+- [x] Reproduce the kokon bug and automate all three playback acceptance criteria.
+- [x] Test invalid paths, budgets, failures, cancellation, restart interruption, and duplicate publication.
 - [ ] Wire Next.js to real statuses/results and document actual runnable commands.
-- [ ] Verify the end-to-end run and export actual traces, tests, PR, and recovery evidence.
+- [x] Verify the live operator issue-to-PR flow and export actual tests, usage, patch, and PR evidence.
+- [ ] Export finalized dashboard trace and genuine live recovery evidence.
 
 ## Outcome and scope
 
-Implemented milestone: configuration, state enums/validated submission records, SQLite queue and history,
-authenticated local-operator API, separate worker, and read-only issue lookup.
-See [backend/README.md](backend/README.md) for actual commands. Live provider/isolated-test
-acceptance, visitor auth, and publication remain pending. JSON event polling is implemented; SSE is pending.
+Implemented: configuration, typed records, SQLite queue/history/events, operator-authenticated
+API, separate worker, pinned source snapshots, restricted edits, provider budgets, remote
+Linux browser tests, local-artifact recovery, and explicit controlled-fork draft PR publication.
 
-Second milestone: provider adapters, four agent roles, immutable public-source snapshots,
-restricted edits, estimated budgets, Docker-only runner, test-result classification, local
-failure recovery, and atomic verified-content artifacts are implemented. Fixture tests
-exercise failure and recovery; live provider/Docker/browser/Neatlogs checks are pending.
-The kokon browser suite is prepared under tests/acceptance/kokon but has not run.
-Readback-driven recovery, runtime Entire context, visitor authentication, and publication
-remain unchecked. No invented Git head SHA is recorded: verified source bytes have a digest.
+Live demo run `6634790aa28943629348e02914d9b56c` reproduced the baseline bug, passed
+all three independent browser criteria after the first patch, and published
+[davre001/kokon #1](https://github.com/davre001/kokon/pull/1). Saved
+[evidence](evidence/runs/6634790aa28943629348e02914d9b56c/README.md) records source,
+verified content, published commit, model usage, and original artifacts. Latest tests: 74 passed.
+
+Recovery is fixture-tested with local artifacts; genuine hosted trace-driven recovery is
+pending. Neatlogs finalized application readback, runtime Entire context, GitHub visitor
+sessions, and real frontend polling remain pending. JSON event polling exists; SSE is optional.
 
 Scope update: `changes.md` now specifies a public landing page and a separate authenticated workspace. Real Connect GitHub and Disconnect behavior require GitHub App identity/installation onboarding, server-side sessions, and per-user ownership checks in the current requested scope. The local single-operator path below remains the first development milestone; it does not fulfill multi-user connection behavior by itself.
 
@@ -58,7 +64,7 @@ First candidate: https://github.com/GabrieleLozupone/kokon/issues/4. Reproduce t
 
 ## Existing state and proposed structure
 
-`frontend/app.py` contains FastAPI run routes, JSON state files, and a deferred legacy import of an absent `suture` package. The Next.js UI currently simulates the agent. Keep the route contract, replace the task stub and legacy import with the `backend` package, and connect the UI to real run records. Torque remains the product name.
+`frontend/app.py` exposes the backend FastAPI app. The legacy `suture` import and task stub have been replaced. The Next.js UI still needs connection to persisted backend run records. Torque remains the product name.
 
 ```text
 backend/                   # Python package; design documents are at root
@@ -106,7 +112,7 @@ Persist issue URL, source owner/repo/base SHA, destination repo/base branch, bra
 4. Implementer proposes structured file edits. Validate paths, patch size, and permitted files before applying changes. No unrestricted model-generated shell commands.
 5. Execute the configured test suite in the execution sandbox. Verifier checks the patch, all issue criteria, and actual test output. A model's verdict cannot override a failed required test.
 6. If eligible, Recovery reads the failed trace and artifacts, changes the hypothesis or patch, and triggers another implementation/verification attempt.
-7. Save the verified patch and exact head SHA as `ready_to_publish`. Publish only according to the authorized destination policy, then record the actual PR URL and mark `completed`.
+7. Save verified content and patch digests as `ready_to_publish`; GitHub head SHA is recorded during explicit publication. Publish only according to the authorized destination policy, then record the actual PR URL and mark `completed`.
 
 Default: one initial attempt plus at most two recovery retries (three total attempts), matching the business model. Track provider/network retries separately with their own bounds. Set explicit total wall time, model-call count, output-token, patch-size, test timeout, and dollar limits in configuration. The financial model's $1.65 is an estimate, not a proven runtime cap. Stop when a hard limit is reached; uncertain usage must not silently expand the budget.
 
@@ -136,7 +142,31 @@ Before demo: verify an actual finalized neatlogs trace, inspect Entire context/c
 - [x] Explicit operator-authenticated API and CLI publication, exact verified content checks, and stale-base rejection.
 - [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
 - [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
-- [ ] Live publication to a configured controlled fork and recording its PR URL as demo evidence.
+- [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [ ] GitHub App authentication and publication for connected visitors.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). Earlier pending-publication checklist entries now refer to live validation and the public multi-user flow.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
+
+## Next work in order
+
+1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
+2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
+3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
+4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
+5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
+6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
+
+Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+
+## GitHub App backend milestone
+
+- [x] OAuth connect/callback with browser-bound one-time state and S256 PKCE.
+- [x] Encrypted server-side user credentials, expiring opaque sessions, secure production cookies, CSRF checks, and exact-origin CORS.
+- [x] GitHub App installation/repository permission checks and per-user run ownership.
+- [x] User-scoped worker/publication credentials; local operator PAT is never substituted for a visitor.
+- [x] Disconnect invalidation, cooperative cancellation, publication/disconnect fencing, and signed authorization-revoked webhook.
+- [x] Tests for OAuth replay, session expiry, secure cookies, CSRF, cross-user access, installation permissions, and revocation.
+- [ ] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
+- [ ] Wire landing-page connection and workspace UI to these backend endpoints.
+
+The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

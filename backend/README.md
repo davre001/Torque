@@ -6,7 +6,7 @@ gates, bounded recovery, atomic artifacts, and worker-owned Neatlogs tracing.
 The demo pipeline has passed live provider calls and independent remote browser tests.
 Explicit controlled-fork draft PR publication is implemented and tested with mocked GitHub
 responses; live publication and finalized dashboard traces remain unverified.
-GitHub visitor login is still pending.
+GitHub App visitor login and per-user backend permissions are implemented; live App registration/browser acceptance and frontend wiring remain pending. See [GitHub App setup](GITHUB_APP.md).
 
 Install from the repository root:
 
