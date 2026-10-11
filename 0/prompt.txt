@@ -1,0 +1,91 @@
+# Context from my IDE setup:
+
+## Open tabs:
+- .env: .env
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- background_worker.md: background_worker.md
+- REMOTE_RUNNER.md: backend/REMOTE_RUNNER.md
+
+## My request:
+COMMIT & PUSH
+
+---
+
+# Context from my IDE setup:
+
+## Active file: integration.md
+
+## Open tabs:
+- integration.md: integration.md
+- implementation.md: implementation.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- .env: .env
+
+## My request:
+the traces at neatlogs are failing
+
+---
+
+# Context from my IDE setup:
+
+## Active file: integration.md
+
+## Open tabs:
+- integration.md: integration.md
+- implementation.md: implementation.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- .env: .env
+
+## My request:
+the last trace was 6.38 am
+
+---
+
+# Context from my IDE setup:
+
+## Active file: integration.md
+
+## Open tabs:
+- integration.md: integration.md
+- implementation.md: implementation.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- .env: .env
+
+## My request:
+its not still there
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/REMOTE_RUNNER.md
+
+## Open tabs:
+- REMOTE_RUNNER.md: backend/REMOTE_RUNNER.md
+- integration.md: integration.md
+- implementation.md: implementation.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+
+## My request:
+**Implement GitHub PR publication**,
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- README.md: evidence/runs/6634790aa28943629348e02914d9b56c/README.md
+- attempt-1.json: evidence/runs/6634790aa28943629348e02914d9b56c/attempt-1.json
+- README.md: tests/README.md
+- test_repository_download.py: tests/test_repository_download.py
+
+## My request:
+my username is davre001

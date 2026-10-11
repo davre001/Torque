@@ -1,0 +1,93 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MT9RYGMNCGWQQX9NS6N73S",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T06:27:46.3601711Z",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "save_step_count": 1,
+  "files_touched": [
+    ".env.example",
+    "backend.md",
+    "backend/PUBLICATION.md",
+    "backend/README.md",
+    "backend/__main__.py",
+    "backend/api.py",
+    "backend/publication.py",
+    "backend/store.py",
+    "backend_implementation.md",
+    "background_worker.md",
+    "integration.md",
+    "tests/test_publication.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "ead1de0ba281",
+  "checkpoint_transcript_start": 4066,
+  "transcript_lines_at_start": 4066,
+  "compact_transcript_start": 624,
+  "token_usage": {
+    "input_tokens": 93835,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 3842048,
+    "output_tokens": 12903,
+    "api_call_count": 32,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 137
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T06:27:44.8613789Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 472,
+    "human_removed": 431,
+    "total_committed": 0,
+    "total_lines_changed": 903,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 964,
+      "user_lines_removed": 494,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".env.example": 3,
+        "backend.md": 52,
+        "backend/PUBLICATION.md": 21,
+        "backend/README.md": 76,
+        "backend/__main__.py": 8,
+        "backend/api.py": 8,
+        "backend/publication.py": 197,
+        "backend/store.py": 45,
+        "backend_implementation.md": 142,
+        "background_worker.md": 83,
+        "cfo.ai/README.md": 63,
+        "integration.md": 118,
+        "tests/test_publication.py": 148
+      },
+      "user_removed_per_file": {
+        "backend.md": 42,
+        "backend/README.md": 75,
+        "backend/api.py": 1,
+        "backend_implementation.md": 132,
+        "background_worker.md": 73,
+        "business/README.md": 63,
+        "integration.md": 108
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 964,
+      "agent_lines_removed": 494
+    }
+  ]
+}
