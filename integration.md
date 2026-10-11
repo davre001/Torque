@@ -132,7 +132,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 ## Next work in order
 
 1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention cleanup is implemented; run live restart, cancellation, and API-restart acceptance next.
+2. Retention and isolated live restart/API-restart/cancellation plus actual remote cancellation are verified. Finish OS-signal/provider-interruption and live publication crash/reconciliation acceptance before public deployment.
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.

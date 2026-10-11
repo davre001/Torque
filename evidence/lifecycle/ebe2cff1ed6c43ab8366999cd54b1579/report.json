@@ -1,0 +1,70 @@
+{
+  "mode": "live-processes-fixture-work",
+  "run_id": "ebe2cff1ed6c43ab8366999cd54b1579",
+  "provider_calls": 0,
+  "github_calls": 0,
+  "remote_actions_cancellation_verified": false,
+  "production_database_modified": false,
+  "outcomes": [
+    {
+      "case": "hard-kill-restart-investigating",
+      "run_id": "65988e04d1f045848503f6301b95505c",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-implementing",
+      "run_id": "24cac804f2b84d3c8dcdb7e75846a5fd",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-verifying",
+      "run_id": "46717d3e102f4ba4a8ffad99b84e55af",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-recovering",
+      "run_id": "72170b597f974b77aded794014583ee7",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "queued-api-cancellation",
+      "run_id": "140a0c6272ff4385ab454840a93092ce",
+      "status": "cancelled",
+      "event_count": 2,
+      "executed": false
+    },
+    {
+      "case": "api-restart-during-worker",
+      "run_id": "c8c16517a1fe423d8be52ef931e6c7ae",
+      "status": "verifying",
+      "event_count": 2,
+      "heartbeat_renewed": true
+    },
+    {
+      "case": "running-api-cancellation",
+      "run_id": "c8c16517a1fe423d8be52ef931e6c7ae",
+      "status": "cancelled",
+      "event_count": 4,
+      "cooperative_exit": true
+    },
+    {
+      "case": "cooperative-worker-stop",
+      "run_id": "81911a9fc6d040868c09989ed4715c8b",
+      "status": "interrupted",
+      "event_count": 3,
+      "trigger": "fixture calls Worker.stop; not an OS signal test"
+    }
+  ]
+}

@@ -36,7 +36,9 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Reconcile PR side effects using a stable branch/marker and publication lease; lost-response retry is mock-tested.
 - [x] Implement explicit preview/apply retention with checked cleanup paths and protected active/publishable runs; see `backend/RETENTION.md`.
 - [x] Test competing claims, slow-operation heartbeats, expired-owner fencing, persisted submissions, and cooperative cancellation.
-- [ ] Complete live kill/restart at each stage and API-restart/remote-cancellation acceptance.
+- [x] Verify real worker kill/restart at all fixture agent stages, lease fencing, HTTP cancellation, and API restart; isolated live-process evidence is saved.
+- [x] Verify actual GitHub Actions cancellation; remote run 38177020201 finished cancelled.
+- [ ] Verify OS-signal graceful shutdown, interruption within real provider calls, and live publication crash/reconciliation separately.
 
 ## Why a worker
 
@@ -95,7 +97,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 ## Next work in order
 
 1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention cleanup is implemented; run live restart, cancellation, and API-restart acceptance next.
+2. Retention and isolated live restart/API-restart/cancellation plus actual remote cancellation are verified. Finish OS-signal/provider-interruption and live publication crash/reconciliation acceptance before public deployment.
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
