@@ -4,7 +4,7 @@ Frontend API wiring is now implemented in `/workspace`: credentialed requests, C
 persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
 The labeled landing preview remains separate. Connected-user browser acceptance is pending.
 
-Status: implemented single-operator integrations with live provider/browser/PR evidence; hosted trace readback and public-user integration remain pending. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
+Status: live operator/provider/browser/PR evidence, finalized trace readback, and controlled live hosted recovery are saved. Live connected-user execution remains pending. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
 
 ## Integration progress checklist
 
@@ -24,8 +24,8 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Verify Gemini 3.5 Flash access; implement bounded provider errors/retries and token limits.
 - [x] Implement shared provider adapters, role routing, timeouts, and spending accounting.
 - [x] Initialize worker Neatlogs once and wrap model/tool calls; finalized dashboard span-tree acceptance remains pending.
-- [ ] Obtain separate authorized neatlogs read credentials and implement failure-trace retrieval.
-- [ ] Verify finalized application traces and genuine trace-driven recovery.
+- [x] Obtain separate authorized neatlogs read credentials and implement failure-trace retrieval.
+- [x] Verify finalized application traces and hosted recovery in an explicitly seeded controlled live drill; live repository recovery remains pending.
 - [x] Verify GitHub source/destination identities and token permissions; select the demo fork.
 - [x] Implement issue fetching, authenticated branch writes, and idempotent verified PR publication.
 - [ ] Verify authorization separately before any upstream public contribution.
@@ -127,12 +127,12 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
 2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
+3. Hosted readback and a controlled live recovery drill are complete (see `backend/NEATLOGS_RECOVERY.md`). Verify recovery on a live GitHub repository next; the original successful demo had no recovery retry.
 4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
 5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
 6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
 
-Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted hierarchy/cancellation checks; live issue-to-draft-PR demo, authenticated finalized trace readback, and an explicitly seeded controlled live recovery drill completed. Live connected-user execution, runtime Entire context, and broad repository support remain pending.
 
 ## GitHub App backend milestone
 
