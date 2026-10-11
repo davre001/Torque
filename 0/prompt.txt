@@ -1,0 +1,399 @@
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- README.md: evidence/README.md
+- README.md: business/README.md
+- hooks.json: .codex/hooks.json
+
+## My request:
+commit and push
+
+---
+
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- README.md: evidence/README.md
+- README.md: business/README.md
+- hooks.json: .codex/hooks.json
+
+## My request:
+new, check if there' s anything left undone brfore we start building
+
+---
+
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- README.md: evidence/README.md
+- README.md: business/README.md
+- hooks.json: .codex/hooks.json
+
+## My request:
+how many LLM can we use? i have  two $20 credit for claude sonnet 4.6 and a free Gemini API key
+
+---
+
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- README.md: evidence/README.md
+- README.md: business/README.md
+- hooks.json: .codex/hooks.json
+
+## My request:
+okay we'll use just one claude and gemini .... its endpoint is LiteLLM
+
+---
+
+# Context from my IDE setup:
+
+## Active file: evidence/README.md
+
+## Open tabs:
+- README.md: evidence/README.md
+- README.md: business/README.md
+- hooks.json: .codex/hooks.json
+
+## My request:
+ad the templates so i'll just update the keys
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+how do i get gemini api key, i know its google ai studio, how do i get the endpoint url too
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+HOW DO I CHANGE THE MODEL OF MY GOOGLE API KEY
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+I'll be using Gemini 3.8 Flash
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+all set, all added to .env
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+how do i get github tokens
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+done
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+where do i see demo repository and issue URL
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+i found this issue; [https://github.com/commaai/connect/issues/769](https://github.com/commaai/connect/issues/769)
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+WAIT, but when this project go live, i wont be the one puuting issues in my repo. it is for everyone, not for me alone
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+that means i'll still change the github token later?
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+okay, so where do i see a repo with an issue
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+check this [https://github.com/GabrieleLozupone/kokon/issues/4](https://github.com/GabrieleLozupone/kokon/issues/4)
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+yeah
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+alright before we start the backend, draft the backend implementation.md , background_worker.md if there will be background worker and integration.md
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+or it does not need background worker? what other things does it need
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+- README.md: evidence/README.md
+- README.md: business/README.md
+
+## My request:
+okay lets use seperate worker.  it does not need a databse right?
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/implementation.md
+
+## Open tabs:
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+
+## My request:
+ok then.  build the backend file tree
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+
+## My request:
+the backend file tree should be in the backend folder not SUTURE folder ,
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+- .env: .env
+- .env.example: .env.example
+- .gitignore: .gitignore
+
+## My request:
+let the backend md files be at the root folder
+
+---
+
+# Context from my IDE setup:
+
+## Active file: background_worker.md
+
+## Open tabs:
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+
+## My request:
+confirm that background worker will use a separate worker  with a SQLite queue not FAST API
+
+---
+
+# Context from my IDE setup:
+
+## Active file: background_worker.md
+
+## Open tabs:
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+- background_worker.md: backend/background_worker.md
+
+## My request:
+before you start building , in those backend related mds , add checklist , to help keep track of whats present and what's left
