@@ -55,6 +55,10 @@ class DockerRunner:
         if "," in str(workspace) or "," in str(suite):
             raise PipelineError("Docker mount paths containing commas are unsupported")
         name = "torque-"+uuid.uuid4().hex
+        security_args = []
+        profile = suite/"seccomp_profile.json"
+        if profile.is_file():
+            security_args = ["--security-opt",f"seccomp={profile}"]
         args = ["docker","run","--rm","--init","--pull=never","--name",name,
                 "--network=none","--read-only","--cap-drop=ALL",
                 "--security-opt=no-new-privileges","--user","65534:65534",
@@ -62,7 +66,7 @@ class DockerRunner:
                 "--tmpfs","/tmp:rw,nosuid,nodev,size=256m",
                 "--mount",f"type=bind,src={workspace},dst=/workspace,readonly",
                 "--mount",f"type=bind,src={suite},dst=/acceptance,readonly",
-                "--workdir","/workspace",self.recipe.image,*self.recipe.command]
+                "--workdir","/workspace",*security_args,self.recipe.image,*self.recipe.command]
         checkpoint()
         # Disk-backed output avoids unbounded Python memory; enforce a log cap.
         with tempfile.TemporaryFile() as output:
