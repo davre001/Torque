@@ -25,7 +25,7 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 
 ## Demo and submission
 
-- Saved [verified live demo run](runs/6634790aa28943629348e02914d9b56c/README.md): baseline bug reproduced, all three browser assertions passed, and Gemini approved the patch. Three model calls used 23,856 tokens at an estimated $0.056541. No PR was published; publication remains disabled.
+- Saved [verified live demo run](runs/6634790aa28943629348e02914d9b56c/README.md): baseline bug reproduced, all three browser assertions passed, and Gemini approved the patch. Three model calls used 23,856 tokens at an estimated $0.056541. Published controlled-fork draft PR: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 
 - Record the issue URL, verified pull request, real test results, and failure-to-recovery sequence.
 - Save public build-log links tagged `#neatHack`.

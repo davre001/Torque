@@ -2,14 +2,14 @@
   "run_id": "6634790aa28943629348e02914d9b56c",
   "user_id": "operator",
   "issue_url": "https://github.com/GabrieleLozupone/kokon/issues/4",
-  "status": "ready_to_publish",
+  "status": "completed",
   "current_agent": null,
   "created_at": 1791697811.9971368,
-  "updated_at": 1791698044.4112535,
+  "updated_at": 1791720725.6361184,
   "cancel_requested": false,
   "idempotency_key": null,
   "error": null,
-  "pr_url": null,
+  "pr_url": "https://github.com/davre001/kokon/pull/1",
   "result": {
     "verified": true,
     "artifacts": [
@@ -87,7 +87,9 @@
     "verified_content_sha256": "bca33fa69874110676b199d8b5bfc6c45f1947603fcdd134163fe46fce36ee4f",
     "patch_sha256": "041ded274194f4acb322f586b5bc9af4c6e22f21fa4d721d4e505350200037b0",
     "summary": "Wrap the reel autoplay in a prefers-reduced-motion check so the video stays paused on scroll when reduced motion is enabled, while manual playback via the button still works and normal autoplay is unchanged when reduced motion is not enabled.",
-    "publication_available": false
+    "publication_available": true,
+    "published_commit_sha": "ae520d0100cdac1deaddea191c8bdd72d058ef5d",
+    "destination_repository": "davre001/kokon"
   },
   "attempts": [
     {

@@ -51,4 +51,4 @@ def apply_patch(root, patch, editable_files, max_bytes=100000):
         for target,previous,_ in changes:
             target.write_bytes(previous)
         raise
-    return hashlib.sha256(b"".join(str(target.relative_to(root)).encode()+b"\0"+content for target,_,content in changes)).hexdigest()
+    return hashlib.sha256(b"".join(target.relative_to(root).as_posix().encode()+b"\0"+content for target,_,content in changes)).hexdigest()

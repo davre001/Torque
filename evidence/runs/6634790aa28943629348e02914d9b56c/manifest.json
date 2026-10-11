@@ -54,6 +54,13 @@
       "association": "time-correlated; backend did not persist workflow IDs"
     }
   ],
-  "publication": "No PR was created. Publication remains disabled.",
-  "telemetry": "Trace ID recorded locally; dashboard readback not independently verified in this export."
+  "publication": {
+    "status": "completed",
+    "pr_url": "https://github.com/davre001/kokon/pull/1",
+    "destination_repository": "davre001/kokon",
+    "published_commit_sha": "ae520d0100cdac1deaddea191c8bdd72d058ef5d",
+    "recorded_at": 1791720725.6361184
+  },
+  "telemetry": "Trace ID recorded locally; dashboard readback not independently verified in this export.",
+  "run_export_sha256": "6f1ab22b51a88dba0c91d8d4f4c4e77ca6ffba7c9e4a0d9319b6238f4ef0aba2"
 }

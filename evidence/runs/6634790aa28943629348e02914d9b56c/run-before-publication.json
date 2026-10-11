@@ -1,0 +1,137 @@
+{
+  "run_id": "6634790aa28943629348e02914d9b56c",
+  "user_id": "operator",
+  "issue_url": "https://github.com/GabrieleLozupone/kokon/issues/4",
+  "status": "ready_to_publish",
+  "current_agent": null,
+  "created_at": 1791697811.9971368,
+  "updated_at": 1791698044.4112535,
+  "cancel_requested": false,
+  "idempotency_key": null,
+  "error": null,
+  "pr_url": null,
+  "result": {
+    "verified": true,
+    "artifacts": [
+      {
+        "name": "baseline.json",
+        "sha256": "e50305b2c9d1251ac70ba9b7dede3122b7cd43b21a1574ee5f2c75da95fdec28"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "06ee19ae60fcb1f79c70fef9b76b74f29428b2c5dd97c908f0807fd33f52b0ec"
+      },
+      {
+        "name": "patch-1.json",
+        "sha256": "3c5cc2d3908bea0e11d5da0838f6357c20807048d1c9bf474763b3f615e2d243"
+      },
+      {
+        "name": "tests-1.json",
+        "sha256": "8ee2bb0ed17f4a43c78fe57dea81a02c218edeb596322ac00b94ea9f6f0ae0b3"
+      },
+      {
+        "name": "attempt-1.json",
+        "sha256": "1f585cf7bafc493ce919ae6290df16447fc238dd0920c81e99420246b1338635"
+      },
+      {
+        "name": "verified.json",
+        "sha256": "3034aa6fa7a4793b5053f6b973bf4866b6f573b6407a916b4c046ff37fe7bec2"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "65f1c230ec0f31c423c81d7f0e33ed02",
+    "test_image": "sha256:ebe33494540157a919d1173a81328fe9d238dc5dadca1ae6e3a06a10367c2ee7",
+    "acceptance_suite_sha256": "200e6e6bd518167824c1f851e3a2fd0b1fb478320d1b9c576c495974c8469239",
+    "budget": {
+      "calls": 3,
+      "tokens": 23856,
+      "estimated_cost_usd": 0.05654100000000001,
+      "usage": [
+        {
+          "model": "gemini-3.5-flash",
+          "usage": "provider-reported",
+          "input_tokens": 2529,
+          "output_tokens": 685,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 17152,
+          "output_tokens": 339,
+          "estimated_cost_usd": 0.056541
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "usage": "provider-reported",
+          "input_tokens": 2467,
+          "output_tokens": 684,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "source_sha": "995b078b79819c0049db3eef96fc6bd91b016b12",
+    "source_repository": "GabrieleLozupone/kokon",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "Check for prefers-reduced-motion before autoplaying the demo reel video in site/index.html so that the video stays paused on scroll when reduced motion is enabled, while maintaining manual playback functionality and existing autoplay behavior when reduced motion is disabled.",
+      "acceptance_criteria": [
+        "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+        "Manual playback still works when reduced motion is enabled.",
+        "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+      ],
+      "files": [
+        "site/index.html"
+      ]
+    },
+    "verified_content_sha256": "bca33fa69874110676b199d8b5bfc6c45f1947603fcdd134163fe46fce36ee4f",
+    "patch_sha256": "041ded274194f4acb322f586b5bc9af4c6e22f21fa4d721d4e505350200037b0",
+    "summary": "Wrap the reel autoplay in a prefers-reduced-motion check so the video stays paused on scroll when reduced motion is enabled, while manual playback via the button still works and normal autoplay is unchanged when reduced motion is not enabled.",
+    "publication_available": false
+  },
+  "attempts": [
+    {
+      "number": 1,
+      "patch_sha256": "041ded274194f4acb322f586b5bc9af4c6e22f21fa4d721d4e505350200037b0",
+      "tests_passed": true,
+      "review": {
+        "approved": true,
+        "rationale": "The change checks `prefers-reduced-motion: reduce` before triggering `reel.play()` on intersection. When reduced motion is enabled, autoplay on scroll is suppressed while manual playback via the watch button remains fully functional. When reduced motion is disabled, autoplay on scroll behaves as before.",
+        "satisfied_criteria": [
+          0,
+          1,
+          2
+        ]
+      },
+      "budget": {
+        "calls": 3,
+        "tokens": 23856,
+        "estimated_cost_usd": 0.05654100000000001,
+        "usage": [
+          {
+            "model": "gemini-3.5-flash",
+            "usage": "provider-reported",
+            "input_tokens": 2529,
+            "output_tokens": 685,
+            "estimated_cost_usd": 0.0
+          },
+          {
+            "model": "claude-sonnet-4.6",
+            "usage": "provider-reported",
+            "input_tokens": 17152,
+            "output_tokens": 339,
+            "estimated_cost_usd": 0.056541
+          },
+          {
+            "model": "gemini-3.5-flash",
+            "usage": "provider-reported",
+            "input_tokens": 2467,
+            "output_tokens": 684,
+            "estimated_cost_usd": 0.0
+          }
+        ]
+      },
+      "trace_id": "65f1c230ec0f31c423c81d7f0e33ed02"
+    }
+  ]
+}

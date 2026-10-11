@@ -1,6 +1,6 @@
 # Verified Torque demo run
 
-Run ID: `6634790aa28943629348e02914d9b56c`. Status: `ready_to_publish`. Verified: **true**.
+Run ID: `6634790aa28943629348e02914d9b56c`. Status: `completed`. Verified: **true**.
 
 Issue: [kokon #4](https://github.com/GabrieleLozupone/kokon/issues/4). Source revision: `995b078b79819c0049db3eef96fc6bd91b016b12`.
 
@@ -12,15 +12,18 @@ recovery retries in this run. Earlier failed development runs are separate runs.
 - Models: Gemini 3.5 Flash and Claude Sonnet 4.6 through LiteLLM.
 - Model calls: 3. Provider-reported tokens: 23,856.
 - Estimated cost: $0.056541, using configured rates (Gemini free-quota rate: $0).
-- Wall time: 232.4 seconds, including source download and remote tests.
+- Agent pipeline wall time: 232.4 seconds, including source download and remote tests; publication occurred later.
 - Neatlogs trace ID: `65f1c230ec0f31c423c81d7f0e33ed02`.
 - Patch SHA-256: `041ded274194f4acb322f586b5bc9af4c6e22f21fa4d721d4e505350200037b0`.
 
-**No pull request was published.** `pr_url` is null and publication is disabled.
+Published controlled-fork draft PR: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
+
+Published commit: `ae520d0100cdac1deaddea191c8bdd72d058ef5d`. The upstream repository was not changed.
 
 ## Evidence files
 
-- [Saved run status](run.json)
+- [Completed run status](run.json)
+- [Original pre-publication status](run-before-publication.json)
 - [Baseline reproduction](baseline.json)
 - [Investigation plan](plan.json)
 - [Proposed patch](patch-1.json)

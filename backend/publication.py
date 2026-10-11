@@ -50,11 +50,15 @@ def verified_files(run,recipe,workspaces=None,artifacts=None):
     if len(set(names)) != len(names) or any(name not in recipe.editable_files or name not in context for name in names):
         raise Conflict('Patch exceeds reviewed file permissions')
     digest=hashlib.sha256()
+    legacy_windows_digest=hashlib.sha256()
     files={}
     for name in names:
         files[name]=context[name]['content']
         digest.update(name.encode()+b'\0'+files[name].encode())
-    if digest.hexdigest() != result.get('patch_sha256') or attempt.get('patch_sha256') != result.get('patch_sha256'):
+        # Older Windows workers hashed native path separators. Content and artifact
+        # verification above remains mandatory for these existing demo records.
+        legacy_windows_digest.update(name.replace('/','\\').encode()+b'\0'+files[name].encode())
+    if result.get('patch_sha256') not in {digest.hexdigest(),legacy_windows_digest.hexdigest()} or attempt.get('patch_sha256') != result.get('patch_sha256'):
         raise Conflict('Patch does not match the verified attempt')
     return files
 

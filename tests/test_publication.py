@@ -54,6 +54,27 @@ def test_artifact_tampering_blocks_publication(tmp_path):
         verified_files(run,recipe,tmp_path/'workspaces',tmp_path/'artifacts')
 
 
+def test_existing_windows_nested_patch_hash_can_be_published(tmp_path):
+    run,recipe=workspace(tmp_path)
+    root=tmp_path/'workspaces'/run['run_id']
+    (root/'site').mkdir()
+    (root/'index.html').rename(root/'site'/'index.html')
+    recipe.context_files=recipe.editable_files=['site/index.html']
+    run['result']['verified_content_sha256']=hashlib.sha256(b'site/index.html\0fixed\n').hexdigest()
+    legacy=hashlib.sha256(b'site\\index.html\0fixed\n').hexdigest()
+    run['result']['patch_sha256']=run['attempts'][0]['patch_sha256']=legacy
+    artifact=tmp_path/'artifacts'/run['run_id']/'patch-1.json'
+    patch=json.loads(artifact.read_bytes())
+    patch['edits'][0]['path']='site/index.html'
+    data=json.dumps(patch).encode()
+    artifact.write_bytes(data)
+    run['result']['artifacts'][0]['sha256']=hashlib.sha256(data).hexdigest()
+    assert verified_files(run,recipe,tmp_path/'workspaces',tmp_path/'artifacts')=={'site/index.html':'fixed\n'}
+    run['result']['patch_sha256']=run['attempts'][0]['patch_sha256']='f'*64
+    with pytest.raises(Conflict,match='Patch does not match'):
+        verified_files(run,recipe,tmp_path/'workspaces',tmp_path/'artifacts')
+
+
 def test_publication_lock_and_real_pr_completion(tmp_path):
     clock=[1000]
     store=Store(tmp_path/'db',clock=lambda:clock[0]); store.initialize()
