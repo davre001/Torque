@@ -1,0 +1,93 @@
+{
+  "verified": true,
+  "artifacts": [
+    {
+      "name": "baseline.json",
+      "sha256": "b087f139b5bb268c1e6e728a4fbaa23f67306416aa34af58ef9afcbde0ca7336"
+    },
+    {
+      "name": "plan.json",
+      "sha256": "5c3b962c80606a29fcb575d19c57e21c020e999a3ef0d19ade2b370fe534bc2c"
+    },
+    {
+      "name": "patch-1.json",
+      "sha256": "ec27181600653c6f83a83777af3504f484706841713907f46f8e2dd8584c99c0"
+    },
+    {
+      "name": "tests-1.json",
+      "sha256": "e8f7494b655db0b8d1d9aed85384eea27346dc25eb80f624ebabef6e70ddf46f"
+    },
+    {
+      "name": "attempt-1.json",
+      "sha256": "2442dfa061fe14ce462318af6cd6dd9f2371de331e1f5f0ed065a18e70b0935f"
+    },
+    {
+      "name": "failed-trace-1.json",
+      "sha256": "dc248bfe24664a6b8943cd8e57a3ca3ba6f104fe0aaa0723b10abfee4d49890d"
+    },
+    {
+      "name": "recovery-1.json",
+      "sha256": "b823d44768169a1cfe05fbbecfbee6d126112a21715e6e8444547cb04f57e13f"
+    },
+    {
+      "name": "patch-2.json",
+      "sha256": "2fd4beca0021f57d1441750b3fc0e5c891c09fb34e385b904e01e05078f59b27"
+    },
+    {
+      "name": "tests-2.json",
+      "sha256": "3215b200a509c1e192df8ee51c8dc69fbd74e55c7ea986f52008691fafc22ba3"
+    },
+    {
+      "name": "attempt-2.json",
+      "sha256": "2f0d514a4d5216acc96b4cb117a19721c3016f9755d9e55749db82582c6c05e7"
+    }
+  ],
+  "recovery_evidence_source": "neatlogs-public-api+local-artifacts",
+  "trace_id": "2b869453d595b5951eb2fd0fbb898021",
+  "test_image": "local-python-ast-assertion; no Docker image used",
+  "acceptance_suite_sha256": "815c4fcce12781730a18c656902af9888b4a2f85f83863557a94ebc263a09083",
+  "budget": {
+    "calls": 3,
+    "tokens": 2744,
+    "estimated_cost_usd": 0.008777999999999994,
+    "usage": [
+      {
+        "model": "gemini-3.5-flash",
+        "usage": "provider-reported",
+        "input_tokens": 401,
+        "output_tokens": 549,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 680,
+        "output_tokens": 171,
+        "estimated_cost_usd": 0.004605
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 831,
+        "output_tokens": 112,
+        "estimated_cost_usd": 0.004173
+      }
+    ]
+  },
+  "source_sha": "e090b8e0aff858147919232dd3781348ddac60d5",
+  "source_repository": "example/torque-recovery-fixture",
+  "baseline_passed": false,
+  "plan": {
+    "summary": "Update app.py to set result to 10 for the local recovery drill.",
+    "acceptance_criteria": [
+      "result equals 10"
+    ],
+    "files": [
+      "app.py"
+    ]
+  },
+  "verified_content_sha256": "2593d12798e6005291f9b75b58fb2133e8a6409c365ebdbfc03d989d3b5ab0df",
+  "patch_sha256": "2593d12798e6005291f9b75b58fb2133e8a6409c365ebdbfc03d989d3b5ab0df",
+  "summary": "Change result from 9 to 10 in app.py to satisfy the acceptance criterion.",
+  "publication_available": false
+}

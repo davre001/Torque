@@ -1,0 +1,12 @@
+{
+  "exit_code": 0,
+  "output": "PASS: result equals 10\n",
+  "timed_out": false,
+  "command": [
+    "python",
+    "independent-acceptance.py",
+    "app.py"
+  ],
+  "failure_kind": null,
+  "assertions_passed": 1
+}

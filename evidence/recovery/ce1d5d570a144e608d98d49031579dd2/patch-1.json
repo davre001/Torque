@@ -1,0 +1,11 @@
+{
+  "summary": "Deliberately incorrect first patch for a controlled recovery drill",
+  "edits": [
+    {
+      "path": "app.py",
+      "original_sha256": "6bb127b67d08a3e9acc37935eccb5fd6c9ab5306f7087a95aff55815b71fe5c5",
+      "content": "result = 8\n",
+      "replacements": null
+    }
+  ]
+}

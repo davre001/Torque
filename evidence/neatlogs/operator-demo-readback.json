@@ -1,0 +1,44 @@
+{
+  "trace_id": "65f1c230ec0f31c423c81d7f0e33ed02",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "OK",
+  "spans": [
+    {
+      "spanId": "8366c7eb6936ed71",
+      "parentSpanId": null,
+      "spanName": "github-issue-to-pr",
+      "spanType": "WORKFLOW",
+      "status": "OK"
+    },
+    {
+      "spanId": "8edbdfe245c6d525",
+      "parentSpanId": "8366c7eb6936ed71",
+      "spanName": "fetch-issue",
+      "spanType": "TOOL",
+      "status": "OK"
+    },
+    {
+      "spanId": "7da4c42264e82016",
+      "parentSpanId": "8366c7eb6936ed71",
+      "spanName": "prepare-pinned-source",
+      "spanType": "TOOL",
+      "status": "OK"
+    },
+    {
+      "spanId": "f5d7b55af2e2a05c",
+      "parentSpanId": "8366c7eb6936ed71",
+      "spanName": "baseline-tests",
+      "spanType": "TOOL",
+      "status": "OK"
+    },
+    {
+      "spanId": "5b60c52d02e91c4d",
+      "parentSpanId": "8366c7eb6936ed71",
+      "spanName": "acceptance-tests",
+      "spanType": "TOOL",
+      "status": "OK"
+    }
+  ]
+}

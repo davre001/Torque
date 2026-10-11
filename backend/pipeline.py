@@ -14,12 +14,13 @@ log = logging.getLogger(__name__)
 class Pipeline:
     def __init__(self, *, github, prepare, runner, investigator_provider,
                  implementer_provider, budget, recipe, workspaces, artifacts,
-                 telemetry=None, secrets=()):
+                 telemetry=None, secrets=(), trace_reader=None):
         self.github, self.prepare, self.runner = github,prepare,runner
         self.investigator_provider, self.implementer_provider = investigator_provider,implementer_provider
         self.budget, self.recipe = budget,recipe
         self.workspaces, self.artifacts = Path(workspaces),Path(artifacts)
         self.telemetry, self.secrets = telemetry,secrets
+        self.trace_reader = trace_reader
 
     def span(self,name,kind="TOOL",**attrs):
         return self.telemetry.span(name,kind,**attrs) if self.telemetry else nullcontext(None)
@@ -101,8 +102,17 @@ class Pipeline:
                         patch_hash = apply_patch(workspace,patch,self.recipe.editable_files,self.budget.limits.max_patch_bytes)
                     save(f"patch-{number}",patch.model_dump())
                     transition(Status.VERIFYING)
-                    with self.span("acceptance-tests",attempt=number):
+                    attempt_name = f'acceptance-tests-{run_id}-{number}'
+                    attempt_context = self.telemetry.attempt(attempt_name, attempt=number, run_id=run_id) if self.telemetry else nullcontext(None)
+                    with attempt_context as test_span:
                         tests = self.runner.run(workspace,check)
+                        if test_span is not None:
+                            from opentelemetry.trace import Status as SpanStatus, StatusCode
+                            test_span.set_attribute('torque.assertions_passed', tests.assertions_passed)
+                            test_span.set_attribute('torque.failure_kind', tests.failure_kind or 'none')
+                            test_span.set_status(SpanStatus(StatusCode.OK if tests.passed else StatusCode.ERROR,
+                                                          None if tests.passed else 'Independent acceptance tests failed'))
+                    attempt_trace = format(test_span.get_span_context().trace_id, '032x') if test_span is not None else None
                     if tests.passed and tests.assertions_passed != len(self.recipe.acceptance_criteria):
                         tests.failure_kind = "infrastructure"
                     save(f"tests-{number}",tests.model_dump())
@@ -116,7 +126,7 @@ class Pipeline:
                                                  recipe=self.recipe,originals=originals)
                     attempt = {"number":number,"patch_sha256":patch_hash,"tests_passed":tests.passed,
                                "review":review.model_dump(),"budget":self.budget.snapshot(),
-                               "trace_id":result.get("trace_id")}
+                               "trace_id":result.get("trace_id"), "test_trace_id":attempt_trace}
                     attempt = artifacts.sanitize(attempt)
                     save(f"attempt-{number}",attempt)
                     if tests.passed and review.approved:
@@ -138,9 +148,26 @@ class Pipeline:
                     if number > self.budget.limits.recovery_retries:
                         raise PipelineError("Independent verification failed after the configured recovery limit")
                     failure = artifacts.sanitize({"tests":tests.model_dump(),"review":review.model_dump(),"attempt":number})
-                    with self.span("recovery-local-evidence","AGENT",attempt=number):
-                        strategy = recovery.recover(self.implementer_provider,plan,failure,changed)
-                    save(f"recovery-{number}",{"strategy":strategy,"evidence_source":"local-artifacts"})
+                    hosted = None
+                    readback_error = 'Neatlogs readback is not configured'
+                    if self.trace_reader and self.trace_reader.configured and attempt_trace:
+                        from backend.integrations.neatlogs_read import ReadbackUnavailable
+                        try:
+                            if not self.telemetry.flush():
+                                raise ReadbackUnavailable('Neatlogs attempt flush failed')
+                            hosted = self.trace_reader.read(attempt_trace, check, expected_name=attempt_name)
+                            if not any(str(s['status']).upper() in {'ERROR','FAILED','FAILURE'} for s in hosted['spans']):
+                                raise ReadbackUnavailable('Neatlogs attempt does not contain the test failure')
+                            save(f'failed-trace-{number}', hosted)
+                        except ReadbackUnavailable as exc:
+                            hosted = None
+                            readback_error = str(exc)
+                    evidence_source = 'neatlogs-public-api+local-artifacts' if hosted else 'local-artifacts'
+                    result['recovery_evidence_source'] = evidence_source
+                    with self.span('recovery-hosted-evidence' if hosted else 'recovery-local-evidence','AGENT',attempt=number):
+                        strategy = recovery.recover(self.implementer_provider,plan,failure,changed,hosted,self.recipe)
+                    save(f"recovery-{number}",{"strategy":strategy,"evidence_source":evidence_source,
+                                             'failed_trace_id':attempt_trace, 'readback_error':None if hosted else readback_error})
             except PipelineError as exc:
                 # Lease/cancellation errors deliberately propagate to the worker.
                 result["budget"] = self.budget.snapshot()

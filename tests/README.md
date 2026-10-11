@@ -1,5 +1,18 @@
 # Backend tests
 
+## Hosted recovery
+
+`test_neatlogs_read.py`, `test_hosted_recovery.py`, `test_telemetry_mask.py`, and
+`test_gemini_schema.py` verify credential separation, bounded response/pagination,
+exact finalized trace identity, hierarchy, safe metadata, failure-only recovery,
+labeled local fallback, detached attempt traces with restored workflow context,
+typed usage preservation, and native Gemini schema submission.
+
+The live drill is separate from these fixtures: see
+[saved controlled recovery evidence](../evidence/recovery/ce1d5d570a144e608d98d49031579dd2/README.md)
+and [setup/limits](../backend/NEATLOGS_RECOVERY.md). It deliberately seeds the first
+incorrect patch and does not submit jobs to GitHub or the production database.
+
 ## Workspace browser contract
 
 With Next.js running, use `node tests/workspace-browser.mjs` (Node 22+ and Microsoft

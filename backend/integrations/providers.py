@@ -95,7 +95,8 @@ class StructuredProvider:
                     raise BudgetExceeded(last_failure+"; retry blocked by the remaining budget. Previous request usage is unknown; reservation retained") from None
                 raise
             try:
-                response = self.adapter.complete(prompt,self.budget.limits.max_output_tokens)
+                structured = getattr(self.adapter,'complete_structured',None)
+                response = structured(prompt,self.budget.limits.max_output_tokens,schema) if structured else self.adapter.complete(prompt,self.budget.limits.max_output_tokens)
             except Exception as exc:
                 # Do not refund uncertain requests: a timeout may have been billed.
                 code = getattr(exc,"status_code",None) or getattr(exc,"code",None)

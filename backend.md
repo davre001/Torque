@@ -28,7 +28,7 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement and verify the separate worker lifecycle.
 - [x] Implement repository tools and isolated test execution.
 - [x] Implement Investigator, Implementer, Verifier, and local-artifact Recovery; recovery tested with controlled fixtures.
-- [ ] Verify real model tracing and authenticated failure-trace readback.
+- [x] Verify real model tracing and authenticated failure-trace readback in a controlled live recovery drill.
 - [ ] Obtain genuine Entire runtime context evidence.
 - [x] Implement verified, idempotent branch/PR publication.
 - [x] Connect the authenticated workspace to actual API state and keep simulations outside the real run path.
@@ -43,8 +43,9 @@ Python source lives in `backend/`; plans live at the root. The separate SQLite w
 pinned source download, Gemini investigation/review, Claude patch, and remote Linux browser
 tests have completed a live run. All three acceptance assertions passed and the verified
 patch was published as [draft PR #1](https://github.com/davre001/kokon/pull/1).
-Commands are in [backend/README.md](backend/README.md). Neatlogs dashboard readback,
-runtime Entire context, and the connected-user frontend remain pending.
+Commands are in [backend/README.md](backend/README.md). Finalized trace readback and
+controlled hosted recovery are saved in [recovery evidence](backend/NEATLOGS_RECOVERY.md).
+Runtime Entire context and live connected-user execution remain pending.
 
 Runtime database, checkouts, and logs will live under ignored `var/`. Selected sanitized run evidence belongs in `evidence/runs/`. Tests will be implemented alongside actual behavior.
 
@@ -62,12 +63,12 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
 2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
+3. Hosted readback and a controlled live recovery drill are complete (see `backend/NEATLOGS_RECOVERY.md`). Verify recovery on a live GitHub repository next; the original successful demo had no recovery retry.
 4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
 5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
 6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
 
-Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted hierarchy/cancellation checks; live issue-to-draft-PR demo, authenticated finalized trace readback, and an explicitly seeded controlled live recovery drill completed. Live connected-user execution, runtime Entire context, and broad repository support remain pending.
 
 ## GitHub App backend milestone
 

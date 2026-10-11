@@ -5,8 +5,10 @@ snapshots, bounded file edits, Claude/LiteLLM and Gemini adapters, agent roles, 
 gates, bounded recovery, atomic artifacts, and worker-owned Neatlogs tracing.
 The demo pipeline has passed live provider calls and independent remote browser tests.
 Explicit controlled-fork draft PR publication is implemented and tested with mocked GitHub
-responses; live publication and finalized dashboard traces remain unverified.
-GitHub App visitor login and per-user backend permissions are implemented; live App registration/browser acceptance and frontend wiring remain pending. See [GitHub App setup](GITHUB_APP.md).
+responses and a published controlled-fork demo. Finalized trace readback and a controlled
+live hosted recovery drill are saved; see [Neatlogs recovery](NEATLOGS_RECOVERY.md).
+GitHub App visitor login, per-user permissions and frontend polling are implemented;
+live connected-user execution remains pending. See [GitHub App setup](GITHUB_APP.md).
 
 Install from the repository root:
 
@@ -31,7 +33,8 @@ Recipes restrict context/editable paths and define immutable acceptance criteria
 Each recipe needs an installed immutable Docker image and an independent test suite.
 See [kokon acceptance setup](../tests/acceptance/kokon/README.md). The example contains
 deliberately invalid placeholders: replace them with real image/suite values.
-Docker is currently unavailable in this workspace, so the worker fails before model spend.
+For testing on a GitHub-hosted Linux runner, see [remote runner setup](REMOTE_RUNNER.md).
+The default Docker runner requires Docker locally and fails preflight when unavailable.
 
 Alternatively, set `TORQUE_RUNNER=github-actions` and follow
 [remote Linux runner setup](REMOTE_RUNNER.md). That path needs no local Docker or rented

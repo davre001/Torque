@@ -32,6 +32,7 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Bound provider transport and agent recovery retries independently; expired jobs are interrupted, not automatically replayed.
 - [x] Implement cooperative cancellation, local subprocess termination, and remote Actions cancellation requests.
 - [x] Implement graceful shutdown, interruption records, and one-time telemetry teardown.
+- [x] Emit completed acceptance-attempt traces and use authorized bounded Neatlogs readback during recovery; preserve cancellation checks and labeled local fallback.
 - [x] Reconcile PR side effects using a stable branch/marker and publication lease; lost-response retry is mock-tested.
 - [ ] Implement workspace retention and checked cleanup paths.
 - [x] Test competing claims, slow-operation heartbeats, expired-owner fencing, persisted submissions, and cooperative cancellation.

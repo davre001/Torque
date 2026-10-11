@@ -9,7 +9,10 @@ Collect verifiable evidence for Torque's issue-to-pull-request agent here.
 - The probe timed out during readback; the trace subsequently appeared in the dashboard, as confirmed by the team.
 - This synthetic trace does not verify the application's agent instrumentation.
 - Successful live agent run: `6634790aa28943629348e02914d9b56c`, with local trace ID `65f1c230ec0f31c423c81d7f0e33ed02`. See the [sanitized demo evidence](runs/6634790aa28943629348e02914d9b56c/README.md).
-- Pending: dashboard trace link/screenshots, plus a separately documented failed run and recovery comparison. The saved successful run passed on its first implementation attempt; it does not demonstrate an in-run recovery retry.
+- Finalized readback of the published demo is now saved in [operator-demo-readback.json](neatlogs/operator-demo-readback.json): status OK, five spans. Its older trace has no LLM spans; model usage remains recorded in the run evidence.
+- Fresh synthetic Doctor probe `52a9d6c4d2e8c7436523452faa2f663e` passed exact hosted finalization, hierarchy, metadata, and usage checks on October 11, 2026. This is separate from application evidence.
+- [Controlled live recovery drill](recovery/ce1d5d570a144e608d98d49031579dd2/README.md): an explicitly seeded bad patch caused a real assertion failure, finalized Neatlogs readback informed live Claude recovery, and the second attempt passed. Main trace finalized OK with 16 spans/four LLM calls. No GitHub writes or Docker execution occurred.
+- Pending: dashboard screenshots/access links and recovery in a live GitHub repository. The original kokon run passed on its first attempt.
 
 ## Entire
 

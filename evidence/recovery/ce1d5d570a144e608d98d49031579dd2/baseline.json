@@ -1,0 +1,12 @@
+{
+  "exit_code": 1,
+  "output": "Traceback (most recent call last):\n  File \"C:\\Users\\USER\\OneDrive\\Documents\\Torque\\var\\recovery-demo\\395b9cd3e2e64a64816275acc4def8b9\\acceptance.py\", line 6, in <module>\n    assert actual == 10, f\"Expected result=10; actual={actual!r}\"\n           ^^^^^^^^^^^^\nAssertionError: Expected result=10; actual=9\n",
+  "timed_out": false,
+  "command": [
+    "python",
+    "independent-acceptance.py",
+    "app.py"
+  ],
+  "failure_kind": "assertion",
+  "assertions_passed": 0
+}

@@ -1,0 +1,64 @@
+{
+  "mode": "controlled-live-recovery-drill",
+  "first_failure": "deliberately seeded incorrect patch",
+  "github": "local metadata fixture; no GitHub requests or PR publication",
+  "acceptance": "independent subprocess AST assertion; model code never executed",
+  "records": [
+    {
+      "name": "attempt-1.json",
+      "sha256": "2442dfa061fe14ce462318af6cd6dd9f2371de331e1f5f0ed065a18e70b0935f"
+    },
+    {
+      "name": "attempt-2.json",
+      "sha256": "2f0d514a4d5216acc96b4cb117a19721c3016f9755d9e55749db82582c6c05e7"
+    },
+    {
+      "name": "baseline.json",
+      "sha256": "b087f139b5bb268c1e6e728a4fbaa23f67306416aa34af58ef9afcbde0ca7336"
+    },
+    {
+      "name": "failed-trace-1.json",
+      "sha256": "dc248bfe24664a6b8943cd8e57a3ca3ba6f104fe0aaa0723b10abfee4d49890d"
+    },
+    {
+      "name": "patch-1.json",
+      "sha256": "ec27181600653c6f83a83777af3504f484706841713907f46f8e2dd8584c99c0"
+    },
+    {
+      "name": "patch-2.json",
+      "sha256": "2fd4beca0021f57d1441750b3fc0e5c891c09fb34e385b904e01e05078f59b27"
+    },
+    {
+      "name": "plan.json",
+      "sha256": "5c3b962c80606a29fcb575d19c57e21c020e999a3ef0d19ade2b370fe534bc2c"
+    },
+    {
+      "name": "recovery-1.json",
+      "sha256": "b823d44768169a1cfe05fbbecfbee6d126112a21715e6e8444547cb04f57e13f"
+    },
+    {
+      "name": "tests-1.json",
+      "sha256": "e8f7494b655db0b8d1d9aed85384eea27346dc25eb80f624ebabef6e70ddf46f"
+    },
+    {
+      "name": "tests-2.json",
+      "sha256": "3215b200a509c1e192df8ee51c8dc69fbd74e55c7ea986f52008691fafc22ba3"
+    },
+    {
+      "name": "verified.json",
+      "sha256": "56f13925d7400ee0b518c4b6c74069cb814a5cf245f298fe095ed153f6eb44f0"
+    },
+    {
+      "name": "run.json",
+      "sha256": "aa665b182ac2049f1ba8287c4f166df393015fee03ea3b611763f91081ef67a9"
+    },
+    {
+      "name": "workflow-readback.json",
+      "sha256": "21957a88d4c110a8176ef955dd196be0344dcccab6e577419ba41e4d98646609"
+    },
+    {
+      "name": "passing-trace-2.json",
+      "sha256": "0946280b55345dec6b0ad6809a534eb599e68f3f70575b40d1d288b62d35cee3"
+    }
+  ]
+}

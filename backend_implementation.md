@@ -26,7 +26,7 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Implement structured model edits through allowlisted, source-hash-checked file tools.
 - [x] Implement Verifier with required tests as a hard gate (fixture-tested and live demo passed).
 - [x] Implement local-artifact Recovery and distinct transport/recovery budget counters.
-- [ ] Implement authorized hosted-trace-informed Recovery.
+- [x] Implement authorized hosted-trace-informed Recovery; verified in a controlled live drill with a seeded failure.
 - [x] Persist verified patch/head records and enforce authorized publication.
 - [x] Reproduce the kokon bug and automate all three playback acceptance criteria.
 - [x] Test invalid paths, budgets, failures, cancellation, restart interruption, and duplicate publication.
@@ -34,7 +34,7 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [ ] Verify connected-user execution against an installed supported source repository.
 - [x] Expose repository eligibility and prevent unsupported connected-user submissions from entering the queue.
 - [x] Verify the live operator issue-to-PR flow and export actual tests, usage, patch, and PR evidence.
-- [ ] Export finalized dashboard trace and genuine live recovery evidence.
+- [x] Export finalized application trace and controlled live hosted recovery evidence; natural GitHub-repository recovery remains pending.
 
 ## Outcome and scope
 
@@ -48,9 +48,7 @@ all three independent browser criteria after the first patch, and published
 [evidence](evidence/runs/6634790aa28943629348e02914d9b56c/README.md) records source,
 verified content, published commit, model usage, and original artifacts. Latest tests: 74 passed.
 
-Recovery is fixture-tested with local artifacts; genuine hosted trace-driven recovery is
-pending. Neatlogs finalized application readback, runtime Entire context, GitHub visitor
-sessions, and real frontend polling remain pending. JSON event polling exists; SSE is optional.
+Recovery now uses authenticated finalized failure traces alongside local artifacts and passed a controlled live drill with an explicitly seeded bad first patch. Runtime Entire context and live connected-user execution remain pending. GitHub visitor sessions and frontend polling are implemented. See `backend/NEATLOGS_RECOVERY.md` for evidence and limits.
 
 Scope update: `changes.md` now specifies a public landing page and a separate authenticated workspace. Real Connect GitHub and Disconnect behavior require GitHub App identity/installation onboarding, server-side sessions, and per-user ownership checks in the current requested scope. The local single-operator path below remains the first development milestone; it does not fulfill multi-user connection behavior by itself.
 
@@ -153,12 +151,12 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
 2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
+3. Hosted readback and a controlled live recovery drill are complete (see `backend/NEATLOGS_RECOVERY.md`). Verify recovery on a live GitHub repository next; the original successful demo had no recovery retry.
 4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
 5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
 6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
 
-Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted hierarchy/cancellation checks; live issue-to-draft-PR demo, authenticated finalized trace readback, and an explicitly seeded controlled live recovery drill completed. Live connected-user execution, runtime Entire context, and broad repository support remain pending.
 
 ## GitHub App backend milestone
 

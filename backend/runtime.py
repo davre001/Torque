@@ -84,6 +84,9 @@ class AgentProcessor:
         model_rates = rates("GEMINI"),rates("LITELLM")
         clients = []
         try:
+            from backend.integrations.neatlogs_read import TraceReader
+            trace_reader = TraceReader()
+            clients.append(trace_reader)
             github = GitHub(github_token)
             clients.append(github)
             gemini = Gemini(os.getenv("GEMINI_API_KEY",""),os.getenv("GEMINI_MODEL",""),self.telemetry.wrap)
@@ -98,7 +101,7 @@ class AgentProcessor:
                      investigator_provider=providers[0],implementer_provider=providers[1],
                      budget=budget,recipe=recipe,workspaces=workspace_root(),
                      artifacts=ROOT/"var"/"artifacts",telemetry=self.telemetry,
-                     secrets=(*self.secrets,github_token))(store,run_id,owner,checkpoint)
+                     secrets=(*self.secrets,github_token),trace_reader=trace_reader)(store,run_id,owner,checkpoint)
         finally:
             for client in reversed(clients):
                 client.close()

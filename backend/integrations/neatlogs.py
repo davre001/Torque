@@ -14,11 +14,17 @@ class Telemetry:
 
     def mask(self, span):
         # Preserve model/usage/status metadata; never export source/prompt content.
-        content_keys = ("input.value","output.value","prompt","completion","messages",
-                        "exception.message","exception.stacktrace")
+        content_keys = ('input.value','output.value','prompt','completion','messages',
+                        'exception.message','exception.stacktrace','gen_ai.input.messages',
+                        'gen_ai.output.messages','llm.input_messages','llm.output_messages',
+                        'ai.prompt','ai.response.text','llm.prompts','gen_ai.prompt','gen_ai.completion')
+        def content_key(key):
+            return key in content_keys or any(key.startswith(prefix+'.') for prefix in
+                                             ('llm.input_messages','llm.output_messages','llm.prompts',
+                                              'gen_ai.prompt','gen_ai.completion'))
         def clean(value):
             if isinstance(value,dict):
-                return {k:("[content omitted]" if any(token in k for token in content_keys)
+                return {k:("[content omitted]" if content_key(k)
                            else clean(v)) for k,v in value.items()}
             if isinstance(value,list):
                 return [clean(v) for v in value]
@@ -27,6 +33,20 @@ class Telemetry:
 
     def wrap(self,client):
         return neatlogs.wrap(client) if self.active else client
+
+    @contextmanager
+    def attempt(self, name, **attributes):
+        # A closed root is readable while the enclosing issue workflow stays active.
+        from opentelemetry.context import Context, attach, detach
+        token = attach(Context())
+        try:
+            with self.span(name, 'WORKFLOW', **attributes) as span:
+                yield span
+        finally:
+            detach(token)
+
+    def flush(self):
+        return neatlogs.flush(timeout_millis=5000) if self.active else True
 
     @contextmanager
     def span(self,name,kind="TOOL",**attributes):

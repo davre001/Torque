@@ -69,7 +69,7 @@ class FixtureGitHub:
     def revision(self,*_):
         return "a"*40
 
-def pipeline_run(tmp_path,models=None):
+def pipeline_run(tmp_path,models=None,telemetry=None,trace_reader=None):
     store = Store(tmp_path/"db")
     store.initialize()
     run_id = store.submit(URL)
@@ -80,7 +80,8 @@ def pipeline_run(tmp_path,models=None):
     pipeline = Pipeline(github=FixtureGitHub(),prepare=prepare,runner=FixtureRunner(),
                         investigator_provider=models,implementer_provider=models,
                         budget=Budget(Limits()),recipe=recipe(tmp_path),
-                        workspaces=tmp_path/"work",artifacts=tmp_path/"artifacts")
+                        workspaces=tmp_path/"work",artifacts=tmp_path/"artifacts",
+                        telemetry=telemetry,trace_reader=trace_reader)
     Worker(store,Settings(store.path),pipeline).once()
     return store,run_id,models
 

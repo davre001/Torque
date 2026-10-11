@@ -13,10 +13,17 @@ class Gemini:
             timeout=120000,retry_options=types.HttpRetryOptions(attempts=1))))
 
     def complete(self,prompt,max_output_tokens):
+        return self._complete(prompt,max_output_tokens)
+
+    def complete_structured(self,prompt,max_output_tokens,schema):
+        return self._complete(prompt,max_output_tokens,schema.model_json_schema())
+
+    def _complete(self,prompt,max_output_tokens,json_schema=None):
         from google.genai import types
         result = self.client.models.generate_content(
             model=self.model,contents=prompt,
             config=types.GenerateContentConfig(response_mime_type="application/json",
+                                               response_json_schema=json_schema,
                                                max_output_tokens=max_output_tokens))
         usage = result.usage_metadata
         incoming = usage.prompt_token_count if usage else None

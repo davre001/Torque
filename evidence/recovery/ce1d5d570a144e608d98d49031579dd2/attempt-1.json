@@ -1,0 +1,26 @@
+{
+  "number": 1,
+  "patch_sha256": "9283651206f744b4f964f67030070977d39129e5199c4eb2954865d5e6c650f0",
+  "tests_passed": false,
+  "review": {
+    "approved": false,
+    "rationale": "Independent acceptance tests failed",
+    "satisfied_criteria": []
+  },
+  "budget": {
+    "calls": 1,
+    "tokens": 950,
+    "estimated_cost_usd": 0.0,
+    "usage": [
+      {
+        "model": "gemini-3.5-flash",
+        "usage": "provider-reported",
+        "input_tokens": 401,
+        "output_tokens": 549,
+        "estimated_cost_usd": 0.0
+      }
+    ]
+  },
+  "trace_id": "2b869453d595b5951eb2fd0fbb898021",
+  "test_trace_id": "e6417b8ff867e18db4fe1093548c91c2"
+}

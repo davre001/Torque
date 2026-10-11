@@ -1,0 +1,171 @@
+{
+  "trace_id": "2b869453d595b5951eb2fd0fbb898021",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "OK",
+  "total_tokens": 2639,
+  "llm_calls": 4,
+  "spans": [
+    {
+      "spanId": "d6440fd521bd8441",
+      "parentSpanId": null,
+      "spanName": "github-issue-to-pr",
+      "spanType": "WORKFLOW",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "448b2cfa322b0972",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "prepare-pinned-source",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "8d150dfa2ace92a0",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "fetch-issue",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "cc8ddfa71854aeab",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "baseline-tests",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "cf2ac8956d8b64b0",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "investigator",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "c237764e709e7058",
+      "parentSpanId": "cf2ac8956d8b64b0",
+      "spanName": "gemini-3.6-flash",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "gemini-3.6-flash",
+      "provider": "google_genai",
+      "totalTokens": 438
+    },
+    {
+      "spanId": "ed509229c46a8045",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "implementer",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "562e6c5110d2d05b",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "apply-approved-edits",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "9e2c9745147aac18",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "verifier",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "381f512fa54a87b1",
+      "parentSpanId": "7b54af33ba537189",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 851
+    },
+    {
+      "spanId": "7b54af33ba537189",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "recovery-hosted-evidence",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "57737b3ed35b20c6",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "implementer",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "35a4b616fc661857",
+      "parentSpanId": "57737b3ed35b20c6",
+      "spanName": "claude-sonnet-4.6",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "totalTokens": 943
+    },
+    {
+      "spanId": "5c5857e82cbc37b5",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "apply-approved-edits",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "9a871d5c83bc94ab",
+      "parentSpanId": "d6440fd521bd8441",
+      "spanName": "verifier",
+      "spanType": "AGENT",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "cd23af1153621f67",
+      "parentSpanId": "9a871d5c83bc94ab",
+      "spanName": "gemini-3.6-flash",
+      "spanType": "LLM",
+      "status": "OK",
+      "model": "gemini-3.6-flash",
+      "provider": "google_genai",
+      "totalTokens": 407
+    }
+  ]
+}

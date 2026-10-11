@@ -1,0 +1,9 @@
+{
+  "summary": "Update app.py to set result to 10 for the local recovery drill.",
+  "acceptance_criteria": [
+    "result equals 10"
+  ],
+  "files": [
+    "app.py"
+  ]
+}
