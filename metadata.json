@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4PEGKYAN6KRM283KHAC84MY",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "backend.md",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/lifecycle_probe.py",
+    "background_worker.md",
+    "evidence/lifecycle/95cecd4f46a5427ea5f34436633402b0/report.json",
+    "evidence/lifecycle/ebe2cff1ed6c43ab8366999cd54b1579/report.json",
+    "integration.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1967952,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 127965440,
+    "output_tokens": 285265,
+    "api_call_count": 1006,
+    "subagent_tokens_complete": true
+  }
+}
