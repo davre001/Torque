@@ -8,6 +8,9 @@ Status: live operator/provider/browser/PR evidence, finalized trace readback, an
 
 ## Integration progress checklist
 
+- [x] Prepare a pinned fork gallery profile and independently calibrate keyboard/alt/mouse browser assertions locally; see [gallery evidence](backend/GALLERY_VERIFICATION.md).
+- [ ] Deploy the gallery-capable workflow, verify its hosted baseline, and run a fresh fork gallery issue before publication-crash acceptance.
+
 User-reported credential entry is setup progress, not proof of provider access. Synthetic SDK diagnostics are separate from application verification.
 
 - [x] Create a key-free `.env.example` and ignore the local `.env`.
@@ -132,7 +135,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 ## Next work in order
 
 1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention and isolated live restart/API-restart/cancellation plus actual remote cancellation are verified. Finish OS-signal/provider-interruption and live publication crash/reconciliation acceptance before public deployment.
+2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals, blocked-provider graceful shutdown, and live publication crash/reconciliation before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.

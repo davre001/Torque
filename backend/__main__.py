@@ -63,6 +63,8 @@ def main():
         worker = Worker(store,settings,processor)
         signal.signal(signal.SIGINT,worker.stop)
         signal.signal(signal.SIGTERM,worker.stop)
+        if hasattr(signal,'SIGBREAK'):
+            signal.signal(signal.SIGBREAK,worker.stop)
         try:
             if args.once:
                 worker.once()

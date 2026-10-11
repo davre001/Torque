@@ -2,9 +2,13 @@
 
 No server account or local Docker installation is needed. GitHub Actions provisions an
 Ubuntu VM for each test job. Docker isolation runs on that VM. This first implementation
-supports only the public kokon issue, with edits restricted to site/index.html.
+supports reviewed public kokon task profiles: landing-video reduced motion and gallery
+keyboard accessibility. Each profile has a fixed editable scope and source policy.
 
-Status: code prepared and mock-tested. A live GitHub test has not run.
+Status: reduced-motion execution and cancellation have live evidence. The new gallery
+profile passes local suite calibration and automated contract tests; its updated
+workflow must be pushed and its hosted baseline verified before live agent use.
+See [gallery setup and evidence](GALLERY_VERIFICATION.md).
 
 ## Enable it
 
@@ -19,14 +23,15 @@ Status: code prepared and mock-tested. A live GitHub test has not run.
    immutable local ID. Local Docker mode rejects this marker.
 6. Run backend preflight, then start the API and separate worker.
 
-The three acceptance criteria and editable scope must remain unchanged. Provider keys stay
-on the laptop. Only pinned public source and the HTML replacement are sent to GitHub.
+Each profile's acceptance criteria and editable scope must remain unchanged. Provider keys stay
+on the laptop. Only pinned public source and reviewed file replacements are sent to GitHub.
 Workflow inputs/artifacts may be visible to repository viewers: private source is unsupported.
 
 Each job uploads a bounded result.json artifact. The backend correlates the random request ID,
 source SHA, workflow revision, and acceptance-suite digest. Cancellation requests remote job
 cancellation; a ten-minute workflow timeout is a backstop. GitHub queues and image builds count
-against the backend wall-time budget. Actual browser sandbox compatibility is still unverified.
+against the backend wall-time budget. Reduced-motion sandbox compatibility is live-verified;
+gallery sandbox compatibility is pending deployment of the updated workflow.
 
 GitHub Actions artifacts expire after one day. Local sanitized attempt artifacts remain available.
-PR publication is still disabled. This adds a test executor, not a GitHub visitor login flow.
+PR publication remains a separate explicit action; the runner never publishes a PR.

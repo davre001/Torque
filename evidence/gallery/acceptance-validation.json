@@ -1,0 +1,57 @@
+{
+  "mode": "local-headless-edge-real-gallery-fixture-io",
+  "source_repository": "davre001/kokon",
+  "source_sha": "3b7fe6d714cf7764e54a877c69c64eb0bdb38655",
+  "upstream_issue": "https://github.com/GabrieleLozupone/kokon/issues/2",
+  "acceptance_criteria": [
+    "Gallery cards are reachable with Tab and open with Enter or Space.",
+    "Favorite and delete actions are visible on keyboard focus, have aria-labels, and work without opening the card.",
+    "Gallery thumbnails have meaningful nonempty alt text derived from their prompts.",
+    "Mouse opening, favoriting, and confirmed deletion remain functional."
+  ],
+  "baseline": {
+    "exit_code": 1,
+    "failure_kind": "assertion",
+    "assertions_passed": 1,
+    "failed_checks": [
+      "card-keyboard",
+      "action-keyboard",
+      "thumbnail-alt"
+    ],
+    "mouse_regression_passed": true
+  },
+  "positive_fixture": {
+    "exit_code": 0,
+    "failure_kind": null,
+    "assertions_passed": 4,
+    "note": "Temporary local correction to calibrate suite, not an agent-generated or published fix."
+  },
+  "files": [
+    {
+      "path": "src/components/Gallery.tsx",
+      "source_sha256": "128d736e4578cee404067eca337564aa33f0c3f6c4ba0b27346284443130e034",
+      "positive_fixture_sha256": "a14a9295c71ab7a89ef3c2b49536bf5b69d50807a4572b9d0daa97db62ced218"
+    },
+    {
+      "path": "src/styles.css",
+      "source_sha256": "f92859bc078c5ede4f79be0d61c15ec63a1d4c447118d61e97d7847e3fef5a58",
+      "positive_fixture_sha256": "b47b6355d5e802f593f2240b0d75d0c8f2a2afded715179dfad7d62a16f3db6d"
+    }
+  ],
+  "suite_files_sha256": {
+    "build-harness.cjs": "8ff37e1dfb19b7d0cd0d9d2c7bce3855eae06b76d7491dbe75d0aeb3397316fd",
+    "Dockerfile": "ebb70cd74337f9f9a3a0b5a52424970da281158717d9c815788dd3c0dc4ca277",
+    "package-lock.json": "89aabc258b1394b380632750cb0ea3d08b508e719bb0aa55af16c36d5dfc1b16",
+    "package.json": "372cc15f0914ff3965f2109d0cf9b5582d5427f0234f44c08b02bc76c5377c97",
+    "README.md": "bbf615e9cd8e8cf2d929a1e07be0d1bccb9c79061c41ae17439227ece713f837",
+    "seccomp_profile.json": "067869ea9b69aa0982f47f713f133cc6327d408de0bbc297eee51213ad47089e",
+    "test_gallery.py": "b6208ad6e499ce01d4873fd016af849aee6eb6be0097771744860dfc1587424b"
+  },
+  "automated_tests": {
+    "passed": 132,
+    "skipped": 1
+  },
+  "hosted_docker_verified": false,
+  "provider_calls": 0,
+  "github_writes": 0
+}

@@ -1,0 +1,36 @@
+--- a/src/components/Gallery.tsx
++++ b/src/components/Gallery.tsx
+@@ -104,14 +104,14 @@
+         }}
+       >
+         {items.map((g) => (
+-          <div key={g.id} className="card" onClick={() => reopen(g)} title={g.prompt}>
+-            <img src={urls.genThumb(g.id)} alt="" loading="lazy" draggable={false} />
++          <div key={g.id} className="card" role="button" tabIndex={0} onClick={() => reopen(g)} title={g.prompt} onKeyDown={(e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); reopen(g); } }}>
++            <img src={urls.genThumb(g.id)} alt={g.prompt.slice(0, 80)} loading="lazy" draggable={false} />
+             <div className={`card-actions ${g.favorite ? "fav" : ""}`} onClick={(e) => e.stopPropagation()}>
+-              <button title={g.favorite ? "Remove from favorites" : "Favorite"} onClick={() => toggleFav(g)}>
++              <button aria-label={g.favorite ? "Remove from favorites" : "Favorite"} title={g.favorite ? "Remove from favorites" : "Favorite"} onClick={() => toggleFav(g)}>
+                 <Heart size={14} fill={g.favorite ? "currentColor" : "none"} />
+               </button>
+               <button
+-                title="Delete"
++                title="Delete" aria-label="Delete image"
+                 onClick={async () => {
+                   if (await native.confirm("Delete this image from the gallery and disk?", "Delete")) remove(g);
+                 }}
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -298,10 +298,10 @@
+ .card { position: relative; border-radius: 10px; overflow: hidden; background: var(--surface); aspect-ratio: 1; cursor: pointer; }
+ .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+ .card .card-actions { position: absolute; right: 6px; top: 6px; display: none; gap: 4px; }
+-.card:hover .card-actions, .card .card-actions.fav { display: flex; }
++.card:hover .card-actions, .card:focus-within .card-actions, .card .card-actions.fav { display: flex; }
+ .card .card-actions button { width: 28px; height: 28px; border-radius: 8px; background: var(--scrim); display: grid; place-items: center; color: var(--text); }
+ .card .card-meta { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 8px 6px; font-size: 11px; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,0.6)); display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+-.card:hover .card-meta { display: block; }
++.card:hover .card-meta, .card:focus-within .card-meta { display: block; }
+ 
+ /* editors */
+ .editor-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px 24px; position: relative; overflow: hidden; }

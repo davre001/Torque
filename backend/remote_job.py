@@ -6,12 +6,25 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+import zlib
 from backend.config import ROOT
 from backend.execution import Recipe
 from backend.models import TestResult
 from backend.tools.repository import snapshot
 from backend.tools.files import safe_path
 from backend.tools.sandbox import DockerRunner
+from backend.acceptance_profiles import GALLERY_FILES, GALLERY_CRITERIA, validate_source
+
+def decode_gallery_bundle(encoded):
+    if len(encoded)>60000:raise ValueError('Oversized gallery input')
+    compressed=base64.b64decode(encoded,validate=True)
+    decoder=zlib.decompressobj()
+    raw=decoder.decompress(compressed,250001)
+    if len(raw)>250000 or not decoder.eof or decoder.unused_data:raise ValueError('Invalid or oversized compressed input')
+    files=json.loads(raw)
+    if not isinstance(files,dict) or set(files)!=set(GALLERY_FILES) or any(not isinstance(content,str) for content in files.values()):
+        raise ValueError('Unreviewed gallery file scope')
+    return files
 
 def main():
     request_id = os.environ["TORQUE_REQUEST_ID"]
@@ -20,27 +33,39 @@ def main():
         raise ValueError("Invalid request identity")
     record = {"request_id":request_id,"source_sha":sha,"suite_sha256":None}
     try:
-        encoded = os.environ["TORQUE_INDEX_HTML"]
-        if len(encoded) > 60000:
-            raise ValueError("Oversized input")
-        replacement = base64.b64decode(encoded,validate=True).decode("utf-8")
+        profile=os.getenv('TORQUE_ACCEPTANCE_PROFILE','reduced-motion') or 'reduced-motion'
+        repository=os.getenv('TORQUE_SOURCE_REPOSITORY','gabrielelozupone/kokon').lower() or 'gabrielelozupone/kokon'
+        if not validate_source(profile,repository,sha):raise ValueError('Source/profile not reviewed')
+        record.update(acceptance_profile=profile,source_repository=repository)
+        if profile=='gallery-keyboard':
+            replacements=decode_gallery_bundle(os.environ['TORQUE_FILES_BUNDLE'])
+            suite=ROOT/'tests/acceptance/gallery'
+            command=['python','/acceptance/test_gallery.py']
+            criteria=GALLERY_CRITERIA
+        else:
+            encoded = os.environ["TORQUE_INDEX_HTML"]
+            if len(encoded) > 60000:raise ValueError("Oversized input")
+            replacements={'site/index.html':base64.b64decode(encoded,validate=True).decode('utf-8')}
+            suite=ROOT/'tests/acceptance/kokon'
+            command=['python','/acceptance/test_reduced_motion.py']
+            criteria=['reduced motion paused','manual play','normal autoplay']
         # No inputs are interpolated into shell commands.
         subprocess.run(["docker","build","-t","torque-kokon-tests",
-                        str(ROOT/"tests"/"acceptance"/"kokon")],check=True,timeout=300)
+                        str(suite)],check=True,timeout=300)
         image = subprocess.check_output(["docker","image","inspect","torque-kokon-tests",
                                          "--format","{{.Id}}"],text=True).strip()
         record["image_digest"] = image
-        recipe = Recipe(image=image,command=["python","/acceptance/test_reduced_motion.py"],
-                        context_files=["site/index.html"],editable_files=["site/index.html"],
-                        acceptance_criteria=["reduced motion paused","manual play","normal autoplay"],
-                        suite_directory=str(ROOT/"tests"/"acceptance"/"kokon"))
+        recipe = Recipe(image=image,command=command,
+                        context_files=list(replacements),editable_files=list(replacements),
+                        acceptance_criteria=criteria,suite_directory=str(suite),timeout_seconds=120)
         runner = DockerRunner(recipe)
         runner.preflight()
         record["suite_sha256"] = runner.suite_sha256
         with tempfile.TemporaryDirectory(prefix="torque-source-") as temporary:
             workspace = Path(temporary)/"source"
-            snapshot("GabrieleLozupone","kokon",sha,workspace,lambda:None)
-            safe_path(workspace,"site/index.html").write_bytes(replacement.encode())
+            owner,repo=repository.split('/')
+            snapshot(owner,repo,sha,workspace,lambda:None)
+            for name,content in replacements.items():safe_path(workspace,name).write_bytes(content.encode())
             result = runner.run(workspace,lambda:None)
         print(result.output,flush=True)
         record["result"] = result.model_dump()

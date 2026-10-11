@@ -1,0 +1,79 @@
+{
+  "mode": "live-processes-fixture-work",
+  "run_id": "30fa9e79dc554517b94c9e2642808bf2",
+  "provider_calls": 0,
+  "github_calls": 0,
+  "remote_actions_cancellation_verified": false,
+  "production_database_modified": false,
+  "outcomes": [
+    {
+      "case": "hard-kill-restart-investigating",
+      "run_id": "69e509fe5c814e7ebd2944f525f1c1d9",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-implementing",
+      "run_id": "efff68baace2422c8c04c597880035ff",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-verifying",
+      "run_id": "1e66737e338e44449eeb13df9e70b537",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-recovering",
+      "run_id": "ebc48bb9492846f18723670e1ed63519",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "queued-api-cancellation",
+      "run_id": "edc473e5647243c090a368c033cc9aac",
+      "status": "cancelled",
+      "event_count": 2,
+      "executed": false
+    },
+    {
+      "case": "api-restart-during-worker",
+      "run_id": "3d020a2d3ff64e8a810dd806c8295b38",
+      "status": "verifying",
+      "event_count": 2,
+      "heartbeat_renewed": true
+    },
+    {
+      "case": "running-api-cancellation",
+      "run_id": "3d020a2d3ff64e8a810dd806c8295b38",
+      "status": "cancelled",
+      "event_count": 4,
+      "cooperative_exit": true
+    },
+    {
+      "case": "cooperative-worker-stop",
+      "run_id": "fdf96fdee5a745f097e64928752ce327",
+      "status": "interrupted",
+      "event_count": 3,
+      "trigger": "fixture calls Worker.stop; not an OS signal test"
+    },
+    {
+      "case": "os-signal-SIGBREAK",
+      "run_id": "4b43ab93b94a4c0aae3d302cdc30b43d",
+      "status": "interrupted",
+      "event_count": 3,
+      "cooperative_exit": true,
+      "delivery": "Windows GenerateConsoleCtrlEvent"
+    }
+  ],
+  "os_signal_check": "passed: Windows SIGBREAK; POSIX SIGINT/SIGTERM require Linux"
+}

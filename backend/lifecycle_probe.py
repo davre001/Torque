@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import signal
 import subprocess
 import sys
 import time
@@ -30,6 +31,10 @@ def child(database, stage):
             checkpoint()
             time.sleep(.1)
     worker=Worker(store,config,process)
+    signal.signal(signal.SIGINT,worker.stop)
+    signal.signal(signal.SIGTERM,worker.stop)
+    if hasattr(signal,'SIGBREAK'):
+        signal.signal(signal.SIGBREAK,worker.stop)
     worker.once()
 
 
@@ -61,8 +66,14 @@ def drill():
     environment={k:v for k,v in os.environ.items() if k.upper() in
                  {'PATH','SYSTEMROOT','WINDIR','TEMP','TMP','COMSPEC','PATHEXT'}}
     def spawn(mode, *args):
+        options={}
+        if os.name=='nt' and mode=='worker':
+            startup=subprocess.STARTUPINFO()
+            startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startup.wShowWindow=0
+            options={'startupinfo':startup,'creationflags':subprocess.CREATE_NEW_CONSOLE|subprocess.CREATE_NEW_PROCESS_GROUP}
         p=subprocess.Popen([sys.executable,'-m','backend.lifecycle_probe',mode,str(database),*args],
-                           cwd=ROOT,env=environment,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+                           cwd=ROOT,env=environment,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,**options)
         processes.append(p);return p
     def submit():return store.submit('https://github.com/fixture/lifecycle/issues/1')
     outcomes=[]
@@ -123,9 +134,25 @@ def drill():
         (folder/'stop-requested').write_text('fixture-trigger')
         worker.wait(timeout=10);assert worker.returncode==0 and store.get(rid)['status']=='interrupted'
         record('cooperative-worker-stop',rid,trigger='fixture calls Worker.stop; not an OS signal test')
+        (folder/'stop-requested').unlink()
+        if os.name != 'nt':
+            for sig in (signal.SIGINT, signal.SIGTERM):
+                rid=submit();worker=spawn('worker','implementing');stage_ready(rid,'implementing')
+                worker.send_signal(sig);worker.wait(timeout=10)
+                assert worker.returncode==0 and store.get(rid)['status']=='interrupted'
+                record('os-signal-'+sig.name,rid,cooperative_exit=True)
+        else:
+            rid=submit();worker=spawn('worker','implementing');stage_ready(rid,'implementing')
+            helper=subprocess.run([sys.executable,'-m','backend.lifecycle_probe','windows-break',str(worker.pid)],
+                                  cwd=ROOT,env=environment,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=5)
+            assert helper.returncode==0
+            worker.wait(timeout=10)
+            assert worker.returncode==0 and store.get(rid)['status']=='interrupted'
+            record('os-signal-SIGBREAK',rid,cooperative_exit=True,delivery='Windows GenerateConsoleCtrlEvent')
         report={'mode':'live-processes-fixture-work','run_id':identifier,'provider_calls':0,
                 'github_calls':0,'remote_actions_cancellation_verified':False,
                 'production_database_modified':False,'outcomes':outcomes}
+        report['os_signal_check']='passed: Windows SIGBREAK; POSIX SIGINT/SIGTERM require Linux' if os.name=='nt' else 'passed: SIGINT and SIGTERM'
         evidence=ROOT/'evidence'/'lifecycle'/identifier;evidence.mkdir(parents=True)
         (evidence/'report.json').write_text(json.dumps(report,indent=2)+'\n')
         print(json.dumps(report,indent=2))
@@ -193,4 +220,12 @@ if __name__=='__main__':
     elif sys.argv[1]=='--remote':remote_drill()
     elif sys.argv[1]=='worker':child(sys.argv[2],sys.argv[3])
     elif sys.argv[1]=='api':api(sys.argv[2],sys.argv[3])
+    elif sys.argv[1]=='windows-break':
+        import ctypes
+        kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+        kernel.FreeConsole()
+        if not kernel.AttachConsole(int(sys.argv[2])):raise SystemExit(2)
+        if not kernel.GenerateConsoleCtrlEvent(1,int(sys.argv[2])):raise SystemExit(3)
+        time.sleep(.2)
+        kernel.FreeConsole()
     else:raise SystemExit('Unknown lifecycle probe mode')

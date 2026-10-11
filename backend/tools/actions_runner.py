@@ -8,6 +8,7 @@ import re
 import time
 import uuid
 import zipfile
+import zlib
 import httpx
 from backend.models import PipelineError, TestResult
 from backend.tools.files import read_files
@@ -26,6 +27,10 @@ class ActionsRunner:
                      "X-GitHub-Api-Version":"2026-03-10"},follow_redirects=False)
         self.clock,self.pause = clock,pause
         self.source = None
+        self.source_repository = None
+        from backend.acceptance_profiles import profile_for
+        try:self.profile = profile_for(recipe)
+        except ValueError:self.profile = None
         self.suite_sha256 = None
         self.workflow_sha = None
         self.test_image = None
@@ -50,32 +55,50 @@ class ActionsRunner:
         if self.workflow_sha is not None and self.workflow_sha != sha:
             raise PipelineError("Runner workflow revision changed during this run")
         self.workflow_sha = sha
+        if self.profile=='gallery-keyboard':
+            workflow=self._request('GET',f'/repos/{self.repository}/contents/.github/workflows/{self.workflow}',params={'ref':sha}).json()
+            try:
+                if workflow.get('encoding')!='base64' or workflow.get('size',0)>20000:raise ValueError()
+                contents=base64.b64decode(workflow['content']).decode()
+                if not all(marker in contents for marker in ('files_bundle:','acceptance_profile:','TORQUE_FILES_BUNDLE','TORQUE_ACCEPTANCE_PROFILE')):raise ValueError()
+            except (KeyError,ValueError,UnicodeError):
+                raise PipelineError('Push the gallery-capable workflow before submitting gallery runs') from None
 
     def bind_source(self,owner,repo,sha):
         repository = f"{owner}/{repo}".lower()
         if repository not in {"gabrielelozupone/kokon", "davre001/kokon"} or not re.fullmatch("[a-f0-9]{40}",sha):
             raise PipelineError("The first remote runner supports only the pinned public kokon demo")
-        # remote_job downloads upstream. The reviewed fork is valid only when its
-        # complete source tree is the identical upstream commit, not just one file.
-        if repository == "davre001/kokon" and sha != "995b078b79819c0049db3eef96fc6bd91b016b12":
-            raise PipelineError("The reviewed demo fork must retain the verified upstream revision")
-        if self.recipe.editable_files != ["site/index.html"] or len(self.recipe.acceptance_criteria) != 3:
-            raise PipelineError("Remote kokon recipe must retain its one-file edit scope and three criteria")
+        from backend.acceptance_profiles import profile_for, validate_source
+        try:self.profile=profile_for(self.recipe)
+        except ValueError:raise PipelineError('Remote kokon recipe exceeds reviewed scope') from None
+        if not validate_source(self.profile,repository,sha):
+            raise PipelineError('The reviewed demo fork must retain the verified upstream revision or reviewed gallery revision')
         self.source = sha
+        self.source_repository = repository
 
     def run(self,workspace,checkpoint):
         self.preflight()
         if self.source is None:
             raise PipelineError("Remote runner source has not been pinned")
-        content = read_files(Path(workspace),["site/index.html"])["site/index.html"]["content"]
-        bundle = base64.b64encode(content.encode()).decode()
+        if self.profile=='gallery-keyboard':
+            files=read_files(Path(workspace),self.recipe.editable_files)
+            raw=json.dumps({name:item['content'] for name,item in files.items()}).encode()
+            if len(raw)>250000:raise PipelineError('Gallery source bundle exceeds decoded input limit')
+            bundle=base64.b64encode(zlib.compress(raw)).decode()
+            inputs={'request_id':None,'source_sha':self.source,'index_html':'',
+                    'source_repository':self.source_repository,'acceptance_profile':self.profile,'files_bundle':bundle}
+        else:
+            content = read_files(Path(workspace),["site/index.html"])["site/index.html"]["content"]
+            bundle = base64.b64encode(content.encode()).decode()
+            inputs={'request_id':None,'source_sha':self.source,'index_html':bundle}
         # workflow_dispatch has a limited input payload; never truncate source.
         if len(bundle) > 60000:
             raise PipelineError("Remote demo patch exceeds the workflow input size limit")
         request_id = uuid.uuid4().hex
+        inputs['request_id']=request_id
         checkpoint()
         self._request("POST",f"/repos/{self.repository}/actions/workflows/{self.workflow}/dispatches",
-            json={"ref":self.ref,"inputs":{"request_id":request_id,"source_sha":self.source,"index_html":bundle}})
+            json={"ref":self.ref,"inputs":inputs})
         deadline = self.clock()+600
         run = None
         try:
@@ -140,6 +163,8 @@ class ActionsRunner:
             record = json.loads(archive.read(item))
         if record["request_id"] != request_id or record["source_sha"] != self.source:
             raise PipelineError("Remote result identity does not match request")
+        if self.profile=='gallery-keyboard' and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
+            raise PipelineError('Remote gallery profile/source does not match request')
         signature = record["suite_sha256"]
         if self.suite_sha256 is not None and signature != self.suite_sha256:
             raise PipelineError("Remote acceptance suite changed between attempts")

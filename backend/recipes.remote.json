@@ -31,25 +31,35 @@
     "image": "remote-managed",
     "command": [
       "python",
-      "/acceptance/test_reduced_motion.py"
+      "/acceptance/test_gallery.py"
     ],
     "context_files": [
-      "site/index.html"
+      "src/components/Gallery.tsx",
+      "src/styles.css"
     ],
     "investigation_terms": {
-      "site/index.html": [
-        "reel",
-        "prefers-reduced-motion",
-        "IntersectionObserver"
+      "src/components/Gallery.tsx": [
+        "card",
+        "onClick",
+        "reopen",
+        "toggleFav",
+        "remove"
+      ],
+      "src/styles.css": [
+        ".card",
+        ".grid",
+        ":focus"
       ]
     },
     "editable_files": [
-      "site/index.html"
+      "src/components/Gallery.tsx",
+      "src/styles.css"
     ],
     "acceptance_criteria": [
-      "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
-      "Manual playback still works when reduced motion is enabled.",
-      "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+      "Gallery cards are reachable with Tab and open with Enter or Space.",
+      "Favorite and delete actions are visible on keyboard focus, have aria-labels, and work without opening the card.",
+      "Gallery thumbnails have meaningful nonempty alt text derived from their prompts.",
+      "Mouse opening, favoriting, and confirmed deletion remain functional."
     ],
     "suite_directory": "remote-managed",
     "timeout_seconds": 120,

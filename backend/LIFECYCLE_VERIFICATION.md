@@ -33,8 +33,40 @@ Saved [remote results](../evidence/lifecycle/95cecd4f46a5427ea5f34436633402b0/re
 confirm [Actions run 38177020201](https://github.com/davre001/Torque/actions/runs/38177020201)
 completed with conclusion `cancelled`. No model calls or PR writes occurred.
 
-These drills do not modify the production database. They prove local lifecycle
-and remote cancellation behavior, not interruption inside a real provider request,
-OS-signal-specific graceful shutdown, or a crash during GitHub PR publication.
+These drills do not modify the production database.
+
+## Provider interruption and Windows shutdown signal
+
+The [updated local results](../evidence/lifecycle/30fa9e79dc554517b94c9e2642808bf2/report.json)
+include a real Windows Ctrl+Break event delivered through
+`GenerateConsoleCtrlEvent` to a hidden worker console. The worker exited with code
+0 and persisted `interrupted`. The CLI now handles `SIGBREAK` as well as SIGINT and
+SIGTERM. This checks fixture work with real OS delivery; Linux SIGINT/SIGTERM and
+graceful shutdown while a provider is blocked are still separate pending checks.
+The probe also supports SIGINT/SIGTERM when run on Linux.
+
+```powershell
+.\.venv\Scripts\python.exe -m backend.provider_interruption_probe
+```
+
+The [provider interruption result](../evidence/lifecycle/9a09a2319dcf435abeef1d9eab7c1a44/report.json)
+records one real Claude gateway request through the existing LiteLLM adapter.
+The isolated worker was killed while the synchronous request was outstanding.
+After lease expiry, restart marked the run interrupted with one execution and no
+replay. A conservative $0.008484 reservation was saved before dispatch; this is
+not measured billing. The SDK request hook proves dispatch started, not that the
+gateway accepted the request. No response was observed, and remote processing or
+billing may continue after the client is killed. This small probe uses a maximum
+$0.02 reservation and 128 output tokens, with no retry or production DB writes.
+Its reservation is saved by the probe; this does not establish durable production
+budget accounting across crashes or remote provider cancellation.
+
+## Pending publication crash trial
+
 Publication lost-response reconciliation remains covered by mocked tests; a live
-publication crash/recovery acceptance trial is still pending.
+publication crash/recovery acceptance trial is still pending. The previous demo
+PR is merged, so its verified source no longer matches the fork default branch.
+A fresh issue and verified run are needed. Preserve the source revision gate.
+The trial must kill a publication subprocess after GitHub returns a successful
+PR creation but before SQLite completion, wait for publication lease expiry,
+retry the same run, and verify the same PR/head with no second PR creation.

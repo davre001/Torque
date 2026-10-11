@@ -11,7 +11,17 @@ on:
         type: string
       index_html:
         description: Base64 public kokon site/index.html replacement
-        required: true
+        required: false
+        type: string
+      acceptance_profile:
+        default: reduced-motion
+        type: string
+      source_repository:
+        default: gabrielelozupone/kokon
+        type: string
+      files_bundle:
+        description: Base64 zlib-compressed JSON for reviewed gallery files only
+        required: false
         type: string
 permissions:
   contents: read
@@ -33,6 +43,9 @@ jobs:
           TORQUE_REQUEST_ID: ${{ inputs.request_id }}
           TORQUE_SOURCE_SHA: ${{ inputs.source_sha }}
           TORQUE_INDEX_HTML: ${{ inputs.index_html }}
+          TORQUE_ACCEPTANCE_PROFILE: ${{ inputs.acceptance_profile }}
+          TORQUE_SOURCE_REPOSITORY: ${{ inputs.source_repository }}
+          TORQUE_FILES_BUNDLE: ${{ inputs.files_bundle }}
         run: python -m backend.remote_job
       - name: Save machine-readable result
         if: always()

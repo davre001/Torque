@@ -1,0 +1,21 @@
+{
+  "mode": "live-provider-process-interruption",
+  "probe_id": "9a09a2319dcf435abeef1d9eab7c1a44",
+  "run_id": "cadafb8eeea64e8ba2c264d0ae0978c4",
+  "status": "interrupted",
+  "executions": 1,
+  "replayed": false,
+  "request_hook_observed": true,
+  "request_response_observed": false,
+  "interruption": "hard process kill while synchronous gateway request was outstanding",
+  "provider_acceptance": "unknown: no response; the request hook does not prove server acceptance",
+  "billed_usage": "unknown; killing the client does not cancel server-side work",
+  "reservation": {
+    "calls": 1,
+    "tokens": 2316,
+    "estimated_cost_usd": 0.008484,
+    "usage": []
+  },
+  "production_database_modified": false,
+  "pr_writes": 0
+}
