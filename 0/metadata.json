@@ -1,0 +1,106 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4PDZ234328RZH92NM7YEY06",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T21:30:43.1635796Z",
+  "branch": "main",
+  "checkpoints_count": 9,
+  "save_step_count": 6,
+  "files_touched": [
+    "backend.md",
+    "backend/RETENTION.md",
+    "backend/__main__.py",
+    "backend/retention.py",
+    "background_worker.md",
+    "evidence/github-app/README.md",
+    "evidence/github-app/browser-acceptance.json",
+    "frontend/ui/app/workspace/page.tsx",
+    "integration.md",
+    "tests/test_retention.py",
+    "tests/workspace-browser.mjs"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "df0e1b1ef37f",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 1894150,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 123642368,
+    "output_tokens": 277819,
+    "api_call_count": 983,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 246
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T21:30:42.203345Z",
+    "agent_lines": 212,
+    "agent_removed": 50,
+    "human_added": 9,
+    "human_modified": 778,
+    "human_removed": 0,
+    "total_committed": 986,
+    "total_lines_changed": 1049,
+    "agent_percentage": 24.976167778836988,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 364,
+      "agent_lines_removed": 349
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 377,
+      "agent_lines_removed": 349
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 377,
+      "agent_lines_removed": 349
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 7,
+      "user_lines_removed": 4,
+      "agent_lines_added": 710,
+      "agent_lines_removed": 673,
+      "user_added_per_file": {
+        "evidence/github-app/browser-acceptance.json": 7
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/browser-acceptance.json": 4
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 7,
+      "user_lines_removed": 4,
+      "agent_lines_added": 991,
+      "agent_lines_removed": 733,
+      "user_added_per_file": {
+        "evidence/github-app/browser-acceptance.json": 7
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/browser-acceptance.json": 4
+      }
+    }
+  ]
+}
