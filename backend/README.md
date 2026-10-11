@@ -32,6 +32,11 @@ See [kokon acceptance setup](../tests/acceptance/kokon/README.md). The example c
 deliberately invalid placeholders: replace them with real image/suite values.
 Docker is currently unavailable in this workspace, so the worker fails before model spend.
 
+Alternatively, set `TORQUE_RUNNER=github-actions` and follow
+[remote Linux runner setup](REMOTE_RUNNER.md). That path needs no local Docker or rented
+server. The remote workflow must be pushed and an Actions-scoped token configured first;
+it has not yet passed a live acceptance run.
+
 Run the API and worker in separate terminals:
 
 ```powershell

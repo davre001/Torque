@@ -22,6 +22,8 @@ class Recipe(Record):
     @classmethod
     def immutable_image(cls,value):
         import re
+        if value == "remote-managed":
+            return value
         if not re.fullmatch(r"(?:[a-zA-Z0-9./:_-]+@)?sha256:[a-f0-9]{64}",value):
             raise ValueError("Test image must use an immutable sha256 digest or local image ID")
         return value

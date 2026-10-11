@@ -17,6 +17,8 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement provider adapters, bounded agent roles, patch validation, and fixture-tested verification/recovery.
 - [x] Add pinned source snapshots, atomic artifacts, and Docker-only test execution interface.
 - [x] Add Neatlogs worker lifecycle and prepare independent kokon browser acceptance tests.
+- [x] Add GitHub-hosted Linux runner workflow and backend adapter (mock-tested).
+- [ ] Publish/configure remote workflow and verify actual Linux/browser acceptance results.
 - [ ] Implement configuration and provider/GitHub preflight checks.
 - [ ] Implement typed records, SQLite persistence, and durable job ownership.
 - [ ] Implement and verify the separate worker lifecycle.

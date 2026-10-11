@@ -14,7 +14,7 @@ from backend.pipeline import Pipeline
 from backend.tools.repository import snapshot
 from backend.tools.sandbox import DockerRunner
 
-SECRET_NAMES = ("NEATLOGS_API_KEY","LITELLM_API_KEY","GEMINI_API_KEY","GITHUB_TOKEN","TORQUE_OPERATOR_TOKEN","NEATLOGS_TOKEN")
+SECRET_NAMES = ("NEATLOGS_API_KEY","LITELLM_API_KEY","GEMINI_API_KEY","GITHUB_TOKEN","TORQUE_OPERATOR_TOKEN","NEATLOGS_TOKEN","TORQUE_ACTIONS_TOKEN")
 
 def rates(prefix):
     try:
@@ -40,7 +40,12 @@ def readiness():
         load_recipes()
     except (PipelineError,ValueError):
         reasons.append("Execution limits or test recipes missing/invalid")
-    if not shutil.which("docker"):
+    runner_kind = os.getenv("TORQUE_RUNNER","docker")
+    if runner_kind == "github-actions" and not os.getenv("TORQUE_ACTIONS_TOKEN"):
+        reasons.append("TORQUE_ACTIONS_TOKEN missing")
+    elif runner_kind not in {"docker","github-actions"}:
+        reasons.append("Unsupported TORQUE_RUNNER")
+    elif runner_kind == "docker" and not shutil.which("docker"):
         reasons.append("Docker unavailable")
     return {"configured":not reasons,"missing":reasons,"live_integrations_verified":False}
 
@@ -56,7 +61,13 @@ class AgentProcessor:
         recipe = load_recipes().get(f"{source_owner}/{repo}".lower())
         if recipe is None:
             raise PipelineError("No reviewed acceptance recipe for this repository")
-        runner = DockerRunner(recipe)
+        if os.getenv("TORQUE_RUNNER","docker") == "github-actions":
+            from backend.tools.actions_runner import ActionsRunner
+            runner = ActionsRunner(recipe)
+        elif os.getenv("TORQUE_RUNNER","docker") == "docker":
+            runner = DockerRunner(recipe)
+        else:
+            raise PipelineError("Unsupported TORQUE_RUNNER")
         runner.preflight()  # Fail before constructing providers or spending credits.
         limits = Limits.load()
         model_rates = rates("GEMINI"),rates("LITELLM")
@@ -80,6 +91,8 @@ class AgentProcessor:
         finally:
             for client in reversed(clients):
                 client.close()
+            if hasattr(runner,"close"):
+                runner.close()
 
     def close(self):
         self.telemetry.close()

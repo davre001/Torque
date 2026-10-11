@@ -16,6 +16,8 @@ class DockerRunner:
         self.suite_sha256 = None
 
     def preflight(self):
+        if self.recipe.image == "remote-managed":
+            raise PipelineError("This recipe requires TORQUE_RUNNER=github-actions")
         if not shutil.which("docker"):
             raise PipelineError("Docker is unavailable; install/start Docker before agent execution")
         suite = Path(self.recipe.suite_directory).resolve()

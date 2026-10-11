@@ -6,6 +6,11 @@ Status: proposed. [Backend overview](backend_implementation.md) defines the API 
 
 The worker is a separate process. FastAPI only submits jobs and reads state; it must not execute agents through `BackgroundTasks`.
 
+Remote execution option: `TORQUE_RUNNER=github-actions` dispatches the reviewed kokon
+acceptance workflow to GitHub-hosted Ubuntu. The local worker still owns jobs, model calls,
+leases, and budgets; remote jobs only execute tests. See [setup](backend/REMOTE_RUNNER.md).
+Live dispatch and browser acceptance are pending.
+
 - [x] Select SQLite and one separate worker with concurrency one for the prototype.
 - [x] Create `backend/worker.py` and `backend/store.py` placeholders.
 - [x] Implement queue schema, atomic job claims, ownership tokens, and persisted worker state.

@@ -56,6 +56,8 @@ class Pipeline:
                         raise PipelineError("Issue is closed; choose an open issue")
                     sha = self.github.revision(source_owner,repo)
                 result["source_sha"], result["source_repository"] = sha,f"{source_owner}/{repo}"
+                if hasattr(self.runner,"bind_source"):
+                    self.runner.bind_source(source_owner,repo,sha)
                 workspace = self.workspaces/run_id
                 with self.span("prepare-pinned-source"):
                     self.prepare(source_owner,repo,sha,workspace,check)
@@ -68,6 +70,9 @@ class Pipeline:
                     baseline = self.runner.run(workspace,check)
                 save("baseline",baseline.model_dump())
                 result["baseline_passed"] = baseline.passed
+                result["acceptance_suite_sha256"] = getattr(self.runner,"suite_sha256",None)
+                if getattr(self.runner,"test_image",None):
+                    result["test_image"] = self.runner.test_image
                 if baseline.failure_kind in {"infrastructure","timeout"}:
                     raise PipelineError("Baseline did not reproduce an acceptance failure; test infrastructure failed")
                 if self.recipe.require_baseline_failure and (baseline.passed or baseline.failure_kind != "assertion"):
