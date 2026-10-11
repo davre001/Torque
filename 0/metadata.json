@@ -1,0 +1,106 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MATNE9H2GJNJQTHEEZ00SF",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T01:57:10.5842317Z",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "save_step_count": 4,
+  "files_touched": [
+    "backend.md",
+    "backend/__init__.py",
+    "backend/__main__.py",
+    "backend/agents/__init__.py",
+    "backend/agents/implementer.py",
+    "backend/agents/investigator.py",
+    "backend/agents/recovery.py",
+    "backend/agents/verifier.py",
+    "backend/config.py",
+    "backend/integrations/__init__.py",
+    "backend/integrations/entire.py",
+    "backend/integrations/gemini.py",
+    "backend/integrations/github.py",
+    "backend/integrations/litellm.py",
+    "backend/integrations/neatlogs.py",
+    "backend/integrations/providers.py",
+    "backend/models.py",
+    "backend/orchestrator.py",
+    "backend/store.py",
+    "backend/tools/__init__.py",
+    "backend/tools/files.py",
+    "backend/tools/patches.py",
+    "backend/tools/repository.py",
+    "backend/tools/sandbox.py",
+    "backend/tools/test_runner.py",
+    "backend/worker.py",
+    "backend_implementation.md",
+    "background_worker.md",
+    "changes.md",
+    "evidence/runs/.gitkeep",
+    "integration.md",
+    "package-lock.json",
+    "tests/README.md",
+    "tests/fixtures/.gitkeep"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "37a49fa8d1ac",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 469396,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 24696192,
+    "output_tokens": 38272,
+    "api_call_count": 205,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 45
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T01:57:10.134624Z",
+    "agent_lines": 495,
+    "agent_removed": 0,
+    "human_added": 12,
+    "human_modified": 12,
+    "human_removed": 0,
+    "total_committed": 507,
+    "total_lines_changed": 519,
+    "agent_percentage": 95.37572254335261,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 12,
+      "user_lines_removed": 0,
+      "agent_lines_added": 337,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "package-lock.json": 12
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 458,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 458,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 507,
+      "agent_lines_removed": 0
+    }
+  ]
+}
