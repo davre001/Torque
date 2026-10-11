@@ -1,0 +1,37 @@
+# Context from my IDE setup:
+
+## Active file: changes.md
+
+## Open tabs:
+- changes.md: changes.md
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+
+## My request:
+COMMIT & PUSH
+
+---
+
+# Context from my IDE setup:
+
+## Active file: changes.md
+
+## Open tabs:
+- changes.md: changes.md
+- background_worker.md: background_worker.md
+- backend_implementation.md: backend_implementation.md
+- backend.md: backend.md
+- implementation.md: backend/implementation.md
+
+## My request:
+SYNC CHANGES
+
+---
+
+ok, since every github user will have a profile, won't it still need a database , cos history will be stored?
+
+---
+
+alright , start the backend
