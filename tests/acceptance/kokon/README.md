@@ -1,7 +1,9 @@
 # Independent kokon acceptance suite
 
 The vendored seccomp_profile.json is from Microsoft Playwright v1.63.0,
-utils/docker/seccomp_profile.json (Apache-2.0). It permits Chromium's user-namespace
+utils/docker/seccomp_profile.json (Apache-2.0), with chroot additionally allowed for
+Chromium's sandbox inside its user namespace when host capabilities are dropped.
+It permits Chromium's user-namespace
 sandbox while retaining syscall filtering. The remote VM uses Ubuntu 22.04 to avoid
 Ubuntu 24.04 host user-namespace restrictions. Chromium sandboxing remains enabled;
 containers still run without network or capabilities and with read-only mounts.
