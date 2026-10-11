@@ -3,17 +3,53 @@
   "checkpoint_id": "01M4P39M904AS40RAEF8MZVEWR",
   "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
   "strategy": "manual-commit",
-  "created_at": "2026-10-11T18:23:52.26391Z",
+  "created_at": "2026-10-11T18:24:36.1149961Z",
+  "branch": "main",
   "checkpoints_count": 223,
-  "files_touched": null,
+  "files_touched": [
+    "backend/api.py",
+    "backend/github_auth.py",
+    "backend/repository_policy.py",
+    "backend_implementation.md",
+    "frontend/ui/app/workspace/page.tsx",
+    "integration.md",
+    "tests/README.md",
+    "tests/test_repository_policy.py",
+    "tests/workspace-browser.mjs"
+  ],
   "agent": "Codex",
-  "model": "",
+  "model": "gpt-6.1-sol",
+  "turn_id": "c5b43b1f6cb0",
   "compact_transcript_start": 0,
   "token_usage": {
-    "input_tokens": 1586869,
+    "input_tokens": 1587729,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 93330688,
-    "output_tokens": 205489,
-    "api_call_count": 762
-  }
+    "cache_read_tokens": 93437952,
+    "output_tokens": 205579,
+    "api_call_count": 763
+  },
+  "session_metrics": {
+    "turn_count": 223
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T18:24:27.8255686Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 0,
+    "total_lines_changed": 0,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
 }
