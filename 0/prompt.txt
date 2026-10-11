@@ -1,0 +1,26 @@
+# Context from my IDE setup:
+
+## Active file: .env.example
+
+## Open tabs:
+- .env.example: .env.example
+- backend_implementation.md: backend_implementation.md
+- README.md: backend/README.md
+
+## My request:
+commit and push
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend.md
+
+## Open tabs:
+- backend.md: backend.md
+- .env.example: .env.example
+- backend_implementation.md: backend_implementation.md
+- README.md: backend/README.md
+
+## My request:
+move on
