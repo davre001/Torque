@@ -1,0 +1,60 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MRQ4SR2DM2C8VZP54C6P03",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 45,
+  "files_touched": [
+    "backend/__main__.py",
+    "backend/agents/implementer.py",
+    "backend/agents/investigator.py",
+    "backend/agents/verifier.py",
+    "backend/execution.py",
+    "backend/integrations/gemini.py",
+    "backend/integrations/litellm.py",
+    "backend/integrations/providers.py",
+    "backend/models.py",
+    "backend/pipeline.py",
+    "backend/recipes.example.json",
+    "backend/recipes.remote.json",
+    "backend/tools/files.py",
+    "backend/tools/patches.py",
+    "backend/tools/repository.py",
+    "backend/worker.py",
+    "evidence/README.md",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/README.md",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/attempt-1.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/baseline.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/manifest.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/patch-1.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/plan.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/run.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/tests-1.json",
+    "evidence/runs/6634790aa28943629348e02914d9b56c/verified.json",
+    "tests/test_backend.py",
+    "tests/test_investigation_context.py",
+    "tests/test_litellm_format.py",
+    "tests/test_patch_replacements.py",
+    "tests/test_provider_failure.py",
+    "tests/test_repository_download.py",
+    "tests/test_response_parser.py",
+    "tests/test_verifier_context.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 998625,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 62483328,
+    "output_tokens": 137961,
+    "api_call_count": 526,
+    "subagent_tokens_complete": true
+  }
+}
