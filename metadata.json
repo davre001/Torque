@@ -1,0 +1,51 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4P9BVZZBH1H0H39XNNG2QN5",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": [
+    ".env.example",
+    "backend/GITHUB_APP.md",
+    "backend/README.md",
+    "backend/integrations/providers.py",
+    "backend/recipes.remote.json",
+    "backend/runtime.py",
+    "backend/tools/actions_runner.py",
+    "backend/worker.py",
+    "evidence/github-app/README.md",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/acceptance-readback.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/attempt-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/baseline.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/manifest.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/patch-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/plan.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/publication.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/run.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/tests-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/verified.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/workflow-readback.json",
+    "integration.md",
+    "tests/test_actions_runner.py",
+    "tests/test_backend.py",
+    "tests/test_format_retry.py",
+    "tests/test_runtime_routing.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1842337,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 114223744,
+    "output_tokens": 263492,
+    "api_call_count": 929,
+    "subagent_tokens_complete": true
+  }
+}

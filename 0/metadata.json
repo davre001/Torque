@@ -1,0 +1,243 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4P9BVZZBH1H0H39XNNG2QN5",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T20:10:28.8004588Z",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "save_step_count": 12,
+  "files_touched": [
+    ".env.example",
+    "backend/GITHUB_APP.md",
+    "backend/README.md",
+    "backend/integrations/providers.py",
+    "backend/recipes.remote.json",
+    "backend/runtime.py",
+    "backend/tools/actions_runner.py",
+    "backend/worker.py",
+    "evidence/github-app/README.md",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/acceptance-readback.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/attempt-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/baseline.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/manifest.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/patch-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/plan.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/publication.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/run.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/tests-1.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/verified.json",
+    "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/workflow-readback.json",
+    "integration.md",
+    "tests/test_actions_runner.py",
+    "tests/test_backend.py",
+    "tests/test_format_retry.py",
+    "tests/test_runtime_routing.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "d1b27bd92808",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 1842337,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 114223744,
+    "output_tokens": 263492,
+    "api_call_count": 929,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 237
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T20:10:27.4384186Z",
+    "agent_lines": 595,
+    "agent_removed": 0,
+    "human_added": 1634,
+    "human_modified": 611,
+    "human_removed": 0,
+    "total_committed": 2782,
+    "total_lines_changed": 2840,
+    "agent_percentage": 20.950704225352112,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 146,
+      "user_lines_removed": 18,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "backend/recipes.remote.json": 58,
+        "backend/tools/actions_runner.py": 6,
+        "evidence/github-app/permissions.json": 73,
+        "tests/test_actions_runner.py": 9
+      },
+      "user_removed_per_file": {
+        "backend/recipes.remote.json": 17,
+        "backend/tools/actions_runner.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 74,
+      "user_lines_removed": 0,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/permissions.json": 74
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 74,
+      "user_lines_removed": 0,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/permissions.json": 74
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 112,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 358,
+      "agent_lines_removed": 194,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 419,
+      "agent_lines_removed": 195,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 153,
+      "user_lines_removed": 1,
+      "agent_lines_added": 541,
+      "agent_lines_removed": 278,
+      "user_added_per_file": {
+        "evidence/github-app/README.md": 11,
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      },
+      "user_removed_per_file": {
+        "evidence/github-app/README.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 142,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1309,
+      "agent_lines_removed": 505,
+      "user_added_per_file": {
+        "evidence/github-app/baseline.json": 11,
+        "evidence/github-app/permissions.json": 74,
+        "evidence/github-app/run-failed-503.json": 57
+      }
+    }
+  ]
+}
