@@ -172,7 +172,14 @@ CREATE TABLE IF NOT EXISTS browser_sessions (hash TEXT PRIMARY KEY, user_id TEXT
 
         @app.get('/api/auth/github/repositories')
         def repositories(request:Request):
-            return {'repositories':self.repositories(self.authenticate(request))}
+            from backend.repository_policy import eligibility, reviewed_recipes
+            repos=self.repositories(self.authenticate(request))
+            recipes=reviewed_recipes()
+            for repo in repos:
+                repo.update(eligibility(repo['full_name'],app.state.settings.allowed_repositories,recipes))
+                if repo['app_permissions'].get('contents') not in {'read','write'} or repo['app_permissions'].get('issues') not in {'read','write'}:
+                    repo.update(run_supported=False,run_reason='GitHub App needs Contents and Issues read access.')
+            return {'repositories':repos}
 
         @app.post('/api/auth/disconnect')
         def disconnect(request:Request):

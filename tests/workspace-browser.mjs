@@ -46,6 +46,7 @@ try {
       if (error.message!=='Invalid InterceptionId.') failures.push(error.message);
     });
   };
+  let supported=false;
   async function intercept({requestId,request}) {
     const url=new URL(request.url);
     requests.push(request);
@@ -55,7 +56,7 @@ try {
       if (!connected) {status=401;body={detail:'Login required'};}
       else body={user_id:'github:123',github_login:'fixture-user',csrf_token:'fixture-csrf'};
     } else if (url.pathname==='/api/auth/github/repositories') {
-      body={repositories:[{full_name:'davre001/kokon',permissions:{push:true},app_permissions:{contents:'write',pull_requests:'write'}}]};
+      body={repositories:[{full_name:'davre001/kokon',run_supported:supported,run_reason:supported ? null : 'No reviewed test recipe for this repository.',permissions:{push:true},app_permissions:{contents:'write',pull_requests:'write'}}]};
     } else if (url.pathname==='/api/runs' && request.method==='POST') {
       assert.equal(request.headers['X-CSRF-Token'] || request.headers['x-csrf-token'],'fixture-csrf');
       assert.ok(request.headers['Idempotency-Key'] || request.headers['idempotency-key']);
@@ -99,6 +100,12 @@ try {
   await send('Fetch.enable',{patterns:[{urlPattern:'*://*/api/*'}]});
   await send('Page.navigate',{url:'http://localhost:3000/workspace'});
   await wait("document.body.innerText.includes('Hello, fixture-user')",'Session greeting absent');
+  await wait("document.body.innerText.includes('No reviewed test recipe')",'Unsupported repository explanation absent');
+  assert.ok(await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque').disabled"));
+  assert.ok(!requests.some(request=>request.method==='POST' && new URL(request.url).pathname==='/api/runs'));
+  supported=true;
+  await evaluate("document.querySelector('[aria-label=\"Refresh repository access\"]').click()");
+  await wait("document.body.innerText.includes('Ready to run')",'Supported repository readiness absent');
   await evaluate(`(()=>{const input=document.querySelector('#issue');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(fixture.issue_url)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await evaluate("document.querySelector('form').requestSubmit()");
   await wait("document.body.innerText.includes('Recovery is analyzing')",'Recovery status absent');

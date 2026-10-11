@@ -7,7 +7,7 @@ import { ArrowRight, Check, ExternalLink, GitPullRequest, LoaderCircle, LogOut, 
 import { api, ApiError, githubLogin } from '@/lib/api';
 
 type Session = { user_id: string; github_login: string; csrf_token: string };
-type Repository = { full_name: string; permissions: { push?: boolean }; app_permissions: { contents?: string; pull_requests?: string } };
+type Repository = { full_name: string; run_supported: boolean; run_reason?: string | null; permissions: { push?: boolean }; app_permissions: { contents?: string; pull_requests?: string } };
 type Run = { run_id: string; issue_url: string; status: string; created_at: number; updated_at?: number; current_agent?: string | null; error?: string | null; pr_url?: string | null;
   result?: { verified?: boolean; summary?: string; trace_id?: string; published_commit_sha?: string; plan?: {summary?: string; acceptance_criteria?: string[]}; budget?: { calls: number; tokens: number; estimated_cost_usd: number } };
   attempts?: { number: number; tests_passed: boolean; review?: { approved?: boolean; rationale?: string; satisfied_criteria?: number[] } }[] };
@@ -119,7 +119,9 @@ export default function Workspace() {
     const value=issue.trim();
     if (!/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/issues\/[1-9][0-9]*$/.test(value)) { setError('Enter a GitHub issue URL, such as https://github.com/owner/repo/issues/4.'); return; }
     const repository=value.split('/').slice(3,5).join('/');
-    if (!repositories.some(repo => repo.full_name.toLowerCase()===repository.toLowerCase())) { setError('Install the Torque GitHub App on this source repository, then refresh access.'); return; }
+    const source=repositories.find(repo => repo.full_name.toLowerCase()===repository.toLowerCase());
+    if (!source) { setError('Install the Torque GitHub App on this source repository, then refresh access.'); return; }
+    if (!source.run_supported) { setError(source.run_reason || 'This repository is not supported yet.'); return; }
     if (!key.current || key.current.issue!==value) key.current={issue:value,value:crypto.randomUUID()};
     void perform(async () => {
       const saved=await action('/api/runs',{issue_url:value},key.current!.value);
@@ -149,7 +151,7 @@ export default function Workspace() {
             <form onSubmit={submit} className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8">
               <label htmlFor="issue" className="text-xl font-semibold">What should we fix?</label><input id="issue" type="url" required value={issue} onChange={e=>setIssue(e.target.value)} placeholder="https://github.com/owner/repo/issues/4" className="mt-5 w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-4 text-base outline-none focus:ring-2 focus:ring-black"/>
               <p className="mt-3 text-sm text-zinc-500">Choose an issue in an installed repository with a supported test recipe.</p>
-              <button disabled={busy || hasActive || !repositories.length} className="mt-6 flex items-center gap-2 rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-zinc-800 disabled:opacity-40"><Play size={17}/>{busy ? 'Working…' : hasActive ? 'Run in progress' : 'Run Torque'}</button>
+              <button disabled={busy || hasActive || !repositories.some(repo=>repo.run_supported)} className="mt-6 flex items-center gap-2 rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-zinc-800 disabled:opacity-40"><Play size={17}/>{busy ? 'Working…' : hasActive ? 'Run in progress' : 'Run Torque'}</button>
             </form>
             <section className="glass-panel relative overflow-hidden rounded-3xl p-6 sm:p-8" aria-label="Workflow progress">
               <div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-semibold">{run ? label(run.status) : 'Ready when you are'}</h2>{active && <LoaderCircle className="animate-spin" aria-label="Run active" size={20}/>}</div>
@@ -175,7 +177,7 @@ export default function Workspace() {
               </>}
             </section>
           </section>
-          <aside className="space-y-6"><section className="rounded-3xl border border-zinc-200 bg-white p-6"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold">Repository access</h2><button aria-label="Refresh repository access" disabled={busy} onClick={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}><RefreshCw size={16}/></button></div><p className="mt-3 text-sm text-zinc-500">{repositories.length ? 'Repositories connected through your GitHub App installation.' : 'Install the Torque App on a public repository, then refresh access.'}</p><ul className="mt-4 space-y-2">{repositories.map(repo=><li className="break-all text-sm" key={repo.full_name}>{repo.full_name}</li>)}</ul></section>
+          <aside className="space-y-6"><section className="rounded-3xl border border-zinc-200 bg-white p-6"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold">Repository access</h2><button aria-label="Refresh repository access" disabled={busy} onClick={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}><RefreshCw size={16}/></button></div><p className="mt-3 text-sm text-zinc-500">{repositories.length ? 'Repositories connected through your GitHub App installation.' : 'Install the Torque App on a public repository, then refresh access.'}</p><ul className="mt-4 space-y-2">{repositories.map(repo=><li className="break-all text-sm" key={repo.full_name}>{repo.full_name}<span className={`mt-1 block text-xs ${repo.run_supported ? 'text-green-700' : 'text-zinc-500'}`}>{repo.run_supported ? 'Ready to run' : repo.run_reason || 'Not supported yet'}</span></li>)}</ul></section>
             <section className="rounded-3xl border border-zinc-200 bg-white p-6"><h2 className="text-lg font-semibold">Run history</h2>{!history.length ? <p className="mt-4 text-sm text-zinc-500">Your first run starts here.</p> : <ul className="mt-4 space-y-2">{history.map(item=><li key={item.run_id}><button disabled={busy} onClick={()=>{if(item.run_id!==runId) {setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');setRunId(item.run_id);}setError('');}} className={`w-full rounded-xl p-3 text-left hover:bg-zinc-100 ${item.run_id===runId ? 'bg-zinc-100' : ''}`}><span className="block truncate text-sm font-medium">{item.issue_url.split('/').slice(3).join('/')}</span><span className="mt-1 block text-xs text-zinc-500">{label(item.status)} · {new Date(item.created_at*1000).toLocaleDateString()}</span></button></li>)}</ul>}</section>
           </aside>
         </div>

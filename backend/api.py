@@ -33,6 +33,7 @@ def create_app(settings=None):
         return response
 
     app.state.store = store
+    app.state.settings = settings
     app.state.github_auth = auth
     auth.routes(app)
 
@@ -71,6 +72,10 @@ def create_app(settings=None):
             raise HTTPException(403, "Repository must be explicitly listed in TORQUE_ALLOWED_REPOSITORIES")
         if user != 'operator':
             auth.authorize(user,f'{owner}/{repo}')
+            from backend.repository_policy import eligibility, reviewed_recipes
+            policy = eligibility(f'{owner}/{repo}', settings.allowed_repositories, reviewed_recipes())
+            if not policy['run_supported']:
+                raise HTTPException(422, policy['run_reason'])
         try:
             run_id = store.submit(body.issue_url,user,idempotency_key)
         except Conflict as exc:

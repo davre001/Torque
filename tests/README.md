@@ -25,3 +25,10 @@ tests, visitor login, or PR publication.
 budgets, immutable source/patch validation, artifacts, and telemetry masking.
 The independent browser script under `tests/acceptance` is excluded from ordinary
 pytest collection and must run inside its reviewed Docker image.
+# Repository eligibility
+
+`python -m pytest tests/test_repository_policy.py tests/test_github_auth.py tests/test_backend.py -q`
+checks that a browser caller needs both an enabled repository and a reviewed recipe;
+unsupported submissions create no queued jobs. The workspace browser fixture also
+checks unavailable-repository explanations, disabled submission, and refreshed access.
+These checks do not prove a live GitHub App user run or worker availability.

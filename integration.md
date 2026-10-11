@@ -33,13 +33,14 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Review shared hook/settings files and commit appropriate configuration without local state.
 - [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
 - [ ] Verify a live connected-user browser run with source installation access and a supported recipe.
+- [x] Show installed repository eligibility and reject browser submissions without an enabled source and reviewed test recipe before queueing.
 - [ ] Verify secrets stay out of responses, sandbox environments, Git history, traces, and exported artifacts.
 - [ ] Replace financial cost assumptions with measured run data when available.
 
 Scope update: the requested landing-page Connect GitHub → authenticated workspace → confirmed disconnect flow makes GitHub App identity/installation onboarding part of the current frontend integration work. See `changes.md` for its acceptance checklist. The personal-token path remains useful for local backend development, but cannot substitute for authenticating visitors. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
 
 - [ ] Configure GitHub App user authorization and repository installations for the requested connection flow.
-- [ ] Implement connect/callback/session/disconnect endpoints, secure sessions, and per-user repository/run ownership checks.
+- [x] Implement connect/callback/session/disconnect endpoints, secure sessions, and per-user repository/run ownership checks.
 - [ ] Prevent publication after disconnect and reconcile any write already in progress.
 
 ## Configuration and provider routing
