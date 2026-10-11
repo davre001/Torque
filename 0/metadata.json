@@ -1,0 +1,104 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4PKWABX0BATQKV5JSC46FMF",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T23:14:26.3011458Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    ".github/workflows/torque-remote-tests.yml",
+    "backend.md",
+    "backend/GALLERY_VERIFICATION.md",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/REMOTE_RUNNER.md",
+    "backend/__main__.py",
+    "backend/acceptance_profiles.py",
+    "backend/lifecycle_probe.py",
+    "backend/provider_interruption_probe.py",
+    "backend/remote_job.py",
+    "backend/tools/actions_runner.py",
+    "background_worker.md",
+    "evidence/lifecycle/30fa9e79dc554517b94c9e2642808bf2/report.json",
+    "evidence/lifecycle/9a09a2319dcf435abeef1d9eab7c1a44/report.json",
+    "integration.md",
+    "tests/acceptance/gallery/Dockerfile",
+    "tests/acceptance/gallery/README.md",
+    "tests/acceptance/gallery/build-harness.cjs",
+    "tests/acceptance/gallery/package.json",
+    "tests/acceptance/gallery/test_gallery.py",
+    "tests/test_gallery_profile.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "fe4ce9207e74",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 2057000,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 136977664,
+    "output_tokens": 315205,
+    "api_call_count": 1083,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 250
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T23:14:24.6645121Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 2298,
+    "human_modified": 582,
+    "human_removed": 0,
+    "total_committed": 2475,
+    "total_lines_changed": 2890,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1955,
+      "user_lines_removed": 85,
+      "agent_lines_added": 632,
+      "agent_lines_removed": 373,
+      "user_added_per_file": {
+        ".github/workflows/torque-remote-tests.yml": 14,
+        "backend.md": 3,
+        "backend/GALLERY_VERIFICATION.md": 68,
+        "backend/REMOTE_RUNNER.md": 11,
+        "backend/acceptance_profiles.py": 24,
+        "backend/recipes.remote.json": 68,
+        "backend/remote_job.py": 36,
+        "backend/tools/actions_runner.py": 34,
+        "evidence/gallery/acceptance-validation.json": 57,
+        "evidence/gallery/positive-fixture.patch": 36,
+        "integration.md": 3,
+        "tests/acceptance/gallery/Dockerfile": 6,
+        "tests/acceptance/gallery/README.md": 25,
+        "tests/acceptance/gallery/build-harness.cjs": 40,
+        "tests/acceptance/gallery/package-lock.json": 498,
+        "tests/acceptance/gallery/package.json": 8,
+        "tests/acceptance/gallery/seccomp_profile.json": 841,
+        "tests/acceptance/gallery/test_gallery.py": 98,
+        "tests/test_gallery_profile.py": 85
+      },
+      "user_removed_per_file": {
+        ".github/workflows/torque-remote-tests.yml": 1,
+        "backend/REMOTE_RUNNER.md": 6,
+        "backend/recipes.remote.json": 58,
+        "backend/remote_job.py": 11,
+        "backend/tools/actions_runner.py": 9
+      }
+    }
+  ]
+}

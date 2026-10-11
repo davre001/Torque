@@ -1,0 +1,47 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4PKWABX0BATQKV5JSC46FMF",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".github/workflows/torque-remote-tests.yml",
+    "backend.md",
+    "backend/GALLERY_VERIFICATION.md",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/REMOTE_RUNNER.md",
+    "backend/__main__.py",
+    "backend/acceptance_profiles.py",
+    "backend/lifecycle_probe.py",
+    "backend/provider_interruption_probe.py",
+    "backend/remote_job.py",
+    "backend/tools/actions_runner.py",
+    "background_worker.md",
+    "evidence/lifecycle/30fa9e79dc554517b94c9e2642808bf2/report.json",
+    "evidence/lifecycle/9a09a2319dcf435abeef1d9eab7c1a44/report.json",
+    "integration.md",
+    "tests/acceptance/gallery/Dockerfile",
+    "tests/acceptance/gallery/README.md",
+    "tests/acceptance/gallery/build-harness.cjs",
+    "tests/acceptance/gallery/package.json",
+    "tests/acceptance/gallery/test_gallery.py",
+    "tests/test_gallery_profile.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 2057000,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 136977664,
+    "output_tokens": 315205,
+    "api_call_count": 1083,
+    "subagent_tokens_complete": true
+  }
+}
