@@ -122,8 +122,17 @@ try {
   assert.ok(await evaluate("document.body.innerText.includes('Not verified') && !Array.from(document.querySelectorAll('a')).some(a=>a.textContent.includes('View pull request'))"));
   await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect GitHub').click()");
   assert.ok(await evaluate("document.querySelector('dialog').open"));
+  await evaluate("Array.from(document.querySelector('dialog').querySelectorAll('button')).find(button=>button.textContent==='Keep connected').click()");
+  assert.ok(await evaluate("!document.querySelector('dialog').open && document.body.innerText.includes('Hello, fixture-user')"));
+  await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect GitHub').click()");
   await evaluate("Array.from(document.querySelector('dialog').querySelectorAll('button')).find(button=>button.textContent==='Disconnect').click()");
   await wait("location.pathname==='/'",'Disconnect did not return to landing');
+  await wait("Array.from(document.querySelectorAll('button')).some(button=>button.textContent.includes('Connect GitHub'))",'Landing connect button absent');
+  const target = await evaluate("(()=>{const button=Array.from(document.querySelectorAll('button')).find(button=>button.textContent.includes('Connect GitHub'));button.scrollIntoView({block:'center'});const rect=button.getBoundingClientRect();return {x:rect.x+rect.width/2,y:rect.y+rect.height/2};})()");
+  await send('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...target});
+  await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...target});
+  for (let i=0;i<100 && !requests.some(request=>new URL(request.url).pathname==='/api/auth/github/connect');i++) await sleep(100);
+  assert.ok(requests.some(request=>new URL(request.url).pathname==='/api/auth/github/connect'),'Connect GitHub was blocked after disconnect until refresh');
   await send('Page.navigate',{url:'http://localhost:3000/workspace'});
   await wait("Array.from(document.querySelectorAll('button')).some(button=>button.textContent==='Connect GitHub')",'Expired session login gate absent');
   assert.deepEqual(failures,[]);

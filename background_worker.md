@@ -6,7 +6,7 @@ worker; keep the separate worker process running for queued jobs to execute.
 Frontend progress now reads persisted run events, including recovery and terminal
 outcomes. History status refreshes during polling; completed results expose actual
 acceptance/review records and PR links. Fixture browser tests cover the contract;
-live connected-user execution remains a separate acceptance step.
+live connected-user execution/publication is saved in `evidence/github-app/`. Browser history/disconnect remains a separate acceptance step.
 
 Status: implemented separate SQLite-backed worker; live remote browser execution verified. [Backend overview](backend_implementation.md) defines the API and agent behavior; [integrations](integration.md) defines external access.
 
@@ -29,12 +29,12 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Separate bounded transport retries from the maximum two agent recovery retries.
 - [x] Persist attempt outcomes and atomic artifact records before advancing stages.
 - [x] Detect expired jobs on claim/startup and mark interrupted without replay.
-- [x] Bound provider transport and agent recovery retries independently; expired jobs are interrupted, not automatically replayed.
+- [x] Bound provider transport, one strict format-repair request, completed-result download retry, and agent recovery independently within shared limits; expired jobs are interrupted, not automatically replayed.
 - [x] Implement cooperative cancellation, local subprocess termination, and remote Actions cancellation requests.
 - [x] Implement graceful shutdown, interruption records, and one-time telemetry teardown.
 - [x] Emit completed acceptance-attempt traces and use authorized bounded Neatlogs readback during recovery; preserve cancellation checks and labeled local fallback.
 - [x] Reconcile PR side effects using a stable branch/marker and publication lease; lost-response retry is mock-tested.
-- [ ] Implement workspace retention and checked cleanup paths.
+- [x] Implement explicit preview/apply retention with checked cleanup paths and protected active/publishable runs; see `backend/RETENTION.md`.
 - [x] Test competing claims, slow-operation heartbeats, expired-owner fencing, persisted submissions, and cooperative cancellation.
 - [ ] Complete live kill/restart at each stage and API-restart/remote-cancellation acceptance.
 
@@ -45,12 +45,12 @@ Repository preparation, model calls, and tests take minutes. The HTTP request sh
 Implemented commands (use the project virtual environment):
 
 ```powershell
-.\.venv\Scripts\python.exe -m uvicorn frontend.app:app --host 127.0.0.1 --port 8000
+.\.venv\Scripts\python.exe -m uvicorn backend.api:app --host 127.0.0.1 --port 8000
 .\.venv\Scripts\python.exe -m backend worker
 .\.venv\Scripts\python.exe -m backend run <issue-url>
 ```
 
-CLI execution uses the same persisted jobs and coordinator, and must not race with an already running worker. Document whether the CLI waits for the worker or claims its own job through the identical lease mechanism.
+The CLI `run` command only enqueues and returns the run ID; it neither waits nor claims a job. The separate worker executes it through the same queue/lease mechanism. Browser submissions preserve connected-user ownership; operator CLI submissions do not verify that browser path.
 
 ## Durable queue and ownership
 
@@ -88,20 +88,21 @@ Deployment gate: one trusted local operator initially. Public use requires per-t
 - [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
 - [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
-- [ ] GitHub App authentication and publication for connected visitors.
+- [x] GitHub App authentication and publication verified for the controlled connected-user trial; broader users/repositories remain unverified.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
 
 ## Next work in order
 
-1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
-2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Resolve Neatlogs finalized application trace readback and implement authorized failure-trace retrieval. Export a genuine failure/recovery comparison; the successful demo had no recovery retry.
-4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
-5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
-6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
+1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
+2. Retention cleanup is implemented; run live restart, cancellation, and API-restart acceptance next.
+3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
+4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
+5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
+6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
+7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
 
-Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-draft-PR demo completed. Automated live credential probes, public-user authentication, finalized trace readback, and broad repository support are not claimed complete.
+Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1, connected-user run `b220ce7e5cda4e14963c74fc04ad8711` and PR #3, finalized application readbacks, and a controlled hosted recovery drill are saved. PR #3 is now merged. Browser disconnect/history, runtime Entire context, broader repository support, and public deployment acceptance remain pending.
 
 ## GitHub App backend milestone
 
@@ -111,7 +112,7 @@ Evidence baseline (October 11, 2026): 74 automated tests passed; live issue-to-d
 - [x] User-scoped worker/publication credentials; local operator PAT is never substituted for a visitor.
 - [x] Disconnect invalidation, cooperative cancellation, publication/disconnect fencing, and signed authorization-revoked webhook.
 - [x] Tests for OAuth replay, session expiry, secure cookies, CSRF, cross-user access, installation permissions, and revocation.
-- [ ] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
-- [ ] Wire landing-page connection and workspace UI to these backend endpoints.
+- [x] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance on the reviewed fork.
+- [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
-The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.
+GitHub App code and the controlled connected-user issue-to-PR trial are verified; additional live acceptance is listed above. [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

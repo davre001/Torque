@@ -1,0 +1,16 @@
+{
+  "verification": "live-history-disconnect-acceptance",
+  "user_id": "github:141245473",
+  "saved_run_id": "b220ce7e5cda4e14963c74fc04ad8711",
+  "persisted_status_after_api_restart": "completed",
+  "persisted_pr_url": "https://github.com/davre001/kokon/pull/3",
+  "connection_revoked_before_trial": false,
+  "active_sessions_before_trial": 1,
+  "browser_history_refresh": "passed-user-reported",
+  "disconnect_cancel": "passed-fixture-browser-test-not-live-confirmed",
+  "disconnect_confirm": "passed-user-reported-redirected-to-landing",
+  "reconnect_history": "passed-user-reported-PR3-persists",
+  "reconnect": "passed-user-reported-github-reauthorized-automatically",
+  "connect_without_refresh": "passed-user-reported-after-fix",
+  "gitHub_global_logout": "not-performed-Torque-disconnect-is-local"
+}

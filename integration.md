@@ -19,11 +19,11 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Implement read-only issue fetching with strict GitHub URL parsing and mocked API tests.
 - [x] Implement both provider SDK adapters and structured role routing; live access verified in the saved demo.
 - [x] Implement explicit estimated budgets, bounded transport retries, and usage-required responses (zero rates only for verified free quota).
-- [x] Add worker-owned Neatlogs lifecycle/client wrappers and content masking; dashboard acceptance remains unchecked.
+- [x] Add worker-owned Neatlogs lifecycle/client wrappers and content masking; finalized workflow readbacks are saved. Dashboard screenshots remain pending.
 - [x] Verify LiteLLM model access and usage reporting in the live run; total remaining credit balance is not independently audited.
-- [x] Verify Gemini 3.5 Flash access; implement bounded provider errors/retries and token limits.
+- [x] Verify historical Gemini access and bounded errors/retries/token limits; later full investigation requests on 3.5/3.6 returned 503. The current verified workflow uses Claude-only mode.
 - [x] Implement shared provider adapters, role routing, timeouts, and spending accounting.
-- [x] Initialize worker Neatlogs once and wrap model/tool calls; finalized dashboard span-tree acceptance remains pending.
+- [x] Initialize worker Neatlogs once and verify finalized workflow/acceptance span trees through authenticated readback.
 - [x] Obtain separate authorized neatlogs read credentials and implement failure-trace retrieval.
 - [x] Verify finalized application traces and hosted recovery in an explicitly seeded controlled live drill; live repository recovery remains pending.
 - [x] Verify GitHub source/destination identities and token permissions; select the demo fork.
@@ -34,14 +34,19 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
 - [x] Verify a live connected-user browser run with source installation access and a supported recipe; run `b220ce7e5cda4e14963c74fc04ad8711`, PR #3.
 - [x] Show installed repository eligibility and reject browser submissions without an enabled source and reviewed test recipe before queueing.
-- [ ] Verify secrets stay out of responses, sandbox environments, Git history, traces, and exported artifacts.
+- [x] Check configured credentials and decrypted App user token are absent from exported successful user-run evidence.
+- [ ] Complete the broader credential audit across responses, sandbox environments, Git history, traces, and artifacts.
 - [ ] Replace financial cost assumptions with measured run data when available.
 
-Scope update: the requested landing-page Connect GitHub â†’ authenticated workspace â†’ confirmed disconnect flow makes GitHub App identity/installation onboarding part of the current frontend integration work. See `changes.md` for its acceptance checklist. The personal-token path remains useful for local backend development, but cannot substitute for authenticating visitors. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
+Scope update: Connect GitHub leads to the authenticated workspace and confirmed disconnect. GitHub App identity/installation onboarding is implemented and verified in the controlled trial. The personal-token path remains for local operator development. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
 
-- [ ] Configure GitHub App user authorization and repository installations for the requested connection flow.
+- [x] Configure GitHub App user authorization and repository installations for the controlled connected-user flow.
 - [x] Implement connect/callback/session/disconnect endpoints, secure sessions, and per-user repository/run ownership checks.
-- [ ] Prevent publication after disconnect and reconcile any write already in progress.
+- [x] Implement publication/disconnect fencing and revocation checks; mocked tests pass.
+- [ ] Verify live browser disconnect and publication fencing with real credentials.
+- [x] Verify browser history persistence after refresh and reconnection; user confirmed PR #3 remains.
+- [ ] Add public queue/spending controls and complete deployment acceptance.
+- [ ] Verify recovery on a live GitHub repository; the existing hosted recovery drill is controlled and seeded.
 
 ## Configuration and provider routing
 
@@ -54,12 +59,13 @@ Load the root `.env` with `python-dotenv` before creating SDK clients. Environme
 | `LITELLM_BASE_URL` | Actual organiser-provided API base URL |
 | `LITELLM_MODEL` | Exact gateway alias for the selected Claude model |
 | `GEMINI_API_KEY` | Google AI Studio credential |
-| `GEMINI_MODEL` | `gemini-3.5-flash`, verified in the saved demo; availability is account-dependent |
+| `GEMINI_MODEL` | Saved as `gemini-3.6-flash`; inactive in Claude-only mode; full investigation requests returned 503 |
+| `TORQUE_PROVIDER_MODE` | Current `claude-only`; `mixed` restores Gemini investigation/review and Claude edits |
 | `GITHUB_TOKEN` | Local operator's repository-scoped credential |
 
 Database/workspace paths, source allowlist, publication destination, retry/model/token/dollar limits, test recipes, runner settings, and development origins are defined in `.env.example` and backend configuration.
 
-Route implementation and recovery to Claude through LiteLLM; route investigation summaries and verification reasoning to Gemini. The implemented path uses Gemini for investigation/review and Claude for edits/recovery. Test results remain authoritative regardless of model choice. Do not silently switch provider when quotas fail; persist the error and apply only a configured fallback within the same budget.
+Current verified mode is `TORQUE_PROVIDER_MODE=claude-only`: investigation, implementation, recovery, and review all use the existing Claude/LiteLLM connection and Claude cost rates. The optional `mixed` mode uses Gemini for investigation/review and Claude for edits/recovery. Test results remain authoritative regardless of model choice. Do not silently switch provider when quotas fail; persist the error and apply only a configured fallback within the same budget.
 
 If the gateway supports OpenAI-compatible chat completions, use a client configured with its explicit URL/key and model alias. This is distinct from calling Anthropic directly and does not require an invented Anthropic key. Confirm tool calling, structured response, usage accounting, and context limits for the actual gateway. Use Google's official `google-genai` SDK for direct Gemini access; its default endpoint handles routing without a custom Gemini URL.
 
@@ -107,7 +113,7 @@ Do not let a run switch Entire repository settings, import unrelated sessions, o
 
 The cfo.ai spreadsheet, screenshots, and summary are committed under `cfo.ai/`; there is no runtime cfo.ai API integration. After real runs, use measured tokens, retry rates, sandbox duration, and successful PR rate to revise financial assumptions. Keep the documented narrative/spreadsheet discrepancy visible until corrected.
 
-Replace Next.js simulation events with `POST /api/runs` and persisted polling. Handle queued, recovering, failed, cancelled, interrupted, ready-to-publish, and completed states explicitly; stop polling terminal states. Display only real PR URLs and trace references. Keep API credentials in Python and expose sanitized configuration readiness only.
+The workspace uses `POST /api/runs` and persisted polling; the landing preview remains labeled simulation. Handle queued, recovering, failed, cancelled, interrupted, ready-to-publish, and completed states explicitly; stop polling terminal states. Display only real PR URLs and trace references. Keep API credentials in Python and expose sanitized configuration readiness only.
 
 ## Integration acceptance
 
@@ -121,18 +127,19 @@ Check actual gateway and Gemini model access with small operator-authorized call
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [x] GitHub App authentication and publication for the controlled connected-user trial; broader users/repositories remain unverified.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
 
 ## Next work in order
 
-1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
-2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Hosted readback and a controlled live recovery drill are complete (see `backend/NEATLOGS_RECOVERY.md`). Verify recovery on a live GitHub repository next; the original successful demo had no recovery retry.
-4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
-5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
-6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
+1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
+2. Retention cleanup is implemented; run live restart, cancellation, and API-restart acceptance next.
+3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
+4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
+5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
+6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
+7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
 
-Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted hierarchy/cancellation checks; live issue-to-draft-PR demo, authenticated finalized trace readback, and an explicitly seeded controlled live recovery drill completed. Live connected-user execution, runtime Entire context, and broad repository support remain pending.
+Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1, connected-user run `b220ce7e5cda4e14963c74fc04ad8711` and PR #3, finalized application readbacks, and a controlled hosted recovery drill are saved. PR #3 is now merged. Browser disconnect/history, runtime Entire context, broader repository support, and public deployment acceptance remain pending.
 
 ## GitHub App backend milestone
 
@@ -145,4 +152,4 @@ Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted h
 - [x] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance on the reviewed fork.
 - [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
-The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.
+GitHub App code and the controlled connected-user issue-to-PR trial are verified; additional live acceptance is listed above. [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

@@ -17,11 +17,22 @@ def main():
     commands.add_parser("run").add_argument("issue_url")
     commands.add_parser("status").add_argument("run_id")
     commands.add_parser("publish").add_argument("run_id")
+    retention = commands.add_parser('cleanup')
+    retention.add_argument('--keep-days', type=float, default=7)
+    retention.add_argument('--apply', action='store_true', help='Remove eligible runtime files; default only previews')
     args = parser.parse_args()
     settings = Settings.load()
     store = Store(settings.database)
     store.initialize()
-    if args.command == "preflight":
+    if args.command == 'cleanup':
+        from backend.retention import cleanup
+        from backend.config import ROOT
+        from backend.models import PipelineError
+        try:
+            print(json.dumps(cleanup(store, ROOT, args.keep_days, args.apply), indent=2))
+        except PipelineError as exc:
+            parser.error(str(exc))
+    elif args.command == "preflight":
         print(json.dumps({"storage":"ready","operator_access_configured":bool(settings.operator_token),
                           "allowed_repositories":list(settings.allowed_repositories),
                           "agent_pipeline":readiness()}))

@@ -19,7 +19,7 @@ identical to the submitted fork's complete source tree.
 - [x] Verify persisted user ownership, remote baseline/final tests, and model review.
 - [x] Export finalized trace readback and sanitized run evidence.
 - [x] Verify explicit connected-user PR publication; PR #3 is now merged.
-- [ ] Verify browser history persistence and confirmed disconnect.
+- [x] Verify browser history persistence, confirmed disconnect, and reconnection; user confirmed PR #3 remains and Connect works without refresh.
 
 `permissions.json` contains sanitized live discovery evidence. Permission discovery
 and issue creation do not prove successful browser execution or publication.
@@ -52,7 +52,7 @@ There was one patch attempt and no recovery retry in this run.
 Artifacts, run record, PR status, readbacks, and ten artifact checksums are saved
 under [the run evidence folder](b220ce7e5cda4e14963c74fc04ad8711/).
 Configured credentials and the decrypted App user token were checked absent from
-the exported files. Browser disconnect/history acceptance remains separate.
+the exported files. Live browser disconnect/reconnection/history was subsequently user-confirmed; see `../browser-acceptance.json`. Publication/disconnect fencing with a live in-flight write remains unverified.
 
 After the merge, the fork's default branch has changed. The reviewed remote runner
 will reject a new run against that changed revision; do not reuse the pre-merge
