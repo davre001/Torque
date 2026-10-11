@@ -1,5 +1,14 @@
 # Backend tests
 
+## Workspace browser contract
+
+With Next.js running, use `node tests/workspace-browser.mjs` (Node 22+ and Microsoft
+Edge on Windows). Set `TORQUE_TEST_BROWSER` to another Chromium executable if needed.
+The headless test intercepts API requests with explicit fixtures: session/CSRF,
+submission, recovery, acceptance results, terminal polling, PR results, saved failures,
+disconnect confirmation, and expired login. It makes no live jobs or GitHub writes.
+This verifies UI behavior; live connected-user execution is a separate acceptance step.
+
 Tests will be added as behavior is implemented. Planned coverage: API contracts, job claims and leases, restart interruption, cancellation, retry budgets, file/patch boundaries, provider failures, trace readback, and idempotent publication. Use independent browser assertions for the kokon reduced-motion issue.
 Run the backend foundation tests from the repository root:
 

@@ -3,6 +3,11 @@
 The new `/workspace` submits and polls real SQLite-backed runs. It does not launch the
 worker; keep the separate worker process running for queued jobs to execute.
 
+Frontend progress now reads persisted run events, including recovery and terminal
+outcomes. History status refreshes during polling; completed results expose actual
+acceptance/review records and PR links. Fixture browser tests cover the contract;
+live connected-user execution remains a separate acceptance step.
+
 Status: implemented separate SQLite-backed worker; live remote browser execution verified. [Backend overview](backend_implementation.md) defines the API and agent behavior; [integrations](integration.md) defines external access.
 
 ## Worker progress checklist

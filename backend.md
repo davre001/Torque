@@ -31,7 +31,8 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [ ] Verify real model tracing and authenticated failure-trace readback.
 - [ ] Obtain genuine Entire runtime context evidence.
 - [x] Implement verified, idempotent branch/PR publication.
-- [ ] Connect the frontend to actual API state and remove simulated results from the real run path.
+- [x] Connect the authenticated workspace to actual API state and keep simulations outside the real run path.
+- [ ] Complete a live connected-user run with an installed supported source repository.
 - [x] Pass 74 automated tests and complete the controlled issue-to-PR demonstration.
 - [x] Document runnable setup and export sanitized completed demo evidence.
 - [ ] Finish dashboard screenshots, recovery comparison, and submission packaging.

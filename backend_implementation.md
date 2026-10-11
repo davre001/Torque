@@ -30,7 +30,8 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Persist verified patch/head records and enforce authorized publication.
 - [x] Reproduce the kokon bug and automate all three playback acceptance criteria.
 - [x] Test invalid paths, budgets, failures, cancellation, restart interruption, and duplicate publication.
-- [ ] Wire Next.js to real statuses/results and document actual runnable commands.
+- [x] Wire Next.js to real statuses/results and document actual runnable commands.
+- [ ] Verify connected-user execution against an installed supported source repository.
 - [x] Verify the live operator issue-to-PR flow and export actual tests, usage, patch, and PR evidence.
 - [ ] Export finalized dashboard trace and genuine live recovery evidence.
 

@@ -31,7 +31,8 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [ ] Verify authorization separately before any upstream public contribution.
 - [ ] Implement a supported Entire context adapter and save actual target-repository context evidence.
 - [x] Review shared hook/settings files and commit appropriate configuration without local state.
-- [ ] Replace frontend simulation with real API polling and handle all planned statuses.
+- [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
+- [ ] Verify a live connected-user browser run with source installation access and a supported recipe.
 - [ ] Verify secrets stay out of responses, sandbox environments, Git history, traces, and exported artifacts.
 - [ ] Replace financial cost assumptions with measured run data when available.
 

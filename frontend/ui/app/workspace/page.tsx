@@ -9,10 +9,11 @@ import { api, ApiError, githubLogin } from '@/lib/api';
 type Session = { user_id: string; github_login: string; csrf_token: string };
 type Repository = { full_name: string; permissions: { push?: boolean }; app_permissions: { contents?: string; pull_requests?: string } };
 type Run = { run_id: string; issue_url: string; status: string; created_at: number; updated_at?: number; current_agent?: string | null; error?: string | null; pr_url?: string | null;
-  result?: { verified?: boolean; summary?: string; trace_id?: string; budget?: { calls: number; tokens: number; estimated_cost_usd: number } };
-  attempts?: { number: number; tests_passed: boolean; review?: { approved?: boolean } }[] };
+  result?: { verified?: boolean; summary?: string; trace_id?: string; published_commit_sha?: string; plan?: {summary?: string; acceptance_criteria?: string[]}; budget?: { calls: number; tokens: number; estimated_cost_usd: number } };
+  attempts?: { number: number; tests_passed: boolean; review?: { approved?: boolean; rationale?: string; satisfied_criteria?: number[] } }[] };
+type RunEvent = {id: number; created_at: number; status?: string; error?: string | null};
 const terminal = new Set(['completed','failed','cancelled','interrupted','ready_to_publish']);
-const stages = ['queued','investigating','implementing','verifying','ready_to_publish','publishing','completed'];
+const stages = ['queued','investigating','implementing','recovering','verifying','ready_to_publish','publishing','completed'];
 const label = (value: string) => value.replaceAll('_',' ').replace(/^./, s => s.toUpperCase());
 const safePR = (url?: string | null) => !!url && /^https:\/\/github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9_.-]+\/pull\/[1-9][0-9]*$/.test(url);
 
@@ -27,6 +28,10 @@ export default function Workspace() {
   const [issue,setIssue] = useState('');
   const [runId,setRunId] = useState('');
   const [run,setRun] = useState<Run | null>(null);
+  const [events,setEvents] = useState<RunEvent[]>([]);
+  const [progressError,setProgressError] = useState('');
+  const [lastSynced,setLastSynced] = useState<number | null>(null);
+  const [refreshRun,setRefreshRun] = useState(0);
   const [destination,setDestination] = useState('');
   const [busy,setBusy] = useState(false);
   const [retry,setRetry] = useState(0);
@@ -50,7 +55,8 @@ export default function Workspace() {
         if (results[0].status === 'fulfilled') {
           setHistory(results[0].value.runs);
           const active = results[0].value.runs.find(item => !terminal.has(item.status));
-          if (active) setRunId(active.run_id);
+          const selected=active || results[0].value.runs[0];
+          if (selected) setRunId(selected.run_id);
         }
         if (results[1].status === 'fulfilled') setRepositories(results[1].value.repositories);
         for (const result of results) if (result.status === 'rejected') throw result.reason;
@@ -69,27 +75,32 @@ export default function Workspace() {
     const controller = new AbortController();
     let alive = true;
     let timer: ReturnType<typeof setTimeout>;
+    let cursor=0;
+    let recorded: RunEvent[]=[];
     async function poll() {
       try {
         const current = await api<Run>('/api/runs/'+runId,{signal:controller.signal});
         if (!alive) return;
         setRun(current);
-        if (terminal.has(current.status)) {
-          const saved = await api<{runs:Run[]}>('/api/runs',{signal:controller.signal});
-          if (alive) setHistory(saved.runs);
-          return;
-        }
+        setHistory(previous=>previous.map(item=>item.run_id===current.run_id ? {...item,status:current.status,pr_url:current.pr_url} : item));
+        const batch=await api<{events:RunEvent[]}>(`/api/runs/${runId}/events?after=${cursor}`,{signal:controller.signal});
+        if (!alive) return;
+        recorded=[...recorded,...batch.events];
+        if (batch.events.length) cursor=batch.events[batch.events.length-1].id;
+        setEvents(recorded);setProgressError('');setLastSynced(Date.now());
+        // Drain full event pages even after a run has finished.
+        if (terminal.has(current.status) && batch.events.length<100) return;
       } catch (e) {
         if (!alive) return;
         if (e instanceof ApiError && e.status === 401) { setExpired(true); setSession(null); return; }
-        setError(e instanceof Error ? e.message : 'Progress unavailable.');
+        setProgressError(e instanceof Error ? e.message : 'Progress unavailable.');
         if (e instanceof ApiError && e.status === 404) return;
       }
       if (alive) timer=setTimeout(poll,2500);
     }
     void poll();
     return () => { alive=false; controller.abort(); clearTimeout(timer); };
-  },[runId,session]);
+  },[runId,session,refreshRun]);
 
   async function action(path: string, body?: object, idempotency?: string) {
     if (!session) throw new Error('Connect GitHub first.');
@@ -112,14 +123,14 @@ export default function Workspace() {
     if (!key.current || key.current.issue!==value) key.current={issue:value,value:crypto.randomUUID()};
     void perform(async () => {
       const saved=await action('/api/runs',{issue_url:value},key.current!.value);
-      setRunId(saved.run_id);setRun(null);setDestination('');
+      setRunId(saved.run_id);setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');
       const list=await api<{runs:Run[]}>('/api/runs');setHistory(list.runs);key.current=null;
     });
   }
   const active=!!run && !terminal.has(run.status);
   const hasActive=active || history.some(item => !terminal.has(item.status));
-  const stage=run ? stages.indexOf(run.status) : -1;
-  const failed=run && ['failed','cancelled','interrupted'].includes(run.status);
+  const visited=new Set(events.map(event=>event.status));
+  const review=run?.attempts?.at(-1)?.review;
   const writable=repositories.filter(repo => repo.permissions.push && repo.app_permissions.contents==='write' && repo.app_permissions.pull_requests==='write');
 
   return <div className="min-h-screen bg-[#fafafa]">
@@ -144,22 +155,28 @@ export default function Workspace() {
               <div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-semibold">{run ? label(run.status) : 'Ready when you are'}</h2>{active && <LoaderCircle className="animate-spin" aria-label="Run active" size={20}/>}</div>
               {!run ? <p className="mt-4 text-zinc-500">Your workflow will appear here when you start a run.</p> : <>
                 <p className="mt-3 break-all text-sm text-zinc-500">{run.issue_url}</p>
-                <ol className="mt-8 grid gap-3 sm:grid-cols-2">{stages.map((step,index) => <li key={step} className={`flex items-center gap-3 rounded-xl border p-3 ${index===stage && !failed ? 'border-black bg-white' : 'border-zinc-200 bg-white/40'}`}>
-                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs ${index<stage && !failed ? 'bg-black text-white' : 'bg-zinc-100 text-zinc-500'}`}>{index<stage && !failed ? <Check size={14}/> : index+1}</span><span className="text-sm">{label(step)}</span>
+                <ol className="mt-8 grid gap-3 sm:grid-cols-2">{stages.map((step,index) => <li key={step} aria-current={run.status===step ? 'step' : undefined} className={`flex items-center gap-3 rounded-xl border p-3 ${run.status===step ? 'border-black bg-white' : 'border-zinc-200 bg-white/40'}`}>
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs ${visited.has(step) && run.status!==step ? 'bg-black text-white' : 'bg-zinc-100 text-zinc-500'}`}>{visited.has(step) && run.status!==step ? <Check size={14}/> : index+1}</span><span className="text-sm">{label(step)}{step==='recovering' && !visited.has(step) && run.status!==step ? ' (if needed)' : ''}</span>
                 </li>)}</ol>
                 <p role="status" className="mt-5 text-sm text-zinc-600">{run.status==='recovering' ? 'Recovery is analyzing the failed attempt before retrying.' : run.status==='queued' ? 'Waiting for the separate worker to pick up this run.' : run.current_agent ? `${label(run.current_agent)} is active.` : label(run.status)}</p>
+                <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-500"><span>{lastSynced ? `Last checked ${new Date(lastSynced).toLocaleTimeString()}` : 'Checking progress…'}</span><button disabled={busy} onClick={()=>{setEvents([]);setProgressError('');setRefreshRun(value=>value+1);}} className="underline">Refresh progress</button></div>
+                {progressError && <p role="alert" className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">Progress is temporarily unavailable. Showing the last saved result. {progressError}</p>}
                 {run.result?.summary && <p className="mt-5 text-zinc-700">{run.result.summary}</p>}
                 {run.error && <p className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{run.error}</p>}
                 {run.result?.budget && <p className="mt-5 text-sm text-zinc-500">{run.result.budget.calls} model calls · {run.result.budget.tokens.toLocaleString()} tokens · ${run.result.budget.estimated_cost_usd.toFixed(4)} estimated</p>}
                 {!!run.attempts?.length && <p className="mt-3 text-sm text-zinc-500">{run.attempts.length} recorded attempt(s) · latest tests {run.attempts.at(-1)?.tests_passed ? 'passed' : 'failed'}</p>}
-                {run.status==='ready_to_publish' && <div className="mt-6 border-t border-zinc-200 pt-6"><label htmlFor="destination" className="font-medium">Publish a draft PR</label><select id="destination" value={destination} onChange={e=>setDestination(e.target.value)} className="mt-3 w-full rounded-xl border border-zinc-300 bg-white p-3"><option value="">Choose your source repository or fork</option>{writable.map(repo=><option key={repo.full_name} value={repo.full_name}>{repo.full_name}</option>)}</select><p className="mt-2 text-sm text-zinc-500">The destination must be your own source or fork at the verified revision.</p><button disabled={busy || !destination} onClick={()=>void perform(async()=>{const published=await action(`/api/runs/${run.run_id}/publish?destination=${encodeURIComponent(destination)}`);setRun(published);const saved=await api<{runs:Run[]}>('/api/runs');setHistory(saved.runs);})} className="mt-4 rounded-xl bg-black px-5 py-3 text-white disabled:opacity-40">Publish draft PR</button></div>}
+                {!!run.result?.plan?.acceptance_criteria?.length && <div className="mt-6 border-t border-zinc-200 pt-5"><h3 className="font-semibold">Acceptance results</h3><ul className="mt-3 space-y-3">{run.result.plan.acceptance_criteria.map((criterion,index)=><li key={index} className="text-sm text-zinc-600"><span className="mr-2 font-medium text-zinc-900">{run.result?.verified && review?.approved && review.satisfied_criteria?.includes(index) ? 'Passed' : 'Not verified'}</span>{criterion}</li>)}</ul>{review?.rationale && <p className="mt-4 text-sm text-zinc-500">Review: {review.rationale}</p>}</div>}
+                {run.result?.trace_id && <p className="mt-5 break-all text-xs text-zinc-500">Trace ID: <code>{run.result.trace_id}</code></p>}
+                {run.result?.published_commit_sha && <p className="mt-2 break-all text-xs text-zinc-500">Published commit: <code>{run.result.published_commit_sha}</code></p>}
+                {!!events.length && <details className="mt-6 border-t border-zinc-200 pt-4"><summary className="cursor-pointer font-medium">Activity ({events.length})</summary><ol className="mt-4 max-h-64 space-y-3 overflow-auto">{events.map(event=><li key={event.id} className="text-sm text-zinc-600"><time className="mr-3 text-xs text-zinc-400">{new Date(event.created_at*1000).toLocaleTimeString()}</time>{event.status ? label(event.status) : 'Run updated'}{event.error && <p className="mt-1 text-red-700">{event.error}</p>}</li>)}</ol></details>}
+                {run.status==='ready_to_publish' && <div className="mt-6 border-t border-zinc-200 pt-6"><label htmlFor="destination" className="font-medium">Publish a draft PR</label><select id="destination" value={destination} onChange={e=>setDestination(e.target.value)} className="mt-3 w-full rounded-xl border border-zinc-300 bg-white p-3"><option value="">Choose your source repository or fork</option>{writable.map(repo=><option key={repo.full_name} value={repo.full_name}>{repo.full_name}</option>)}</select><p className="mt-2 text-sm text-zinc-500">The destination must be your own source or fork at the verified revision.</p><button disabled={busy || !destination} onClick={()=>void perform(async()=>{const published=await action(`/api/runs/${run.run_id}/publish?destination=${encodeURIComponent(destination)}`);setRun(published);setRefreshRun(value=>value+1);const saved=await api<{runs:Run[]}>('/api/runs');setHistory(saved.runs);})} className="mt-4 rounded-xl bg-black px-5 py-3 text-white disabled:opacity-40">Publish draft PR</button></div>}
                 {safePR(run.pr_url) && <a href={run.pr_url!} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-medium text-white"><GitPullRequest size={18}/>View pull request<ExternalLink size={14}/></a>}
                 {active && <button disabled={busy} onClick={()=>void perform(async()=>{setRun(await action('/api/runs/'+run.run_id+'/cancel'));})} className="mt-5 block text-sm text-zinc-600 underline disabled:opacity-40">Request cancellation</button>}
               </>}
             </section>
           </section>
           <aside className="space-y-6"><section className="rounded-3xl border border-zinc-200 bg-white p-6"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold">Repository access</h2><button aria-label="Refresh repository access" disabled={busy} onClick={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}><RefreshCw size={16}/></button></div><p className="mt-3 text-sm text-zinc-500">{repositories.length ? 'Repositories connected through your GitHub App installation.' : 'Install the Torque App on a public repository, then refresh access.'}</p><ul className="mt-4 space-y-2">{repositories.map(repo=><li className="break-all text-sm" key={repo.full_name}>{repo.full_name}</li>)}</ul></section>
-            <section className="rounded-3xl border border-zinc-200 bg-white p-6"><h2 className="text-lg font-semibold">Run history</h2>{!history.length ? <p className="mt-4 text-sm text-zinc-500">Your first run starts here.</p> : <ul className="mt-4 space-y-2">{history.map(item=><li key={item.run_id}><button onClick={()=>{if(item.run_id!==runId) {setRun(null);setRunId(item.run_id);}setError('');}} className={`w-full rounded-xl p-3 text-left hover:bg-zinc-100 ${item.run_id===runId ? 'bg-zinc-100' : ''}`}><span className="block truncate text-sm font-medium">{item.issue_url.split('/').slice(3).join('/')}</span><span className="mt-1 block text-xs text-zinc-500">{label(item.status)} · {new Date(item.created_at*1000).toLocaleDateString()}</span></button></li>)}</ul>}</section>
+            <section className="rounded-3xl border border-zinc-200 bg-white p-6"><h2 className="text-lg font-semibold">Run history</h2>{!history.length ? <p className="mt-4 text-sm text-zinc-500">Your first run starts here.</p> : <ul className="mt-4 space-y-2">{history.map(item=><li key={item.run_id}><button disabled={busy} onClick={()=>{if(item.run_id!==runId) {setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');setRunId(item.run_id);}setError('');}} className={`w-full rounded-xl p-3 text-left hover:bg-zinc-100 ${item.run_id===runId ? 'bg-zinc-100' : ''}`}><span className="block truncate text-sm font-medium">{item.issue_url.split('/').slice(3).join('/')}</span><span className="mt-1 block text-xs text-zinc-500">{label(item.status)} · {new Date(item.created_at*1000).toLocaleDateString()}</span></button></li>)}</ul>}</section>
           </aside>
         </div>
       </>}

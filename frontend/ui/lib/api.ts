@@ -9,7 +9,9 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
     if (error instanceof DOMException && error.name === 'AbortError') throw error;
     throw new ApiError('Cannot reach Torque. Check that the backend API is running.', 0);
   }
-  const data = await response.json();
+  let data;
+  try { data = await response.json(); }
+  catch { throw new ApiError('Torque returned an unreadable response. Try refreshing progress.', response.status); }
   if (!response.ok) throw new ApiError(typeof data.detail === 'string' ? data.detail : 'Request failed. Check your input and try again.', response.status);
   return data as T;
 }
