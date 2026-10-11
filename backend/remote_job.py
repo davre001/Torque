@@ -42,6 +42,7 @@ def main():
             snapshot("GabrieleLozupone","kokon",sha,workspace,lambda:None)
             safe_path(workspace,"site/index.html").write_bytes(replacement.encode())
             result = runner.run(workspace,lambda:None)
+        print(result.output,flush=True)
         record["result"] = result.model_dump()
     except Exception:
         # Do not export exception text or workflow environment.

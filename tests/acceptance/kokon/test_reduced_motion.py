@@ -13,9 +13,11 @@ def main():
     thread.start()
     passed = 0
     kind = None
+    stage = "launch-browser"
     try:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(chromium_sandbox=True)
+            stage = "check-reduced-motion"
             base = f"http://127.0.0.1:{server.server_port}/"
             # Separate contexts prevent state leaking between motion preferences.
             reduced = browser.new_context(reduced_motion="reduce")
@@ -27,10 +29,12 @@ def main():
             page.wait_for_timeout(1000)
             assert video.evaluate("(v) => v.paused"), "Reduced-motion autoplay must remain paused"
             passed += 1
+            stage = "check-manual-play"
             page.locator("#reel-btn").click()
             expect(video).to_have_js_property("paused",False,timeout=5000)
             passed += 1
             reduced.close()
+            stage = "check-normal-autoplay"
             normal = browser.new_context(reduced_motion="no-preference")
             page = normal.new_page()
             page.goto(base,wait_until="domcontentloaded")
@@ -45,6 +49,9 @@ def main():
     except Exception as exc:
         kind = "infrastructure"
         print("Browser acceptance infrastructure failed: "+type(exc).__name__)
+        # The isolated container receives no credentials; keep browser stderr bounded.
+        print("Stage: "+stage)
+        print(str(exc)[:6000])
     finally:
         server.shutdown()
         server.server_close()
