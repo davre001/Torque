@@ -1,0 +1,16 @@
+{
+  "gabrielelozupone/kokon": {
+    "image": "REPLACE_WITH_REVIEWED_IMAGE_AT_SHA256_DIGEST",
+    "command": ["python", "/acceptance/test_reduced_motion.py"],
+    "context_files": ["site/index.html"],
+    "editable_files": ["site/index.html"],
+    "acceptance_criteria": [
+      "With reduced motion enabled, the demo video remains paused until the user chooses playback.",
+      "Manual playback still works when reduced motion is enabled.",
+      "Normal autoplay behavior remains unchanged when reduced motion is disabled."
+    ],
+    "suite_directory": "REPLACE_WITH_ABSOLUTE_INDEPENDENT_TEST_SUITE_DIRECTORY",
+    "timeout_seconds": 120,
+    "require_baseline_failure": true
+  }
+}
