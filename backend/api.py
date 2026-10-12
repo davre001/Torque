@@ -14,6 +14,8 @@ def create_app(settings=None):
     auth = GitHubAuth(store)
     from backend.admission import Admission
     admission = Admission.load()
+    from backend.public_boundary import PublicPolicy, PublicBoundary
+    public_policy = PublicPolicy.load(settings, auth)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -22,6 +24,10 @@ def create_app(settings=None):
         yield
 
     app = FastAPI(title="Torque backend", lifespan=lifespan)
+    if public_policy:
+        from starlette.middleware.trustedhost import TrustedHostMiddleware
+        app.add_middleware(PublicBoundary, store=store, policy=public_policy)
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=[public_policy.host], www_redirect=False)
     from fastapi.middleware.cors import CORSMiddleware
     app.add_middleware(CORSMiddleware,allow_origins=[auth.origin],allow_credentials=True,
                        allow_methods=["GET","POST"],allow_headers=["Content-Type","X-CSRF-Token","Idempotency-Key"])
@@ -42,6 +48,8 @@ def create_app(settings=None):
     def operator(request: Request, authorization: Annotated[str | None, Header()] = None):
         if authorization is None and request.cookies.get(auth.cookie):
             return auth.authenticate(request)
+        if public_policy:
+            raise HTTPException(401, "GitHub login required")
         if not settings.operator_token:
             raise HTTPException(503, "Set TORQUE_OPERATOR_TOKEN for local operator access; or configure GitHub App login")
         expected = "Bearer " + settings.operator_token
@@ -59,6 +67,8 @@ def create_app(settings=None):
 
     @app.get("/health")
     def health():
+        if public_policy:
+            return {"status":"ok"}
         from backend.runtime import readiness
         pipeline = readiness()
         return {"status":"ok", "storage":"sqlite", "execution":"separate-worker",

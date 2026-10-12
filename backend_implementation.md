@@ -33,7 +33,7 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Reproduce the kokon bug and automate all three playback acceptance criteria.
 - [x] Test invalid paths, budgets, failures, cancellation, restart interruption, and duplicate publication.
 - [x] Wire Next.js to real statuses/results and document actual runnable commands.
-- [ ] Verify connected-user execution against an installed supported source repository.
+- [x] Verify connected-user execution and publication against an installed supported source repository; saved PR #3/#5 evidence.
 - [x] Expose repository eligibility and prevent unsupported connected-user submissions from entering the queue.
 - [x] Verify the live operator issue-to-PR flow and export actual tests, usage, patch, and PR evidence.
 - [x] Export finalized application trace and controlled live hosted recovery evidence; natural GitHub-repository recovery remains pending.
@@ -50,13 +50,13 @@ all three independent browser criteria after the first patch, and published
 [evidence](evidence/runs/6634790aa28943629348e02914d9b56c/README.md) records source,
 verified content, published commit, model usage, and original artifacts. Latest tests: 74 passed.
 
-Recovery now uses authenticated finalized failure traces alongside local artifacts and passed a controlled live drill with an explicitly seeded bad first patch. Runtime Entire context and live connected-user execution remain pending. GitHub visitor sessions and frontend polling are implemented. See `backend/NEATLOGS_RECOVERY.md` for evidence and limits.
+Recovery uses authenticated finalized failure traces alongside local artifacts and passed a controlled seeded drill. Runtime Entire context and connected-user execution are verified. Unseeded slider attempts have not recovered successfully. See `backend/NEATLOGS_RECOVERY.md` and `backend/LIFECYCLE_VERIFICATION.md` for evidence and limits.
 
 Scope update: `changes.md` now specifies a public landing page and a separate authenticated workspace. Real Connect GitHub and Disconnect behavior require GitHub App identity/installation onboarding, server-side sessions, and per-user ownership checks in the current requested scope. The local single-operator path below remains the first development milestone; it does not fulfill multi-user connection behavior by itself.
 
-- [ ] Add authenticated GitHub connect/callback/session/disconnect endpoints and authorized workspace access.
-- [ ] Associate queued runs and publish permissions with the connected user and installation.
-- [ ] Make disconnect request cancellation and block new writes under the disconnected credentials.
+- [x] Add authenticated GitHub connect/callback/session/disconnect endpoints and authorized workspace access.
+- [x] Associate queued runs and publish permissions with the connected user and installation.
+- [x] Make disconnect request cancellation and block new writes under disconnected credentials; actual in-flight publication/disconnect acceptance remains separate.
 
 Accept a GitHub issue URL, inspect a pinned repository revision, implement a focused patch in an isolated checkout, run real tests, recover from failures using trace evidence, and produce a verified pull request or an explicit failure with supporting artifacts.
 

@@ -1,0 +1,32 @@
+{
+  "mode": "os-signal-during-local-blocked-http-provider-fixture",
+  "probe_id": "806317a39ff24eee8028548b8edf5cef",
+  "run_id": "1c42dc140061443588df3800d3229855",
+  "signal": "Windows SIGBREAK",
+  "status": "interrupted",
+  "exit_code": 0,
+  "shutdown_seconds": 2.25,
+  "budget": {
+    "calls": 1,
+    "tokens": 6686,
+    "estimated_cost_usd": 0.06921,
+    "usage": [
+      {
+        "model": "local-blocked-http-fixture",
+        "usage": "request-failed-reserved",
+        "input_tokens": 2590,
+        "output_tokens": 4096,
+        "estimated_cost_usd": 0.06921,
+        "http_status": null
+      }
+    ]
+  },
+  "transport_retried": false,
+  "real_provider_calls": 0,
+  "production_database_modified": false,
+  "limitations": [
+    "Local HTTP fixture, not a real paid provider",
+    "Shutdown waits for the adapter I/O timeout; remote work is not cancelled",
+    "Production LiteLLM timeout is 45 seconds; Gemini is 120 seconds"
+  ]
+}

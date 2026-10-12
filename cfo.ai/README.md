@@ -61,3 +61,21 @@ The model assumes $45 of temporary, unconfirmed hackathon credits ($20 model bud
 Heavy usage is the primary modeled risk: full allowance usage reduces contribution margin from approximately 54% to 30%. The narrative reports negative contribution when higher model costs, more retries, lower success, and full usage are combined.
 
 Before launch, measure token consumption, sandbox duration, retry costs, and verified success with actual neatlogs traces; replace assumptions with measured costs and current billing. Enforce explicit retry and dollar budgets, then reassess included allowances and overage pricing.
+
+## Observed model-cost samples — October 12, 2026
+
+[Measured run observations](measured-run-costs.json) reference four saved real run records:
+
+| Outcome | Model calls | Tokens | Estimated model cost |
+| --- | ---: | ---: | ---: |
+| Operator reduced-motion fix, PR #1 | 3 | 23,856 | $0.056541 |
+| Connected-user reduced-motion fix, PR #3 | 4 | 26,057 | $0.088683 |
+| Slider failure after three attempts | 9 | 56,151 | $0.281697 |
+| Later slider failure after three attempts | 8 | 51,247 | $0.251985 |
+
+These observations replace the claim that no run-level model measurements exist.
+They do not replace the forecast with a representative production average: this is
+a selected tiny sample, and failed-run costs also matter. Dollar amounts use
+configured rates applied to provider-reported usage, not reconciled invoices.
+Actions compute, storage, tracing, retries with unknown usage and fixed costs still
+require billing measurement. The original cfo.ai workbook remains unchanged.

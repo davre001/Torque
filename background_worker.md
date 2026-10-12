@@ -6,11 +6,16 @@ worker; keep the separate worker process running for queued jobs to execute.
 Frontend progress now reads persisted run events, including recovery and terminal
 outcomes. History status refreshes during polling; completed results expose actual
 acceptance/review records and PR links. Fixture browser tests cover the contract;
-live connected-user execution/publication is saved in `evidence/github-app/`. Browser history/disconnect remains a separate acceptance step.
+live connected-user execution/publication and user-confirmed browser history/disconnect are saved in `evidence/github-app/`.
 
 Status: implemented separate SQLite-backed worker; live remote browser execution verified. [Backend overview](backend_implementation.md) defines the API and agent behavior; [integrations](integration.md) defines external access.
 
 ## Worker progress checklist
+
+Current validation: 157 automated tests passed, one skipped. Windows signal
+delivery during blocked localhost HTTP I/O is verified without transport retry;
+the Linux workflow is prepared. This does not establish remote provider cancellation
+or actual paid-provider graceful shutdown. Successful live recovery remains pending.
 
 The worker is a separate process. FastAPI only submits jobs and reads state; it must not execute agents through `BackgroundTasks`.
 
@@ -40,6 +45,8 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Verify actual GitHub Actions cancellation; remote run 38177020201 finished cancelled.
 - [x] Verify real Windows Ctrl+Break shutdown and hard interruption during an outstanding live Claude request, using isolated workers and saved evidence.
 - [ ] Verify Linux SIGINT/SIGTERM and graceful shutdown during blocked provider calls separately.
+- [x] Verify Windows SIGBREAK during real blocked localhost HTTP I/O; preserve interruption and uncertain reservation without transport retry. This is a local provider fixture, not a paid-provider shutdown result.
+- [x] Prepare credential-free hosted Linux lifecycle and blocked-I/O checks; deployment/run verification is separate.
 
 ## Why a worker
 

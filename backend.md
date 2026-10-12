@@ -2,9 +2,14 @@
 
 Workspace update: `/workspace` now uses real session, repository, submit/status/history,
 cancel/publish, and confirmed-disconnect endpoints. Landing Connect GitHub starts OAuth.
-TypeScript and HTTP route checks pass. The connected-user issue-to-PR trial is verified; browser history/disconnect acceptance remains pending.
+TypeScript and HTTP route checks pass. Connected-user issue-to-PR, browser history and confirmed disconnect/reconnection are verified.
 
 ## Overall progress checklist
+
+Current validation: 157 automated tests passed, one skipped. Public API request
+boundaries and blocked-I/O shutdown are implemented and locally verified. Current
+credential/pattern audit and Entire target context are verified. Linux workflow
+execution and the outstanding live/public-host checks remain separate gates.
 
 - [x] Add reviewed gallery keyboard acceptance and source/input guards for the current fork revision; local baseline and positive-fixture calibration pass.
 - [x] Push the updated runner workflow and reproduce the gallery baseline on hosted Linux (Actions `38183797125`); fresh issue-to-PR verification remains separate.
@@ -32,7 +37,7 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement repository tools and isolated test execution.
 - [x] Implement Investigator, Implementer, Verifier, and local-artifact Recovery; recovery tested with controlled fixtures.
 - [x] Verify real model tracing and authenticated failure-trace readback in a controlled live recovery drill.
-- [ ] Obtain genuine Entire runtime context evidence.
+- [x] Obtain genuine Entire runtime context evidence from the mirrored fork and save live slider-run context artifacts.
 - [x] Implement verified, idempotent branch/PR publication.
 - [x] Connect the authenticated workspace to actual API state and keep simulations outside the real run path.
 - [x] Complete a live connected-user run with an installed supported source repository; evidence is in `evidence/github-app/`.
@@ -46,7 +51,7 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Audit current credential exclusion in local files/artifacts, response records and valid local Git history; implement atomic queue/spending controls.
 - [ ] Audit unknown/rotated secrets, external traces and host logs; verify public deployment controls on the actual host. See [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [ ] Verify recovery on a live GitHub repository; controlled seeded recovery is already saved.
-- [ ] Review a fresh demo task/revision after the fork PR merge; arbitrary repositories remain unsupported.
+- [x] Review fresh gallery and slider tasks/revisions after the fork PR merge; arbitrary repositories remain unsupported.
 - [x] Save the controlled hosted failure/recovery comparison and finalized readbacks.
 - [ ] Finish dashboard screenshots, demo video, and submission packaging.
 

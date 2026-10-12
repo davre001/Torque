@@ -1,6 +1,7 @@
 """Read-only local credential audit. Reports locations, never credential values."""
 import json
 import os
+import re
 import sqlite3
 import subprocess
 from datetime import datetime, timezone
@@ -28,6 +29,12 @@ def audit():
     needles = [v.encode() for v in values if len(v) >= 12]
     def leaked(data):
         return any(value in data for value in needles)
+    patterns = [re.compile(p) for p in (
+        rb'gh[pousr]_[A-Za-z0-9]{36,}', rb'github_pat_[A-Za-z0-9_]{80,}',
+        rb'AIza[A-Za-z0-9_-]{35}', rb'sk-ant-api\d+-[A-Za-z0-9_-]{48,}',
+        rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----')]
+    def detected(data):
+        return leaked(data) or any(pattern.search(data) for pattern in patterns)
     findings = []
     def git(*args):
         return subprocess.check_output(['git', *args], cwd=ROOT, stderr=subprocess.DEVNULL)
@@ -39,10 +46,10 @@ def audit():
     for path in sorted(files):
         if path.is_file():
             scanned += 1
-            if leaked(path.read_bytes()):
+            if detected(path.read_bytes()):
                 findings.append({'scope': 'file', 'location': path.relative_to(ROOT).as_posix()})
     for index, (record,) in enumerate(records):
-        if leaked(record.encode()):
+        if detected(record.encode()):
             findings.append({'scope': 'persisted-response-data', 'location': str(index)})
     refs = git('for-each-ref', '--format=%(objectname)').decode().splitlines()
     objects = git('rev-list', '--objects', 'HEAD', *refs).splitlines()
@@ -57,14 +64,14 @@ def audit():
             if len(header) != 3:
                 raise RuntimeError('Unable to inspect Git object')
             size = int(header[2]); remaining = size; tail = b''; found = False
-            overlap = max([len(v) for v in needles] + [1]) - 1
+            overlap = max([len(v) for v in needles] + [512]) - 1
             while remaining:
                 chunk = process.stdout.read(min(65536, remaining))
                 if not chunk:
                     raise RuntimeError('Incomplete Git object')
                 remaining -= len(chunk)
                 data = tail + chunk
-                if header[1] == b'blob' and leaked(data): found = True
+                if header[1] == b'blob' and detected(data): found = True
                 tail = data[-overlap:] if overlap else b''
             process.stdout.read(1)
             if header[1] == b'blob':
@@ -73,12 +80,13 @@ def audit():
         process.stdin.close()
         if process.wait(timeout=10): raise RuntimeError('Git object scan failed')
     return {'checked_at': datetime.now(timezone.utc).isoformat(),
-            'mode': 'read-only-current-credential-exclusion-audit',
+            'mode': 'read-only-current-credential-and-common-secret-pattern-audit',
             'tracked_and_artifact_files': scanned, 'persisted_response_records': len(records),
             'reachable_git_blobs': blobs, 'connection_credentials_checked': connection_tokens,
             'findings': findings, 'passed': not findings,
+            'pattern_families': ['GitHub tokens', 'Google API keys', 'Anthropic API keys', 'private-key PEM markers'],
             'limitations': ['Exact matching of currently configured secrets and decryptable user tokens only',
-                            'Unknown or rotated credentials are not covered',
+                            'Unknown or rotated credentials outside the listed patterns are not covered; matches require review',
                             'Remote Git objects, live dashboard payloads, and deployment access logs are not inspected',
                             'Broken local refs are excluded; valid refs and HEAD are scanned',
                             'Session and CSRF values intentionally returned to their owner are not secret scan targets']}

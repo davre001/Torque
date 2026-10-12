@@ -38,8 +38,8 @@ The default Docker runner requires Docker locally and fails preflight when unava
 
 Alternatively, set `TORQUE_RUNNER=github-actions` and follow
 [remote Linux runner setup](REMOTE_RUNNER.md). That path needs no local Docker or rented
-server. The remote workflow must be pushed and an Actions-scoped token configured first;
-it has not yet passed a live acceptance run.
+server. The remote workflow is pushed and actual Linux/browser acceptance runs are
+saved. New repositories still require reviewed recipes and independent calibration.
 
 Run the API and worker in separate terminals:
 

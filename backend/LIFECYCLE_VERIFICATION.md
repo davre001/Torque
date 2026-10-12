@@ -91,7 +91,7 @@ passing; a labelled temporary positive calibration fixture passed all five.
 See `evidence/slider/acceptance-validation.json`. Profile, compressed two-file
 transport, immutable source gate, workflow capability check, and a dedicated
 `backend/recipes.slider.json` policy are implemented. Deployment and hosted
-baseline are verified. No agent attempt or live recovery has run.
+baseline are verified. Failed live agent/recovery attempts are recorded below.
 
 The positive fixture is only test calibration and must never seed the live run.
 A naturally failed attempt followed by real hosted-evidence-driven correction
@@ -136,4 +136,28 @@ were exhausted; no PR was created. Evidence, hashes, and diagnosis are saved
 in `evidence/slider/98557585701043f6b452f161b8dd0f96/`.
 The failed final patch omitted previously successful changes after reset to
 pinned originals. Implementation instructions now explicitly require a complete
-solution each retry. This prompt correction is not yet live-verified.
+solution each retry. Later run `2aa4615e4cbf48deadd99a009b8da11b` retained
+the full fix but failed keyboard boundaries in all three attempts (4/5 each).
+Improved diagnostics and actual replacement context are pushed; a fresh live
+recovery trial remains blocked by daily admission limits.
+
+## Graceful shutdown during blocked localhost provider I/O
+
+The real Windows SIGBREAK probe saved
+`evidence/lifecycle/806317a39ff24eee8028548b8edf5cef/report.json`.
+A synchronous HTTP request was outstanding against a deliberately nonresponding
+localhost fixture. OS signal delivery requested worker shutdown; after the fixture
+adapter's two-second timeout, the worker exited with code 0 and persisted
+`interrupted`. Exactly one uncertain reservation was retained and no transport
+retry occurred. No model calls, PR writes or production database changes occurred.
+
+The provider error path now checks shutdown/cancellation before retrying or marking
+the run failed. This is real blocked HTTP I/O with a fixture provider, not evidence
+of graceful termination during a real paid provider request. Production waits for
+the adapter timeout (LiteLLM 45 seconds, Gemini 120 seconds); client interruption
+does not establish server-side provider cancellation or billing cancellation.
+
+Credential-free Linux verification is prepared in
+`.github/workflows/torque-lifecycle-checks.yml`. It runs actual SIGINT/SIGTERM
+lifecycle checks and SIGTERM during blocked local HTTP I/O, using isolated databases.
+Hosted execution remains pending until its reports are inspected.

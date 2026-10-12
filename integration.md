@@ -2,11 +2,18 @@
 
 Frontend API wiring is now implemented in `/workspace`: credentialed requests, CSRF,
 persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
-The labeled landing preview remains separate. A live connected-user issue-to-PR run is saved under `evidence/github-app/`; disconnect/history acceptance remains pending.
+The labeled landing preview remains separate. Live connected-user issue-to-PR and user-confirmed disconnect/history evidence are saved under `evidence/github-app/`.
 
 Status: live operator/provider/browser/PR evidence, finalized trace readback, and controlled live hosted recovery are saved. Live connected-user execution and publication are verified in the saved Claude-only trial. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
 
 ## Integration progress checklist
+
+Current validation: 157 automated tests passed, one skipped. Current credential
+and common-pattern audit passed (395 files, 160 stored response records, 769 valid
+local Git blobs). Isolated Windows blocked-I/O shutdown is verified; hosted Linux
+verification is prepared. Remaining non-submission gates are successful unseeded
+live recovery, real-provider graceful shutdown, actual publication/disconnect
+fencing, external credentials/log review and acceptance on a real public host.
 
 - [x] Prepare a pinned fork gallery profile and independently calibrate keyboard/alt/mouse browser assertions locally; see [gallery evidence](backend/GALLERY_VERIFICATION.md).
 - [x] Deploy the gallery-capable workflow and verify its hosted baseline (Actions `38183797125`, three expected assertions fail, mouse regression passes).
@@ -32,24 +39,27 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Verify finalized application traces and hosted recovery in an explicitly seeded controlled live drill; live repository recovery remains pending.
 - [x] Verify GitHub source/destination identities and token permissions; select the demo fork.
 - [x] Implement issue fetching, authenticated branch writes, and idempotent verified PR publication.
-- [ ] Verify authorization separately before any upstream public contribution.
+- [ ] Optional upstream contribution: verify authorization before contributing outside the controlled fork. This is not required for the current fork-only release.
 - [x] Implement supported Entire search/code context and save actual target-repository runtime evidence in the live slider trial.
 - [x] Review shared hook/settings files and commit appropriate configuration without local state.
 - [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
 - [x] Verify a live connected-user browser run with source installation access and a supported recipe; run `b220ce7e5cda4e14963c74fc04ad8711`, PR #3.
 - [x] Show installed repository eligibility and reject browser submissions without an enabled source and reviewed test recipe before queueing.
 - [x] Check configured credentials and decrypted App user token are absent from exported successful user-run evidence.
-- [ ] Complete the broader credential audit across responses, sandbox environments, Git history, traces, and artifacts.
-- [ ] Replace financial cost assumptions with measured run data when available.
+- [x] Audit current credentials and common secret patterns in local files/artifacts, stored response data and valid local Git history; review sandbox/dispatch exclusion and trace masking.
+- [ ] Verify external trace/dashboard and deployment-log exclusion on the actual public host.
+- [x] Add observed successful/failed model-cost samples in `cfo.ai/measured-run-costs.json`; preserve original forecast assumptions and distinguish estimated model cost from full billed cost.
 
 Scope update: Connect GitHub leads to the authenticated workspace and confirmed disconnect. GitHub App identity/installation onboarding is implemented and verified in the controlled trial. The personal-token path remains for local operator development. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
 
 - [x] Configure GitHub App user authorization and repository installations for the controlled connected-user flow.
 - [x] Implement connect/callback/session/disconnect endpoints, secure sessions, and per-user repository/run ownership checks.
 - [x] Implement publication/disconnect fencing and revocation checks; mocked tests pass.
-- [ ] Verify live browser disconnect and publication fencing with real credentials.
+- [x] Verify live browser confirmed disconnect and reconnect without refresh; user-confirmed evidence is saved.
+- [ ] Verify disconnect fencing during an actual in-flight publication; current fencing and crash checks are separate.
 - [x] Verify browser history persistence after refresh and reconnection; user confirmed PR #3 remains.
-- [ ] Add public queue/spending controls and complete deployment acceptance.
+- [x] Add atomic public queue/spending reservations and opt-in HTTP body/rate/host limits with disabled public operator access.
+- [ ] Complete actual HTTPS-host, second-user and operational deployment acceptance.
 - [ ] Verify recovery on a live GitHub repository; the existing hosted recovery drill is controlled and seeded.
 
 ## Configuration and provider routing
@@ -168,15 +178,16 @@ reservations. Each admission reserves the full TORQUE_MAX_COST_USD cap. Failed o
 cancelled runs retain reservations until the next UTC day; idempotent retries do
 not reserve twice. Existing historical runs have no retrospective reservation.
 These limits cover model estimates, not Actions/storage billing or HTTP login
-rate limits. Single shared SQLite deployment only; public deployment acceptance
-and broader credential audit remain pending. Entire runtime search currently
-requires operator CLI login; no target context or live recovery is claimed yet.
+rate limits by themselves. Opt-in public HTTP controls are implemented separately.
+Single shared SQLite deployment only; public deployment acceptance remains pending.
+Entire runtime search uses the locally authenticated CLI; target context is verified,
+but successful unseeded live recovery remains pending.
 
 Entire runtime adapter is implemented and disabled by default (`TORQUE_ENTIRE_CONTEXT=1` opts in).
 It searches only the named target repository, saves sanitized result references, and
 labels historical context separately from the pinned source revision. CLI login was
-verified against Torque; the demo fork is not mirrored, so target-context and live
-repository recovery acceptance remain unchecked.
+verified against Torque and the mirrored demo fork. Actual target context and live
+runtime artifacts are saved; successful live recovery remains unchecked.
 
 ## Entire target context readback verified
 
@@ -193,7 +204,7 @@ Live repository recovery and broader credential/deployment acceptance remain pen
 Slider issue #7: dedicated reviewed profile and workflow deployed at `6b26912`;
 hosted original-source baseline reproduced four assertions and passed one
 regression group. The recipe is `backend/recipes.slider.json`, separate from
-the completed gallery profile. No live agent or recovery attempt has run yet.
+the completed gallery profile. Later live attempts are recorded below.
 
 Live slider run `98557585701043f6b452f161b8dd0f96` retrieved runtime Entire
 context and attempted genuine recovery twice. The second recovery fetched its
@@ -201,7 +212,8 @@ actual failed Neatlogs trace. All three attempts failed independent verification
 (4/5, 4/5, 1/5), so successful live repository recovery remains unchecked. No PR
 was created. Exported evidence and diagnosis are in evidence/slider/98557585701043f6b452f161b8dd0f96/.
 The prompt now explains that recovery retries must rebuild the whole fix from
-pinned originals; that change awaits a fresh live trial.
+pinned originals. Subsequent run `2aa4615e4cbf48deadd99a009b8da11b` preserved
+the complete fix but still failed keyboard boundaries in all three attempts (4/5).
 
 Recovery diagnostics update (October 12, 2026): the slider suite now reports
 key sequence, previous value, expected value, and actual value without changing
@@ -211,8 +223,9 @@ The labelled calibration fixture still passes 5/5. Recovery receives bounded
 complete replacement strings and instructions distinguishing test-group counts
 from failing assertion indices. Sanitized diagnostics are emitted on the Neatlogs
 acceptance span as `torque.acceptance_diagnostics`; finalized trace identity and
-local diagnostics remain separate evidence sources. A new hosted trial is pending
-publication of the updated suite. Successful live recovery remains unchecked.
+local diagnostics remain separate evidence sources. The updated suite is pushed;
+the fresh trial is blocked by the reached daily admission quota. Successful live
+recovery remains unchecked.
 
 ## Credential and deployment audit — October 12, 2026
 

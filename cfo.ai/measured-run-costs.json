@@ -1,0 +1,51 @@
+{
+  "mode": "observed-selected-demo-cost-samples",
+  "samples": [
+    {
+      "run_id": "6634790aa28943629348e02914d9b56c",
+      "evidence": "evidence/runs/6634790aa28943629348e02914d9b56c/run.json",
+      "status": "completed",
+      "verified": true,
+      "model_calls": 3,
+      "reported_or_reserved_tokens": 23856,
+      "estimated_model_usd": 0.056541,
+      "attempts": 1
+    },
+    {
+      "run_id": "b220ce7e5cda4e14963c74fc04ad8711",
+      "evidence": "evidence/github-app/b220ce7e5cda4e14963c74fc04ad8711/run.json",
+      "status": "completed",
+      "verified": true,
+      "model_calls": 4,
+      "reported_or_reserved_tokens": 26057,
+      "estimated_model_usd": 0.088683,
+      "attempts": 1
+    },
+    {
+      "run_id": "98557585701043f6b452f161b8dd0f96",
+      "evidence": "evidence/slider/98557585701043f6b452f161b8dd0f96/run.json",
+      "status": "failed",
+      "verified": false,
+      "model_calls": 9,
+      "reported_or_reserved_tokens": 56151,
+      "estimated_model_usd": 0.281697,
+      "attempts": 3
+    },
+    {
+      "run_id": "2aa4615e4cbf48deadd99a009b8da11b",
+      "evidence": "evidence/slider/2aa4615e4cbf48deadd99a009b8da11b/run.json",
+      "status": "failed",
+      "verified": false,
+      "model_calls": 8,
+      "reported_or_reserved_tokens": 51247,
+      "estimated_model_usd": 0.251985,
+      "attempts": 3
+    }
+  ],
+  "limitations": [
+    "Selected small sample, not production unit economics or a success-rate estimate",
+    "Costs use configured rates, not provider invoice reconciliation",
+    "Actions, sandbox, tracing, storage and team costs are not measured here",
+    "Original cfo.ai forecast workbook is preserved; pricing/revenue/runway remain assumptions"
+  ]
+}

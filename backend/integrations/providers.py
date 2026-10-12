@@ -119,6 +119,9 @@ class StructuredProvider:
                 self.budget.records.append({"model":getattr(self.adapter,"model","unknown"),"usage":"request-failed-reserved",
                     "input_tokens":input_bound,"output_tokens":output_bound,
                     "estimated_cost_usd":cost,"http_status":safe_code})
+                # A shutdown/cancellation during synchronous I/O takes precedence
+                # over a timeout/provider failure; retain its uncertain reservation.
+                self.checkpoint()
                 retryable = code in {429,500,502,503,504} or isinstance(exc,TimeoutError)
                 if retryable and attempt < self.transport_retries:
                     continue
