@@ -1,0 +1,86 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4RQW4YCNY9TBRQBQR800EEQ",
+  "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-12T19:03:32.9316495Z",
+  "branch": "main",
+  "checkpoints_count": 8,
+  "save_step_count": 2,
+  "files_touched": [
+    "demo/motion/README.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "b0bc4cb86a6f",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 3167741,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 231731584,
+    "output_tokens": 503021,
+    "api_call_count": 1736,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 337
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-12T19:03:29.7840163Z",
+    "agent_lines": 40,
+    "agent_removed": 0,
+    "human_added": 3597,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 3638,
+    "total_lines_changed": 3638,
+    "agent_percentage": 1.0995052226498077,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 396,
+      "user_lines_removed": 8,
+      "agent_lines_added": 4148,
+      "agent_lines_removed": 1985,
+      "user_added_per_file": {
+        "backend/DATABASE_OPERATIONS.md": 92,
+        "backend/RENDER_DEPLOYMENT.md": 5,
+        "backend/acceptance_telemetry_probe.py": 16,
+        "backend/artifact_storage_probe.py": 40,
+        "backend/integrations/test_diagnostics.py": 41,
+        "evidence/deployment/database-backup-checks.json": 18,
+        "evidence/deployment/neon-role-checks.json": 9,
+        "evidence/deployment/private-artifact-checks.json": 32,
+        "evidence/remote-acceptance-instrumentation/bb8ee37b8d644425b7e1edc9ff7691d2/README.md": 5,
+        "evidence/remote-acceptance-instrumentation/bb8ee37b8d644425b7e1edc9ff7691d2/baseline-result.json": 21,
+        "evidence/remote-acceptance-instrumentation/bb8ee37b8d644425b7e1edc9ff7691d2/fixed-result.json": 37,
+        "evidence/remote-acceptance-instrumentation/bb8ee37b8d644425b7e1edc9ff7691d2/manifest.json": 30,
+        "frontend/ui/lib/api.ts": 4,
+        "render.yaml": 2,
+        "tests/acceptance/torque_reporting.py": 39,
+        "tests/test_acceptance_diagnostics.py": 5
+      },
+      "user_removed_per_file": {
+        "backend/acceptance_telemetry_probe.py": 5,
+        "evidence/remote-acceptance-instrumentation/bb8ee37b8d644425b7e1edc9ff7691d2/README.md": 2,
+        "frontend/ui/lib/api.ts": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 10,
+      "user_lines_removed": 1,
+      "agent_lines_added": 3626,
+      "agent_lines_removed": 36,
+      "user_added_per_file": {
+        "backend/database_roles.py": 9,
+        "demo/motion/skills/motion-art-direction/references/direction-playbook.md": 1
+      },
+      "user_removed_per_file": {
+        "demo/motion/skills/motion-art-direction/references/direction-playbook.md": 1
+      }
+    }
+  ]
+}
