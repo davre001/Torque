@@ -15,17 +15,29 @@ def audit():
     from backend.runtime import SECRET_NAMES
     values = {os.getenv(name, '') for name in SECRET_NAMES} - {''}
     connection_tokens = 0
-    with sqlite3.connect(settings.database) as db:
-        tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    from backend.store import Store
+    store = Store(settings.database)
+    with store.transaction() as db:
+        query = "SELECT table_name FROM information_schema.tables WHERE table_schema=current_schema()" if store.database.postgres else "SELECT name FROM sqlite_master WHERE type='table'"
+        tables = {r[0] for r in db.execute(query)}
         if 'github_connections' in tables:
             from cryptography.fernet import Fernet
-            cipher = Fernet(os.environ['TORQUE_SESSION_ENCRYPTION_KEY'].encode())
+            cipher = None
             for (encrypted,) in db.execute('SELECT token FROM github_connections WHERE token != ?', ('',)):
+                if cipher is None:
+                    cipher = Fernet(os.environ['TORQUE_SESSION_ENCRYPTION_KEY'].encode())
                 values.add(cipher.decrypt(encrypted.encode()).decode())
                 connection_tokens += 1
         records = list(db.execute('SELECT result FROM runs'))
         records += list(db.execute('SELECT record FROM attempts'))
         records += list(db.execute('SELECT data FROM events'))
+        artifact_records = []
+        oversized_artifacts = 0
+        if 'artifact_records' in tables:
+            oversized_artifacts = db.execute('SELECT COUNT(*) FROM artifact_records WHERE length(content)>2097152').fetchone()[0]
+            # Bound each record read; malformed oversized content is a finding.
+            artifact_records = list(db.execute('SELECT content FROM artifact_records WHERE length(content)<=2097152'))
+        records += artifact_records
     needles = [v.encode() for v in values if len(v) >= 12]
     def leaked(data):
         return any(value in data for value in needles)
@@ -36,6 +48,8 @@ def audit():
     def detected(data):
         return leaked(data) or any(pattern.search(data) for pattern in patterns)
     findings = []
+    if oversized_artifacts:
+        findings.append({'scope': 'durable-artifacts', 'location': 'oversized-records'})
     def git(*args):
         return subprocess.check_output(['git', *args], cwd=ROOT, stderr=subprocess.DEVNULL)
     tracked = git('ls-files', '-z').decode().split('\0')
@@ -82,6 +96,7 @@ def audit():
     return {'checked_at': datetime.now(timezone.utc).isoformat(),
             'mode': 'read-only-current-credential-and-common-secret-pattern-audit',
             'tracked_and_artifact_files': scanned, 'persisted_response_records': len(records),
+            'durable_artifact_records': len(artifact_records),
             'reachable_git_blobs': blobs, 'connection_credentials_checked': connection_tokens,
             'findings': findings, 'passed': not findings,
             'pattern_families': ['GitHub tokens', 'Google API keys', 'Anthropic API keys', 'private-key PEM markers'],

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @dataclass(frozen=True)
 class Settings:
-    database: Path
+    database: Path | str
     operator_token: str = ""
     lease_seconds: int = 60
     heartbeat_seconds: int = 10
@@ -26,7 +26,7 @@ class Settings:
     def load(cls):
         load_dotenv(ROOT / ".env", override=False)
         return cls(
-            Path(os.getenv("TORQUE_DATABASE", str(ROOT / "var" / "torque.sqlite3"))).resolve(),
+            os.getenv('TORQUE_DATABASE_URL') or Path(os.getenv("TORQUE_DATABASE", str(ROOT / "var" / "torque.sqlite3"))).resolve(),
             os.getenv("TORQUE_OPERATOR_TOKEN", ""),
             int(os.getenv("TORQUE_LEASE_SECONDS", "60")),
             int(os.getenv("TORQUE_HEARTBEAT_SECONDS", "10")),

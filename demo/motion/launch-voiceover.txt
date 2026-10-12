@@ -1,0 +1,23 @@
+An issue is easy to report. A fix you can trust takes more.
+
+Meet Torque. An agent that turns GitHub issues into tested, verified pull requests, with bounded recovery when an attempt fails.
+
+Torque coordinates investigation, implementation, and independent verification. It diagnoses the issue, prepares a patch, runs acceptance tests, and checks the result against the original requirements.
+
+Here is a real example. This website kept playing its demo video, even when a visitor had requested reduced motion. Torque reproduced the accessibility bug and implemented a targeted fix.
+
+The saved run completed. Three independent browser checks passed. The verifier approved the change. And Torque produced this draft pull request, with a reviewable patch.
+
+But reliable agents also need failures you can understand.
+
+Neatlogs' critical-incidents feature identified a gap in our observability: failed acceptance tests exposed a generic error, without individual checks or useful stack traces.
+
+We added named test spans, captured output, and bounded failure diagnostics. In a controlled verification, a deliberately failing check now exposed its exact assertion: expected ten, actual eight.
+
+Correcting the fixture made the unchanged check pass. We also verified the updated remote browser workflow, merged the instrumentation fix, and recorded the evidence in the resolved incident.
+
+Entire captured agent-assisted development in checkpoints linked to commits, preserving the work behind our changes.
+
+And with C F O dot A I, we modeled pricing, inference costs, recovery costs, and financial scenarios. Those forecasts are planning assumptions, informed by a small sample of measured runs.
+
+Torque. From issue to evidence. From patch to verified pull request.

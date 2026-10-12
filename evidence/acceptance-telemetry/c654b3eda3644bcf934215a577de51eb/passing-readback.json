@@ -1,0 +1,31 @@
+{
+  "trace_id": "b08c025e327bcaf698b4b1348e57a2e8",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "OK",
+  "total_tokens": 0,
+  "llm_calls": 0,
+  "spans": [
+    {
+      "spanId": "602e3548a4e14bab",
+      "parentSpanId": null,
+      "spanName": "acceptance-diagnostics-passing-check",
+      "spanType": "WORKFLOW",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "3dc1a5bb652b1f67",
+      "parentSpanId": "602e3548a4e14bab",
+      "spanName": "acceptance-test-case",
+      "spanType": "TOOL",
+      "status": "OK",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    }
+  ]
+}

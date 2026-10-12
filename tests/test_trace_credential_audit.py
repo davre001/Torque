@@ -8,6 +8,7 @@ from backend.store import Store
 def test_raw_trace_secret_is_detected_without_exporting_payload(tmp_path, monkeypatch, capsys):
     store = Store(tmp_path/'db'); store.initialize()
     with store.transaction() as db:
+        db.execute('DROP TABLE github_connections')
         db.execute('CREATE TABLE github_connections (token TEXT)')
     monkeypatch.setattr(Settings, 'load', lambda: Settings(store.path))
     monkeypatch.setattr(audit, 'ROOT', tmp_path)

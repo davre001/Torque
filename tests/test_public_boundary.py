@@ -54,3 +54,22 @@ def test_public_api_minimal_health_host_check_and_no_operator_access(tmp_path, m
         assert client.get('/api/runs', headers={'Authorization':'Bearer fixture'}).status_code == 401
         assert client.get('/api/runs').status_code == 401
         assert client.get('/health', headers={'Host':'attacker.example.test'}).status_code == 400
+
+
+def test_public_proxy_secret_and_secure_oauth_cookie(tmp_path,monkeypatch):
+    from backend.api import create_app
+    values={'TORQUE_PUBLIC_MODE':'1','GITHUB_APP_ID':'12','GITHUB_APP_CLIENT_ID':'fixture',
+            'GITHUB_APP_CLIENT_SECRET':'fixture','TORQUE_SESSION_ENCRYPTION_KEY':Fernet.generate_key().decode(),
+            'GITHUB_APP_CALLBACK_URL':'https://frontend.example.test/api/auth/github/callback',
+            'TORQUE_FRONTEND_ORIGIN':'https://frontend.example.test',
+            'TORQUE_BACKEND_ORIGIN':'https://backend.example.test','TORQUE_PROXY_SECRET':'fixture-proxy-secret'}
+    for key,value in values.items():monkeypatch.setenv(key,value)
+    app=create_app(Settings(tmp_path/'db'))
+    with TestClient(app,base_url='https://backend.example.test') as client:
+        assert client.get('/health').status_code==200
+        assert client.get('/api/auth/github/connect').status_code==403
+        response=client.get('/api/auth/github/connect',headers={'x-torque-proxy-secret':'fixture-proxy-secret'},follow_redirects=False)
+        assert response.status_code==302
+        cookie=response.headers['set-cookie']
+        assert '__Host-torque_oauth' in cookie and 'Secure' in cookie and 'HttpOnly' in cookie
+        assert 'Domain=' not in cookie

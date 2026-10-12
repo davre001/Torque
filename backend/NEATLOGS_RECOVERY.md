@@ -1,5 +1,51 @@
 # Neatlogs readback and recovery
 
+## Acceptance diagnostics incident: October 12 instrumentation change
+
+Incident `d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d` identified insufficient
+per-test detail, not an established root cause for the underlying failed patches.
+Independent suites now report each executed check by name, with actual duration,
+bounded stdout/stderr, and a failure stack trace. The coordinating worker exports
+these as child spans of the acceptance attempt, after subprocess completion.
+`test.execution_duration_ms` is the execution duration; span wall time represents
+reporting, not the original browser test duration. Known credentials are redacted.
+Legacy results and infrastructure failures without case reports produce an
+explicit runner-diagnostics child rather than invented individual test results.
+The remote workflow uses unbuffered output, and the suites print named PASS/FAIL
+records and bounded diagnostics. The reporting helper is mounted read-only and
+included in the acceptance suite integrity digest.
+
+Local verification: 59 targeted tests passed, including an actual failing
+subprocess assertion, a passing rerun, child span parentage, stacktrace capture,
+bounded output and credential redaction. Hosted verification passed on October 12:
+failure trace `3d1061326c1185af4bec2113b7ebe57d` and passing trace
+`b08c025e327bcaf698b4b1348e57a2e8`. MCP full-context readback verified the named
+child check, captured stderr, and actual assertion stack trace. The SDK requires
+canonical `neatlogs.tool.output` to preserve these diagnostics in hosted payloads;
+arbitrary test attributes alone were absent from hosted readback. The Public API
+returns span summaries; the probe uses MCP for full payload verification.
+MCP reports successful spans as SUCCESS; the public summary reports OK.
+The user merged PR #1 on October 12 at commit
+`ad0cf740f8f9166d33ce625618eec31c4ccbfbac`. All 15 instrumentation files match the
+verified PR revision. Remote reduced-motion browser verification reproduced the
+baseline failure with a named check and stack trace (Actions `38259846032`) and
+passed all three checks after applying the saved patch (Actions `38260001074`),
+with an unchanged suite digest. Browser-derived logs were retained locally, not
+uploaded to Neatlogs. The incident is now resolved with these verification limits
+in its resolution note. Gallery/slider and deployed end-to-end agent execution
+were not exercised by this verification.
+
+After authorizing the upload of controlled test diagnostics, run this no-model,
+no-GitHub probe to verify hosted attributes and export dashboard trace IDs:
+
+```powershell
+.\.venv\Scripts\python.exe -m backend.acceptance_telemetry_probe
+```
+
+Existing traces are immutable evidence: instrumentation applies to new runs.
+No detection rate can be inferred from the reported invalid 1.7/1.8 rate values;
+treat those metrics as unavailable.
+
 The worker uses the SDK key only for ingestion at `https://ingest.neatlogs.com`.
 An expiring `NEATLOGS_TOKEN` with `context:read` and `observability:read`, bound
 to the project as Project Viewer, reads `https://app.neatlogs.com/api/v1/public`.

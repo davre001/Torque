@@ -1,0 +1,57 @@
+name: Torque agent worker
+run-name: Torque agent ${{ inputs.run_id }} ${{ inputs.request_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: true
+        type: string
+      request_id:
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: torque-agent-worker
+  cancel-in-progress: false
+jobs:
+  worker:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    environment: torque-production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Process only the assigned run
+        env:
+          ASSIGNED_RUN_ID: ${{ inputs.run_id }}
+          TORQUE_DATABASE_URL: ${{ secrets.TORQUE_DATABASE_URL }}
+          TORQUE_SESSION_ENCRYPTION_KEY: ${{ secrets.TORQUE_SESSION_ENCRYPTION_KEY }}
+          GITHUB_APP_ID: ${{ vars.GITHUB_APP_ID }}
+          GITHUB_APP_CLIENT_ID: ${{ vars.GITHUB_APP_CLIENT_ID }}
+          GITHUB_APP_CLIENT_SECRET: ${{ secrets.GITHUB_APP_CLIENT_SECRET }}
+          GITHUB_APP_CALLBACK_URL: ${{ vars.GITHUB_APP_CALLBACK_URL }}
+          TORQUE_FRONTEND_ORIGIN: ${{ vars.TORQUE_FRONTEND_ORIGIN }}
+          LITELLM_API_KEY: ${{ secrets.LITELLM_API_KEY }}
+          LITELLM_BASE_URL: ${{ vars.LITELLM_BASE_URL }}
+          LITELLM_MODEL: ${{ vars.LITELLM_MODEL }}
+          LITELLM_INPUT_USD_PER_MILLION: ${{ vars.LITELLM_INPUT_USD_PER_MILLION }}
+          LITELLM_OUTPUT_USD_PER_MILLION: ${{ vars.LITELLM_OUTPUT_USD_PER_MILLION }}
+          NEATLOGS_API_KEY: ${{ secrets.NEATLOGS_API_KEY }}
+          NEATLOGS_TOKEN: ${{ secrets.NEATLOGS_TOKEN }}
+          NEATLOGS_PROJECT_ID: ${{ vars.NEATLOGS_PROJECT_ID }}
+          TORQUE_ACTIONS_TOKEN: ${{ secrets.TORQUE_ACTIONS_TOKEN }}
+          TORQUE_ACTIONS_REPOSITORY: davre001/Torque
+          TORQUE_ACTIONS_REF: main
+          TORQUE_RECIPES_FILE: ${{ vars.TORQUE_RECIPES_FILE }}
+          TORQUE_PROVIDER_MODE: claude-only
+          TORQUE_RUNNER: github-actions
+          TORQUE_ENTIRE_CONTEXT: '0'
+        run: |
+          python -c 'import os; from backend.database import Database; d = Database(os.environ["TORQUE_DATABASE_URL"]); assert d.postgres, "Cloud worker requires PostgreSQL"'
+          python -m backend worker --run-id "$ASSIGNED_RUN_ID"

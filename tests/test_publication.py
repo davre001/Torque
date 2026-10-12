@@ -54,6 +54,31 @@ def test_artifact_tampering_blocks_publication(tmp_path):
         verified_files(run,recipe,tmp_path/'workspaces',tmp_path/'artifacts')
 
 
+def test_cloud_publication_retrieves_verified_content_without_workspace(tmp_path):
+    import shutil
+    from backend.artifacts import Artifacts
+    run,recipe=workspace(tmp_path)
+    local=Store(tmp_path/'db');local.initialize()
+    with local.transaction() as db:
+        db.execute('INSERT INTO users VALUES(?,?,?)',('operator','operator',0))
+        db.execute('INSERT INTO runs(run_id,user_id,issue_url,status,created_at,updated_at) VALUES(?,?,?,?,?,?)',
+                   (run['run_id'],'operator',run['issue_url'],'ready_to_publish',0,0))
+    store=SimpleNamespace(database=SimpleNamespace(postgres=True),transaction=local.transaction)
+    artifacts=Artifacts(tmp_path/'artifacts'/run['run_id'],store=store)
+    entries=[]
+    for entry in run['result']['artifacts']:
+        content=json.loads((artifacts.root/entry['name']).read_text())
+        entries.append(artifacts.write(entry['name'][:-5],content))
+    entries.append(artifacts.write('verified-context',{'index.html':{'content':'fixed\n'}}))
+    run['result']['artifacts']=entries
+    shutil.rmtree(tmp_path/'workspaces');shutil.rmtree(tmp_path/'artifacts')
+    assert verified_files(run,recipe,store=store)=={'index.html':'fixed\n'}
+    with local.transaction() as db:
+        db.execute('DELETE FROM artifact_records WHERE name=?',('verified-context.json',))
+    with pytest.raises(Exception,match='unavailable'):
+        verified_files(run,recipe,store=store)
+
+
 def test_existing_windows_nested_patch_hash_can_be_published(tmp_path):
     run,recipe=workspace(tmp_path)
     root=tmp_path/'workspaces'/run['run_id']
@@ -178,7 +203,7 @@ def test_invalid_destination_does_not_lock_first_request(tmp_path,monkeypatch):
     state,client=github_fixture(unrelated=True)
     monkeypatch.setenv('TORQUE_ALLOWED_REPOSITORIES','source/demo')
     monkeypatch.setattr(publication,'load_recipes',lambda:{'source/demo':object()})
-    monkeypatch.setattr(publication,'verified_files',lambda *args:{'index.html':'fixed\n'})
+    monkeypatch.setattr(publication,'verified_files',lambda *args,**kwargs:{'index.html':'fixed\n'})
     monkeypatch.setattr(publication,'Publisher',lambda token,destination:Publisher('fixture-key',destination,client))
     with pytest.raises(Conflict,match='not the verified source'):
         publication.publish_run(store,run_id,destination=DEST)

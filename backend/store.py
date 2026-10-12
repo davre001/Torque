@@ -1,4 +1,4 @@
-"""Durable SQLite queue with short transactions and fenced worker writes."""
+"""Durable SQLite/PostgreSQL queue with short transactions and fenced writes."""
 from contextlib import contextmanager
 import json
 from pathlib import Path
@@ -8,28 +8,32 @@ import uuid
 from backend.models import Conflict, AdmissionDenied, LeaseLost, Status, TERMINAL
 
 class Store:
-    def __init__(self, path: Path, clock=time.time):
-        self.path, self.clock = Path(path), clock
+    def __init__(self, path: Path | str, clock=time.time):
+        from backend.database import Database
+        self.database = Database(path)
+        self.path, self.clock = self.database.target, clock
 
     @contextmanager
     def transaction(self):
-        db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
-        db.row_factory = sqlite3.Row
-        try:
-            db.execute("PRAGMA foreign_keys=ON")
-            db.execute("BEGIN IMMEDIATE")
+        with self.database.transaction() as db:
             yield db
-            db.commit()
-        except BaseException:
-            db.rollback()
-            raise
-        finally:
-            db.close()
 
-    def initialize(self):
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.path) as db:
-            db.execute("PRAGMA journal_mode=WAL")
+    def initialize(self, migrate=False):
+        if self.database.postgres and not migrate:
+            with self.transaction() as db:
+                version=db.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
+                if version != 1:
+                    raise ValueError('Run database migrations with the migration credential first')
+            return
+        if not self.database.postgres:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            with sqlite3.connect(self.path) as connection:
+                connection.execute('PRAGMA journal_mode=WAL')
+        with self.transaction() as db:
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY)')
+            version = db.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
+            if version is not None and version > 1:
+                raise ValueError('Database schema is newer than this application')
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS users (
                     id TEXT PRIMARY KEY, github_login TEXT, created_at REAL NOT NULL);
@@ -58,7 +62,19 @@ class Store:
                     run_id TEXT PRIMARY KEY REFERENCES runs(run_id),
                     user_id TEXT NOT NULL, created_at REAL NOT NULL, cost_usd REAL NOT NULL);
                 PRAGMA user_version=1;
+                CREATE TABLE IF NOT EXISTS dispatches (
+                    run_id TEXT PRIMARY KEY REFERENCES runs(run_id), request_id TEXT NOT NULL,
+                    state TEXT NOT NULL, owner TEXT, lease_until REAL,
+                    attempts INTEGER NOT NULL DEFAULT 0, updated_at REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS artifact_records (
+                    run_id TEXT NOT NULL REFERENCES runs(run_id), name TEXT NOT NULL,
+                    sha256 TEXT NOT NULL, content TEXT NOT NULL, PRIMARY KEY(run_id,name));
+                CREATE TABLE IF NOT EXISTS oauth_states (hash TEXT PRIMARY KEY, verifier TEXT NOT NULL, expires REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS github_connections (user_id TEXT PRIMARY KEY, login TEXT NOT NULL, token TEXT NOT NULL, expires REAL NOT NULL, revoked INTEGER NOT NULL DEFAULT 0);
+                CREATE TABLE IF NOT EXISTS browser_sessions (hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, csrf TEXT NOT NULL, expires REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS http_admission (window INTEGER, actor TEXT, count INTEGER NOT NULL, PRIMARY KEY(window,actor));
             """)
+            db.execute('INSERT OR IGNORE INTO schema_migrations VALUES(1)')
 
     def _event(self, db, run_id, data):
         db.execute("INSERT INTO events(run_id,created_at,data) VALUES(?,?,?)", (run_id,self.clock(),json.dumps(data)))
@@ -85,6 +101,8 @@ class Store:
             run_id = uuid.uuid4().hex
             db.execute("INSERT INTO runs(run_id,user_id,issue_url,status,created_at,updated_at,idempotency_key) VALUES(?,?,?,?,?,?,?)", (run_id,user_id,issue_url,Status.QUEUED,self.clock(),self.clock(),idempotency_key))
             db.execute("INSERT INTO jobs(run_id,state) VALUES(?, 'queued')", (run_id,))
+            db.execute('INSERT INTO dispatches(run_id,request_id,state,updated_at) VALUES(?,?,?,?)',
+                       (run_id,uuid.uuid4().hex,'pending',self.clock()))
             if admission:
                 db.execute("INSERT INTO admission_reservations VALUES(?,?,?,?)",(run_id,user_id,self.clock(),admission.reserve_usd))
             self._event(db,run_id,{"status":"queued"})
@@ -109,7 +127,7 @@ class Store:
         with self.transaction() as db:
             return [{"id":r["id"],"created_at":r["created_at"],**json.loads(r["data"])} for r in db.execute("SELECT * FROM events WHERE run_id=? AND id>? ORDER BY id LIMIT 100", (run_id,after))]
 
-    def claim(self, lease_seconds):
+    def claim(self, lease_seconds, run_id=None):
         with self.transaction() as db:
             expired = db.execute("SELECT run_id FROM jobs WHERE state='running' AND lease_until<=?", (self.clock(),)).fetchall()
             for row in expired:
@@ -119,7 +137,10 @@ class Store:
             # Prototype concurrency is one across worker processes, not one per process.
             if db.execute("SELECT 1 FROM jobs WHERE state='running' LIMIT 1").fetchone():
                 return None
-            row = db.execute("SELECT jobs.run_id FROM jobs JOIN runs USING(run_id) WHERE jobs.state='queued' ORDER BY runs.created_at LIMIT 1").fetchone()
+            query = "SELECT jobs.run_id FROM jobs JOIN runs USING(run_id) WHERE jobs.state='queued'"
+            if run_id is not None:
+                query += ' AND jobs.run_id=?'
+            row = db.execute(query+' ORDER BY runs.created_at LIMIT 1', (run_id,) if run_id is not None else ()).fetchone()
             if not row:
                 return None
             owner = uuid.uuid4().hex

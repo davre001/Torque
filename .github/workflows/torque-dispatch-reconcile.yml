@@ -1,0 +1,28 @@
+name: Reconcile Torque dispatch
+on:
+  workflow_dispatch:
+  # Enable a bounded schedule only after provisioning and measuring Actions usage.
+permissions:
+  contents: read
+concurrency:
+  group: torque-dispatch-reconcile
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    environment: torque-production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python -m backend dispatch
+        env:
+          TORQUE_DATABASE_URL: ${{ secrets.TORQUE_DATABASE_URL }}
+          TORQUE_ACTIONS_TOKEN: ${{ secrets.TORQUE_ACTIONS_TOKEN }}
+          TORQUE_ACTIONS_REPOSITORY: davre001/Torque
+          TORQUE_ACTIONS_REF: main

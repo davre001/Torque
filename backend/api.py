@@ -21,13 +21,26 @@ def create_app(settings=None):
     async def lifespan(app):
         store.initialize()
         auth.initialize()
+        from backend.cloud_preflight import check
+        cloud=check(store)
+        if not cloud['configured']:
+            raise ValueError('Invalid cloud storage/dispatch configuration')
         yield
 
     app = FastAPI(title="Torque backend", lifespan=lifespan)
     if public_policy:
         from starlette.middleware.trustedhost import TrustedHostMiddleware
         app.add_middleware(PublicBoundary, store=store, policy=public_policy)
-        app.add_middleware(TrustedHostMiddleware, allowed_hosts=[public_policy.host], www_redirect=False)
+        import os
+        from urllib.parse import urlparse
+        backend_origin = os.getenv('TORQUE_BACKEND_ORIGIN','')
+        hosts = [public_policy.host]
+        if backend_origin:
+            parsed = urlparse(backend_origin)
+            if parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment or parsed.path not in {'','/'} or not os.getenv('TORQUE_PROXY_SECRET'):
+                raise ValueError('Backend proxy requires an HTTPS origin and TORQUE_PROXY_SECRET')
+            hosts.append(parsed.hostname)
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=hosts, www_redirect=False)
     from fastapi.middleware.cors import CORSMiddleware
     app.add_middleware(CORSMiddleware,allow_origins=[auth.origin],allow_credentials=True,
                        allow_methods=["GET","POST"],allow_headers=["Content-Type","X-CSRF-Token","Idempotency-Key"])
@@ -71,7 +84,7 @@ def create_app(settings=None):
             return {"status":"ok"}
         from backend.runtime import readiness
         pipeline = readiness()
-        return {"status":"ok", "storage":"sqlite", "execution":"separate-worker",
+        return {"status":"ok", "storage":"postgresql" if store.database.postgres else 'sqlite', "execution":"separate-worker",
                 "operator_access_configured":bool(settings.operator_token),
                 "agent_pipeline_ready":pipeline["configured"],
                 "agent_pipeline":pipeline, "github_login_ready":auth.configured}
@@ -94,6 +107,11 @@ def create_app(settings=None):
             raise HTTPException(429,str(exc)) from None
         except Conflict as exc:
             raise HTTPException(409,str(exc)) from exc
+        if __import__('os').getenv('TORQUE_WORKER_DISPATCH','local') == 'github-actions':
+            from backend.dispatch import Dispatcher
+            dispatcher = Dispatcher(store)
+            try: dispatcher.dispatch(run_id)
+            finally: dispatcher.close()
         return {"run_id":run_id,"status":store.get(run_id,user)["status"]}
 
     @app.get("/api/runs")

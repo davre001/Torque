@@ -1,0 +1,54 @@
+# Confirm this region matches Neon before creating the service.
+services:
+  - type: web
+    name: torque-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    repo: https://github.com/davre001/Torque
+    branch: main
+    autoDeployTrigger: off
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn backend.api:app --host 0.0.0.0 --port $PORT --no-proxy-headers
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.11"
+      - key: TORQUE_PUBLIC_MODE
+        value: "1"
+      - key: TORQUE_OPERATOR_TOKEN
+        value: ""
+      - key: TORQUE_WORKER_DISPATCH
+        value: github-actions
+      - key: TORQUE_RUNNER
+        value: github-actions
+      - key: TORQUE_ENTIRE_CONTEXT
+        value: "0"
+      - key: TORQUE_PROVIDER_MODE
+        value: claude-only
+      - key: TORQUE_ACTIONS_REPOSITORY
+        value: davre001/Torque
+      - key: TORQUE_ACTIONS_REF
+        value: main
+      - key: TORQUE_DATABASE_URL
+        sync: false
+      - key: TORQUE_ACTIONS_TOKEN
+        sync: false
+      - key: TORQUE_SESSION_ENCRYPTION_KEY
+        sync: false
+      - key: TORQUE_PROXY_SECRET
+        sync: false
+      - key: TORQUE_FRONTEND_ORIGIN
+        sync: false
+      - key: TORQUE_BACKEND_ORIGIN
+        sync: false
+      - key: GITHUB_APP_CALLBACK_URL
+        sync: false
+      - key: GITHUB_APP_ID
+        sync: false
+      - key: GITHUB_APP_CLIENT_ID
+        sync: false
+      - key: GITHUB_APP_CLIENT_SECRET
+        sync: false
+      - key: TORQUE_ALLOWED_REPOSITORIES
+        sync: false

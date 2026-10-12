@@ -12,7 +12,7 @@ from backend.models import Conflict,PipelineError,Patch,parse_issue
 from backend.tools.files import read_files
 
 
-def verified_files(run,recipe,workspaces=None,artifacts=None):
+def verified_files(run,recipe,workspaces=None,artifacts=None,store=None):
     result=run['result']
     if not result.get('verified') or not run['attempts']:
         raise Conflict('Publication requires a verified attempt')
@@ -24,10 +24,18 @@ def verified_files(run,recipe,workspaces=None,artifacts=None):
     if set(attempt['review'].get('satisfied_criteria',[])) != set(range(len(recipe.acceptance_criteria))):
         raise Conflict('Review did not approve all criteria')
     records={}
+    if len(result['artifacts']) > 64:
+        raise Conflict('Verification artifact manifest exceeds its bound')
     for entry in result['artifacts']:
         name=entry['name']
         if not re.fullmatch(r'[a-z0-9-]+\.json',name):
             raise Conflict('Invalid verification artifact path')
+        if store is not None and store.database.postgres:
+            from backend.artifacts import read_durable
+            records[name]=read_durable(store,run['run_id'],entry)
+            if sum(len(json.dumps(value).encode()) for value in records.values()) > 8*1024*1024:
+                raise Conflict('Verification artifacts exceed the publication read limit')
+            continue
         path=(artifacts or ROOT/'var'/'artifacts')/run['run_id']/name
         if path.is_symlink():
             raise Conflict('Verification artifacts cannot be symlinks')
@@ -40,7 +48,12 @@ def verified_files(run,recipe,workspaces=None,artifacts=None):
     if tests.get('exit_code') != 0 or tests.get('failure_kind') is not None or tests.get('timed_out') or tests.get('assertions_passed') != len(recipe.acceptance_criteria):
         raise Conflict('Saved acceptance results did not pass')
     patch=Patch.model_validate(records[f'patch-{number}.json'])
-    context=read_files((workspaces or workspace_root())/run['run_id'],recipe.context_files)
+    if store is not None and store.database.postgres:
+        context=records.get('verified-context.json')
+        if not isinstance(context,dict) or set(context) != set(recipe.context_files):
+            raise Conflict('Durable verified context unavailable')
+    else:
+        context=read_files((workspaces or workspace_root())/run['run_id'],recipe.context_files)
     digest=hashlib.sha256()
     for name,item in sorted(context.items()):
         digest.update(name.encode()+b'\0'+item['content'].encode())
@@ -198,7 +211,7 @@ def publish_run(store,run_id,user_id='operator',destination=None):
         recipe=load_recipes().get(source)
         if source not in allowed or recipe is None:
             raise Conflict('Source repository is not currently authorized')
-        files=verified_files(run,recipe)
+        files=verified_files(run,recipe,store=store)
         publisher.validate_destination(run)
         store.release_rejected_publication(run_id,user_id)
         owner=store.claim_publication(run_id,user_id,publisher.destination)

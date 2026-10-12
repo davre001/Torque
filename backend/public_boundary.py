@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 import hashlib
 import os
+import secrets
 import time
 from urllib.parse import urlparse
 from starlette.responses import JSONResponse
@@ -44,6 +45,11 @@ class PublicBoundary:
             await JSONResponse({'detail':detail}, status_code=code,
                                headers={'Cache-Control':'no-store', **(headers or {})})(scope, receive, send)
         headers = dict(scope.get('headers', []))
+        proxy_secret = os.getenv('TORQUE_PROXY_SECRET','')
+        if proxy_secret and scope.get('path') != '/health':
+            supplied = headers.get(b'x-torque-proxy-secret',b'')
+            if not secrets.compare_digest(supplied,proxy_secret.encode()):
+                return await deny(403, 'Frontend proxy required')
         length = headers.get(b'content-length')
         if length is not None:
             try: declared = int(length)
@@ -55,7 +61,6 @@ class PublicBoundary:
             address = (scope.get('client') or ('unknown', 0))[0]
             actor = hashlib.sha256(address.encode()).hexdigest()
             with self.store.transaction() as db:
-                db.execute('CREATE TABLE IF NOT EXISTS http_admission (window INTEGER, actor TEXT, count INTEGER NOT NULL, PRIMARY KEY(window,actor))')
                 db.execute('DELETE FROM http_admission WHERE window < ?', (window,))
                 count = db.execute('SELECT count FROM http_admission WHERE window=? AND actor=?', (window, actor)).fetchone()
                 total = db.execute('SELECT COALESCE(SUM(count),0) FROM http_admission WHERE window=?', (window,)).fetchone()[0]

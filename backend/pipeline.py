@@ -26,7 +26,7 @@ class Pipeline:
         return self.telemetry.span(name,kind,**attrs) if self.telemetry else nullcontext(None)
 
     def __call__(self,store,run_id,owner,checkpoint):
-        artifacts = Artifacts(self.artifacts/run_id,self.secrets)
+        artifacts = Artifacts(self.artifacts/run_id,self.secrets,store)
         result = {"verified":False,"artifacts":[],"recovery_evidence_source":"local-artifacts"}
 
         def check():
@@ -80,6 +80,8 @@ class Pipeline:
                 with self.span("baseline-tests"):
                     log.info("Starting baseline tests for run %s",run_id)
                     baseline = self.runner.run(workspace,check)
+                    from backend.integrations.test_diagnostics import trace_test_result
+                    trace_test_result(self.telemetry, baseline)
                 save("baseline",baseline.model_dump())
                 result["baseline_passed"] = baseline.passed
                 result["acceptance_suite_sha256"] = getattr(self.runner,"suite_sha256",None)
@@ -115,6 +117,9 @@ class Pipeline:
                     attempt_context = self.telemetry.attempt(attempt_name, attempt=number, run_id=run_id) if self.telemetry else nullcontext(None)
                     with attempt_context as test_span:
                         tests = self.runner.run(workspace,check)
+                        if tests.passed and tests.assertions_passed != len(self.recipe.acceptance_criteria):
+                            tests.failure_kind = 'infrastructure'
+                        trace_test_result(self.telemetry, tests)
                         if test_span is not None:
                             from opentelemetry.trace import Status as SpanStatus, StatusCode
                             test_span.set_attribute('torque.assertions_passed', tests.assertions_passed)
@@ -151,6 +156,8 @@ class Pipeline:
                                       publication_available=False)
                         if root_span is not None:
                             root_span.set_attribute("torque.status","ready_to_publish")
+                        if store.database.postgres:
+                            save('verified-context',read_files(workspace,self.recipe.context_files))
                         save("verified",result)
                         transition(Status.READY,attempt=attempt)
                         return

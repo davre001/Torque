@@ -1,0 +1,30 @@
+{
+  "status": "verified-remote-browser-reporting",
+  "pr_url": "https://github.com/davre001/Torque/pull/1",
+  "commit": "ce4d43c0c25a25e53610ca6ee5b340c27f87042b",
+  "evidence": "C:\\Users\\USER\\OneDrive\\Documents\\Torque\\evidence\\remote-acceptance-instrumentation\\bb8ee37b8d644425b7e1edc9ff7691d2",
+  "records": [
+    {
+      "label": "baseline",
+      "passed": false,
+      "cases": 1,
+      "workflow_sha": "ce4d43c0c25a25e53610ca6ee5b340c27f87042b",
+      "suite_sha256": "23cc4a51df0dc735ff300852aac18c44334a96bd5ee3e8c5a768e91b9941f5c0",
+      "actions_run_id": 38259846032,
+      "actions_url": "https://github.com/davre001/Torque/actions/runs/38259846032",
+      "request_title": "Torque test 28a8d35bd3964330be4e2e6746ee31f3"
+    },
+    {
+      "label": "fixed",
+      "passed": true,
+      "cases": 3,
+      "workflow_sha": "ce4d43c0c25a25e53610ca6ee5b340c27f87042b",
+      "suite_sha256": "23cc4a51df0dc735ff300852aac18c44334a96bd5ee3e8c5a768e91b9941f5c0",
+      "actions_run_id": 38260001074,
+      "actions_url": "https://github.com/davre001/Torque/actions/runs/38260001074",
+      "request_title": "Torque test 03637b24451949de90cdbfeb0330972c"
+    }
+  ],
+  "models_used": false,
+  "neatlogs_upload": false
+}

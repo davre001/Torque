@@ -1,0 +1,18 @@
+{
+  "sqlite": {
+    "sqlite_present": true,
+    "encrypted_backup": "var/database-backups/sqlite-b6b07e96373d49b0b3f8cf40a443ea50.fernet",
+    "integrity_check": "ok",
+    "byte_match": true
+  },
+  "postgres": {
+    "encrypted_backup": "var/database-backups/postgres-69dcb0742bf1412c84d4e5b6df19d8e5.fernet",
+    "isolated_restore_passed": true,
+    "tables_verified": 14,
+    "rows_verified": 1,
+    "production_tables_modified": false
+  },
+  "credentials_exported": false,
+  "populated_fixture_restore_passed": true,
+  "postgres_integration_tests_passed": 3
+}

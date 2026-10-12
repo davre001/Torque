@@ -12,8 +12,12 @@ from backend.worker import Worker
 def main():
     parser = argparse.ArgumentParser(description="Torque local backend")
     commands = parser.add_subparsers(dest="command",required=True)
-    commands.add_parser("worker").add_argument("--once",action="store_true")
-    commands.add_parser("preflight")
+    worker_command = commands.add_parser('worker')
+    worker_command.add_argument('--once',action='store_true')
+    worker_command.add_argument('--run-id',help='Claim only this assigned run; implies --once')
+    commands.add_parser('preflight').add_argument('--cloud-probe',action='store_true')
+    commands.add_parser('migrate')
+    commands.add_parser('dispatch')
     commands.add_parser("run").add_argument("issue_url")
     commands.add_parser("status").add_argument("run_id")
     commands.add_parser("publish").add_argument("run_id")
@@ -21,10 +25,25 @@ def main():
     retention.add_argument('--keep-days', type=float, default=7)
     retention.add_argument('--apply', action='store_true', help='Remove eligible runtime files; default only previews')
     args = parser.parse_args()
+    if args.command == 'worker' and args.run_id:
+        import re
+        if not re.fullmatch('[a-f0-9]{32}', args.run_id):
+            parser.error('Invalid assigned run ID')
     settings = Settings.load()
-    store = Store(settings.database)
-    store.initialize()
-    if args.command == 'cleanup':
+    import os
+    target=os.getenv('TORQUE_MIGRATION_DATABASE_URL') if args.command=='migrate' else None
+    store = Store(target or settings.database)
+    store.initialize(migrate=args.command == 'migrate')
+    if args.command == 'migrate':
+        from backend.github_auth import GitHubAuth
+        GitHubAuth(store).initialize()
+        print(json.dumps({'schema_version':1,'storage':'postgresql' if store.database.postgres else 'sqlite'}))
+    elif args.command == 'dispatch':
+        from backend.dispatch import Dispatcher
+        dispatcher = Dispatcher(store)
+        try: print(json.dumps(dispatcher.reconcile()))
+        finally: dispatcher.close()
+    elif args.command == 'cleanup':
         from backend.retention import cleanup
         from backend.config import ROOT
         from backend.models import PipelineError
@@ -33,9 +52,10 @@ def main():
         except PipelineError as exc:
             parser.error(str(exc))
     elif args.command == "preflight":
+        from backend.cloud_preflight import check
         print(json.dumps({"storage":"ready","operator_access_configured":bool(settings.operator_token),
                           "allowed_repositories":list(settings.allowed_repositories),
-                          "agent_pipeline":readiness()}))
+                          "agent_pipeline":readiness(),'cloud':check(store,args.cloud_probe)}))
     elif args.command == "run":
         issue = SubmitRun(issue_url=args.issue_url)
         owner, repo, _ = parse_issue(issue.issue_url)
@@ -72,8 +92,8 @@ def main():
         if hasattr(signal,'SIGBREAK'):
             signal.signal(signal.SIGBREAK,worker.stop)
         try:
-            if args.once:
-                worker.once()
+            if args.once or args.run_id:
+                worker.once(args.run_id)
             else:
                 worker.run()
         finally:

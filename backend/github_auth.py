@@ -36,6 +36,10 @@ class GitHubAuth:
 
     def initialize(self):
         with self.store.transaction() as db:
+            if self.store.database.postgres:
+                for table in ('oauth_states','github_connections','browser_sessions'):
+                    db.execute('SELECT 1 FROM '+table+' LIMIT 0')
+                return
             db.executescript('''
 CREATE TABLE IF NOT EXISTS oauth_states (hash TEXT PRIMARY KEY, verifier TEXT NOT NULL, expires REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS github_connections (user_id TEXT PRIMARY KEY, login TEXT NOT NULL, token TEXT NOT NULL, expires REAL NOT NULL, revoked INTEGER NOT NULL DEFAULT 0);

@@ -1,8 +1,9 @@
 # Torque deployment plan
 
-Status: planning only. No production deployment has been completed. The current
-backend uses SQLite; PostgreSQL storage, cloud artifact storage, and the agent
-worker dispatch workflow must be implemented before following the deployment steps.
+Status: Phase 1 code is implemented; Phase 2 database and restore checks passed.
+Phase 3 private artifact checks passed in an isolated Neon schema.
+Production-browser verification remains pending. No production deployment has
+been completed. SQLite remains the local default; PostgreSQL is opt-in.
 This plan excludes hackathon submission preparation.
 
 ## Hosting layout
@@ -14,7 +15,7 @@ This plan excludes hackathon submission preparation.
 | PostgreSQL database | Neon free plan, subject to current quotas | Shared durable users, encrypted credentials, sessions, queue, leases, runs, events and budgets |
 | Agent worker | GitHub Actions in `davre001/Torque`, new workflow | Start a separate Python process for one assigned run, then exit |
 | Independent acceptance tests | Existing `torque-remote-tests.yml` on GitHub Actions | Run reviewed tests separately from the credential-bearing agent worker |
-| Durable run artifacts | Private object storage; provider to be selected | Preserve verified patches and evidence after Actions runners disappear |
+| Durable run artifacts | Private PostgreSQL artifact records in Neon | Preserve verified patches and evidence after Actions runners disappear; 2 MiB per record |
 | Tracing | Existing Neatlogs project | Workflow spans, failure investigation and recovery readback |
 
 The worker code stays in `backend/`. Deployment does not require moving it into
@@ -29,47 +30,73 @@ Sources: [Render free limits](https://render.com/docs/free),
 
 ## 1. Prepare the repository before deploying
 
-- [ ] Implement PostgreSQL configuration and migrations. Choose the connection variable name and document it in `.env.example`; no cloud database variable is supported merely by writing this plan.
-- [ ] Replace SQLite-specific operations across storage, OAuth/session persistence, publication, queue claims, daily reservations and HTTP admission counters.
-- [ ] Preserve atomic admission and exclusive leases under concurrent API and worker processes.
-- [ ] Add a worker command that accepts an assigned run ID and refuses to claim a different run. Existing `python -m backend worker --once` claims any available queued run and is insufficient for targeted cloud dispatch.
-- [ ] Implement durable dispatch bookkeeping and reconciliation: handle accepted submissions followed by failed/uncertain workflow dispatch without duplicating execution or spending reservations.
-- [ ] Implement cancellation checks against the shared database, lease expiry, and interruption handling for runner shutdown or workflow cancellation.
-- [ ] Implement private durable artifact storage, content hashes, bounded downloads and retention. Publication must retrieve and revalidate the exact verified content.
-- [ ] Make publication and retention work without local worker files or local SQLite.
-- [ ] Add a production API proxy and verify OAuth/session behavior through it.
-- [ ] Test migration, concurrent claims, duplicate dispatch, expired leases, cancellation and publication retries.
-- [ ] Update preflight to verify the new database, storage and dispatch configuration without printing credentials.
+- [x] Implement PostgreSQL configuration (`TORQUE_DATABASE_URL`) and transactional schema migrations; preserve local SQLite.
+- [x] Route storage, OAuth/session persistence, publication, queue claims, daily reservations and HTTP counters through the database boundary.
+- [x] Implement atomic admission and exclusive leases with a PostgreSQL transaction advisory lock; actual PostgreSQL concurrency verification is pending below.
+- [x] Add `worker --run-id` that claims only the assigned job.
+- [x] Implement durable dispatch bookkeeping, stable request IDs and bounded manual reconciliation.
+- [x] Preserve shared-database cancellation checks, lease expiry and signal handling in targeted workers.
+- [x] Implement private database artifacts, per-record size limits, immutable hashes and retention.
+- [x] Retrieve verified contents for cloud publication without the worker's local files.
+- [x] Add the production API proxy and credential-free cookie/redirect/origin contract checks.
+- [ ] Verify complete OAuth/session behavior in a real production browser.
+- [x] Verify PostgreSQL migrations, concurrent admission/claims, cancellation, lease expiry, artifact persistence, HTTP counters and publication fencing in disposable Neon schemas (two integration tests passed).
+- [ ] Verify the complete deployed worker/artifact-retention/publication flow; local contract checks do not establish deployed acceptance.
+- [x] Add `preflight --cloud-probe` for bounded database and workflow-access checks without printing secrets.
+
+Implementation details and limits: [cloud preparation](backend/CLOUD_PREPARATION.md).
+Checked items above describe implemented code, not successful cloud deployment.
 
 Do not replace a SQLite filename with a PostgreSQL URL and expect the existing
 backend to work. This is a storage and execution migration.
 
 ## 2. Create the shared database
 
-- [ ] Create a Neon account and PostgreSQL project; select a region close to the API.
-- [ ] Review free compute/storage limits and backup capabilities.
-- [ ] Save the TLS connection string securely; never commit or paste it into chat.
-- [ ] Create appropriate application database roles; keep migration privileges separate where practical.
-- [ ] Apply the implemented migrations to an empty staging database first.
-- [ ] Back up local SQLite before any optional import of existing history.
-- [ ] If importing history, preserve user ownership, artifact hashes and encrypted credentials; retain the matching encryption key securely.
-- [ ] Configure API and worker to use the same production database.
-- [ ] Verify backup/export and restore procedures; do not assume free-tier point-in-time recovery.
+- [x] Create/connect the Neon project.
+- [ ] Align the Render region with this database when provisioning the API in Phase 4.
+- [x] Review published free-plan and restore limitations.
+- [ ] Confirm the account's actual storage and compute quotas in Neon before public release.
+- [x] Save the TLS connection string in ignored local `.env` without exporting it in evidence.
+- [x] Provision a DML-only runtime role and save the owner URL separately as `TORQUE_MIGRATION_DATABASE_URL`.
+- [x] Apply migrations and test them in isolated staging schemas on the initially empty database.
+- [x] Back up local SQLite with the online backup API, encrypt it, and verify restored integrity.
+- [ ] Optional: import local history only if needed, preserving user ownership, artifact hashes and encrypted credentials. Current decision: retain the encrypted SQLite backup; no history has been imported into Neon.
+- [x] Configure local API and worker to read the same restricted `TORQUE_DATABASE_URL`.
+- [ ] Provision that runtime URL to Render and protected Actions secrets during Phases 4–5; exclude the migration owner URL.
+- [x] Verify encrypted PostgreSQL export and isolated restore of all 14 tables; archive and evidence paths are documented below.
+- [ ] Store encrypted backups off-machine and keep their encryption key separately before public release.
 
-## 3. Provision private artifact storage
+Database setup and restore commands: [database operations](backend/DATABASE_OPERATIONS.md).
+Neon's published limits can change; verify your dashboard allowance. Its recent
+[free-storage announcement](https://neon.com/blog/neon-free-plan-1-gb-per-project)
+updates older storage figures. Restore history is bounded, so retain independent
+encrypted backups; see [Neon free-plan limits](https://github.com/neondatabase/website/blob/main/content/faqs/free-plan-limits-and-quotas.md).
 
-- [ ] Select an object-storage provider with suitable free allowance, private access and retention controls.
-- [ ] Create a private bucket/container; block public listing and reads.
-- [ ] Give the worker bounded write/read access and the API only the access it needs.
-- [ ] Configure storage through the new adapter's documented environment variables.
-- [ ] Verify artifact upload, hash validation, publication retrieval and retention.
-- [ ] Confirm prompts, source archives and credentials are excluded from public evidence and logs.
+## 3. Verify private database artifact storage
+
+- [x] Verify `artifact_records` exists in the configured Neon deployment database; no separate storage account is required. Production deployment remains pending.
+- [x] Verify the configured runtime role has artifact DML access, no schema CREATE permission, and the table has no PUBLIC grants. Database credentials remain server-only.
+- [x] Check representative saved JSON artifacts against the 2 MiB record limit: 24 records, largest 6,107 bytes. Verify enforcement of the independent 8 MiB per-run bound.
+- [ ] Confirm available storage in the Neon account dashboard before release; record and run caps do not impose a global database quota.
+- [x] Verify durable writes, immutable hashes, tamper rejection, publication retrieval without local files, and retention in an isolated Neon schema.
+- [x] Scan local tracked/evidence files and reachable Git blobs for current credentials and common secret patterns; no matches found. Include durable database artifacts in subsequent credential audits.
+- [ ] Repeat artifact retrieval and retention through the deployed API/Actions worker in Phase 9.
+- [ ] Audit deployed public evidence and logs for prompts, source archives and credentials before release. Local credential scanning and telemetry masking do not establish deployed log acceptance.
+
+Evidence: [private artifact checks](evidence/deployment/private-artifact-checks.json).
+The database integration trial used fixture content, made no provider calls or
+GitHub publication requests, and removed its temporary schema. Retention keeps
+publishable runs and removes expired terminal-run artifacts while preserving history.
 
 Actions artifacts may supplement demo evidence, but are not the default durable
 publication store: they have retention and access constraints. API and worker
 local disks are temporary staging space only.
 
 ## 4. Deploy the API to Render
+
+Configuration is prepared in [render.yaml](render.yaml); follow the
+[Render deployment steps](backend/RENDER_DEPLOYMENT.md). The service has not yet
+been created. Confirm the database region before using the Blueprint.
 
 - [ ] Connect `davre001/Torque` to Render and create a **Web Service**.
 - [ ] Use the repository root as the service root so `backend` imports and reviewed test files resolve correctly.
@@ -112,7 +139,7 @@ Keep worker secrets separate from the credential-free test workflow.
 - [ ] Import `davre001/Torque` into Vercel.
 - [ ] Set **Root Directory** to `frontend/ui` and select Next.js.
 - [ ] Use the frontend lockfile for installation and `npm run build` for the build.
-- [ ] Configure the implemented server-side API proxy to target the Render HTTPS URL.
+- [ ] Set server-only `TORQUE_BACKEND_ORIGIN`, `TORQUE_FRONTEND_ORIGIN` and `TORQUE_PROXY_SECRET` for the implemented API proxy.
 - [ ] Make browser API calls and login entry points use the same Vercel origin.
 - [ ] Never put database URLs, provider keys, App secrets or encryption keys in `NEXT_PUBLIC_*` variables or client code.
 - [ ] Deploy and record the stable production URL; do not use a temporary preview URL as the permanent OAuth callback.

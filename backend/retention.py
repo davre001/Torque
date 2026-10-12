@@ -57,6 +57,13 @@ def cleanup(store, root, days=7, apply=False):
         with store.transaction() as db:
             if eligible(db, run_id, cutoff) is None:
                 continue
+            if store.database.postgres:
+                count = db.execute('SELECT COUNT(*) FROM artifact_records WHERE run_id=?',(run_id,)).fetchone()[0]
+                if count:
+                    if apply:
+                        db.execute('DELETE FROM artifact_records WHERE run_id=?',(run_id,))
+                        store._event(db,run_id,{'durable_artifacts_expired':True})
+                    report['runs'].append({'run_id':run_id,'durable_artifacts':count})
         try:
             targets = [runtime / kind / run_id for kind in ('workspaces', 'artifacts')]
             targets = [p for p in targets if checked_directory(p, root)]

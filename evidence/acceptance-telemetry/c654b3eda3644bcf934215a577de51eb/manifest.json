@@ -1,0 +1,15 @@
+{
+  "mode": "controlled-acceptance-instrumentation-probe",
+  "models_used": false,
+  "github_writes": false,
+  "records": [
+    {
+      "trace_id": "3d1061326c1185af4bec2113b7ebe57d",
+      "passed": false
+    },
+    {
+      "trace_id": "b08c025e327bcaf698b4b1348e57a2e8",
+      "passed": true
+    }
+  ]
+}

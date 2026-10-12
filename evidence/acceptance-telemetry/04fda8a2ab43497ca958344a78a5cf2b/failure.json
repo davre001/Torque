@@ -1,0 +1,42 @@
+{
+  "trace": {
+    "trace_id": "93c8b0f9ffae5ccbc52096ea3028b766",
+    "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+    "host": "https://app.neatlogs.com",
+    "finalization_status": "finalized",
+    "status": "ERROR",
+    "total_tokens": 0,
+    "llm_calls": 0,
+    "spans": [
+      {
+        "spanId": "274e64b5a2d555d3",
+        "parentSpanId": null,
+        "spanName": "acceptance-diagnostics-forced-failure",
+        "spanType": "WORKFLOW",
+        "status": "ERROR",
+        "model": null,
+        "provider": null,
+        "totalTokens": 0
+      },
+      {
+        "spanId": "8326a8a2c550deee",
+        "parentSpanId": "274e64b5a2d555d3",
+        "spanName": "acceptance-test-case",
+        "spanType": "TOOL",
+        "status": "ERROR",
+        "model": null,
+        "provider": null,
+        "totalTokens": 0
+      }
+    ]
+  },
+  "diagnostics": {
+    "test.name": "result-equals-10",
+    "test.passed": false,
+    "test.execution_duration_ms": 141.00000000053114,
+    "test.reporting_mode": "completed-subprocess-check",
+    "test.stdout": "",
+    "test.stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\USER\\AppData\\Local\\Temp\\torque-telemetry-f8r87v0s\\acceptance.py\", line 6, in <module>\n    assert actual == 10, f\"Expected result=10; actual={actual!r}\"\n           ^^^^^^^^^^^^\nAssertionError: Expected result=10; actual=8\n",
+    "test.stacktrace": "Traceback (most recent call last):\n  File \"C:\\Users\\USER\\AppData\\Local\\Temp\\torque-telemetry-f8r87v0s\\acceptance.py\", line 6, in <module>\n    assert actual == 10, f\"Expected result=10; actual={actual!r}\"\n           ^^^^^^^^^^^^\nAssertionError: Expected result=10; actual=8\n"
+  }
+}

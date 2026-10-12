@@ -1,0 +1,31 @@
+{
+  "trace_id": "3d1061326c1185af4bec2113b7ebe57d",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "ERROR",
+  "total_tokens": 0,
+  "llm_calls": 0,
+  "spans": [
+    {
+      "spanId": "f31e828790ffd6bd",
+      "parentSpanId": null,
+      "spanName": "acceptance-diagnostics-forced-failure",
+      "spanType": "WORKFLOW",
+      "status": "ERROR",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    },
+    {
+      "spanId": "13a4e8cc042bfd86",
+      "parentSpanId": "f31e828790ffd6bd",
+      "spanName": "acceptance-test-case",
+      "spanType": "TOOL",
+      "status": "ERROR",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    }
+  ]
+}

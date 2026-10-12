@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-10-12T13:27:52.569598+00:00",
+  "database_table_exists": true,
+  "runtime_artifact_permissions": {
+    "SELECT": true,
+    "INSERT": true,
+    "UPDATE": true,
+    "DELETE": true
+  },
+  "runtime_schema_create_allowed": false,
+  "public_table_grants": 0,
+  "representative_json_records": 24,
+  "largest_representative_record_bytes": 6107,
+  "all_representative_records_within_2_mib": true,
+  "production_data_modified": false,
+  "limitations": [
+    "Neon account storage allowance requires dashboard confirmation",
+    "Render and Actions runtime secret provisioning pending",
+    "Deployed logs and complete hosted flow not yet verified"
+  ],
+  "isolated_postgres_artifact_test_passed": true,
+  "verified_checks": [
+    "secret redaction",
+    "idempotent and immutable writes",
+    "2 MiB record bound",
+    "8 MiB run bound",
+    "tamper detection",
+    "publication retrieval without local files",
+    "expired artifact deletion",
+    "publishable artifact preservation"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "database": "postgresql",
+  "artifact_store": "private-database",
+  "dispatch": "local",
+  "missing": [],
+  "live_verified": true,
+  "configured": true,
+  "checked_at": "2026-10-12T12:55:19.776360+00:00",
+  "integration_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "temporary_test_schemas_remaining": 0,
+  "production_runs_created": 0,
+  "database_run_count": 0,
+  "schema_version": 1
+}

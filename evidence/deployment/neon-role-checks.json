@@ -1,0 +1,9 @@
+{
+  "runtime_role_restricted": true,
+  "schema_create_allowed": false,
+  "migration_credential_separate": true,
+  "credential_values_exported": false,
+  "runtime_dml_verified_with_rollback": true,
+  "production_probe_rows_committed": 0,
+  "api_and_worker_local_config_share_runtime_url": true
+}

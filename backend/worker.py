@@ -13,8 +13,8 @@ class Worker:
     def stop(self, *_):
         self.stopping.set()
 
-    def once(self):
-        claimed = self.store.claim(self.settings.lease_seconds)
+    def once(self, run_id=None):
+        claimed = self.store.claim(self.settings.lease_seconds, run_id)
         if claimed is None:
             return False
         run_id, owner = claimed
