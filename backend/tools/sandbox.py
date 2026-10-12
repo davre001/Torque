@@ -33,6 +33,8 @@ class DockerRunner:
                     raise PipelineError("Acceptance suite exceeds size limit")
                 digest.update(str(file.relative_to(suite)).encode()+b"\0"+file.read_bytes())
         signature = digest.hexdigest()
+        reporting = Path(__file__).resolve().parents[2]/'tests/acceptance/torque_reporting.py'
+        signature = hashlib.sha256((signature+'\0').encode()+reporting.read_bytes()).hexdigest()
         if self.suite_sha256 is not None and signature != self.suite_sha256:
             raise PipelineError("Independent acceptance suite changed during the run")
         self.suite_sha256 = signature
@@ -66,6 +68,7 @@ class DockerRunner:
                 "--tmpfs","/tmp:rw,nosuid,nodev,size=256m",
                 "--mount",f"type=bind,src={workspace},dst=/workspace,readonly",
                 "--mount",f"type=bind,src={suite},dst=/acceptance,readonly",
+                "--mount",f"type=bind,src={Path(__file__).resolve().parents[2]/'tests/acceptance/torque_reporting.py'},dst=/torque_reporting.py,readonly",
                 "--workdir","/workspace",*security_args,self.recipe.image,*self.recipe.command]
         checkpoint()
         # Disk-backed output avoids unbounded Python memory; enforce a log cap.
@@ -91,21 +94,25 @@ class DockerRunner:
                 process.wait(timeout=10)
             output.seek(0)
             text = output.read(100000).decode("utf-8",errors="replace")
-        failure_kind,passed = "infrastructure",0
+        failure_kind,passed,cases = "infrastructure",0,[]
         for line in text.splitlines():
             if line.startswith("TORQUE_TEST_RESULT="):
                 try:
                     report = json.loads(line.split("=",1)[1])
                     passed = int(report["assertions_passed"])
                     failure_kind = report["failure_kind"]
+                    from backend.models import TestCaseResult
+                    cases = [TestCaseResult.model_validate(case) for case in report.get('cases', [])]
+                    if len(cases)>12 or (cases and sum(case.passed for case in cases)!=passed):
+                        raise ValueError()
                     if failure_kind not in {None,"assertion","infrastructure"} or passed < 0:
                         raise ValueError()
                 except (ValueError,KeyError,TypeError):
-                    failure_kind,passed = "infrastructure",0
+                    failure_kind,passed,cases = "infrastructure",0,[]
         if timed_out:
             failure_kind = "timeout"
         if process.returncode == 0 and passed != len(self.recipe.acceptance_criteria):
             failure_kind = "infrastructure"
         return TestResult(exit_code=process.returncode if not timed_out else 124,
                           output=text,timed_out=timed_out,command=self.recipe.command,
-                          failure_kind=failure_kind,assertions_passed=passed)
+                          failure_kind=failure_kind,assertions_passed=passed,cases=cases)

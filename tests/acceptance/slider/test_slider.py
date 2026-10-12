@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 import sys
 import threading
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from torque_reporting import Reporter
 from playwright.sync_api import sync_playwright, expect, TimeoutError as BrowserTimeout
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -15,6 +17,7 @@ def main(workspace='/workspace'):
     server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(Path(workspace)/'site')))
     threading.Thread(target=server.serve_forever,daemon=True).start()
     passed=0; failures=[]; kind=None
+    reporter=Reporter()
     try:
         with sync_playwright() as pw:
             options={'chromium_sandbox':True}
@@ -92,7 +95,9 @@ def main(workspace='/workspace'):
                 assert page.evaluate("window.mediaCalls.includes('reel')"), 'Normal autoplay regression'
             for name,test in [('slider-semantics',semantic),('slider-keys',keyboard),('sweep-and-focus',sweep_focus),('image-descriptions',descriptions),('pointer-tabs-motion',regression)]:
                 reset()
-                try: test();passed+=1
+                try:
+                    with reporter.case(name): test()
+                    passed+=1
                 except (AssertionError,BrowserTimeout,TypeError,ValueError) as exc:
                     failures.append(name+': '+str(exc)[:800])
             browser.close()
@@ -101,7 +106,7 @@ def main(workspace='/workspace'):
         kind='infrastructure';failures.append(type(exc).__name__+': '+str(exc)[:800])
     finally: server.shutdown();server.server_close()
     for failure in failures: print(failure)
-    print('TORQUE_TEST_RESULT='+json.dumps({'failure_kind':kind,'assertions_passed':passed}))
+    print('TORQUE_TEST_RESULT='+json.dumps({'failure_kind':kind,'assertions_passed':passed,'cases':reporter.cases}))
     return 0 if kind is None and passed==5 else 1
 
 if __name__=='__main__': sys.exit(main(sys.argv[1] if len(sys.argv)>1 else '/workspace'))

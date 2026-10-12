@@ -41,13 +41,14 @@ jobs:
         run: python -m pip install httpx==0.28.1 pydantic==2.14.0 python-dotenv==1.2.4
       - name: Run isolated acceptance tests
         env:
+          PYTHONUNBUFFERED: '1'
           TORQUE_REQUEST_ID: ${{ inputs.request_id }}
           TORQUE_SOURCE_SHA: ${{ inputs.source_sha }}
           TORQUE_INDEX_HTML: ${{ inputs.index_html }}
           TORQUE_ACCEPTANCE_PROFILE: ${{ inputs.acceptance_profile }}
           TORQUE_SOURCE_REPOSITORY: ${{ inputs.source_repository }}
           TORQUE_FILES_BUNDLE: ${{ inputs.files_bundle }}
-        run: python -m backend.remote_job
+        run: python -u -m backend.remote_job
       - name: Save machine-readable result
         if: always()
         uses: actions/upload-artifact@v4

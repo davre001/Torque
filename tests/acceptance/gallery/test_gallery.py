@@ -8,6 +8,8 @@ import subprocess
 import sys
 import tempfile
 import threading
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from torque_reporting import Reporter
 from playwright.sync_api import sync_playwright, expect
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -16,6 +18,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def main(workspace='/workspace'):
     passed=0;kind=None;failures=[];server=None
+    reporter=Reporter()
     try:
         with tempfile.TemporaryDirectory(prefix='gallery-harness-') as output:
             subprocess.run(['node',str(Path(__file__).with_name('build-harness.cjs')),workspace,output],check=True,timeout=30)
@@ -75,7 +78,9 @@ def main(workspace='/workspace'):
                     assert events('delete')==[['delete','one']] and not events('open')
                 reset()  # A failure to mount fixture images is infrastructure, not a reproduced bug.
                 for name,check in [('card-keyboard',cards),('action-keyboard',actions),('thumbnail-alt',alt),('mouse-regression',mouse)]:
-                    try:check();passed+=1
+                    try:
+                        with reporter.case(name): check()
+                        passed+=1
                     except (AssertionError,TimeoutError) as exc:
                         failures.append(name);print(name+': '+str(exc)[:700])
                     except Exception as exc:
@@ -91,7 +96,7 @@ def main(workspace='/workspace'):
     finally:
         if server:server.shutdown();server.server_close()
     print('Failed checks: '+', '.join(failures))
-    print('TORQUE_TEST_RESULT='+json.dumps({'failure_kind':kind,'assertions_passed':passed}))
+    print('TORQUE_TEST_RESULT='+json.dumps({'failure_kind':kind,'assertions_passed':passed,'cases':reporter.cases}))
     return 0 if kind is None and passed==4 else 1
 
 

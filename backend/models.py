@@ -89,6 +89,14 @@ class Review(Record):
 class Recovery(Record):
     strategy: str = Field(min_length=1,max_length=4000)
 
+class TestCaseResult(Record):
+    name: str = Field(min_length=1, max_length=120)
+    passed: bool
+    duration_ms: float = Field(default=0, ge=0, allow_inf_nan=False)
+    stdout: str = Field(default='', max_length=4000)
+    stderr: str = Field(default='', max_length=4000)
+    stacktrace: str = Field(default='', max_length=6000)
+
 class TestResult(Record):
     exit_code: int
     output: str
@@ -96,6 +104,7 @@ class TestResult(Record):
     command: list[str]
     failure_kind: Literal["assertion","infrastructure","timeout"] | None = None
     assertions_passed: int = Field(default=0,ge=0)
+    cases: list[TestCaseResult] = Field(default_factory=list, max_length=12)
 
     @property
     def passed(self):

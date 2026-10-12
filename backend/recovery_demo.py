@@ -8,6 +8,7 @@ import json
 import logging
 import subprocess
 import sys
+import time
 import uuid
 from backend.artifacts import Artifacts
 from backend.config import ROOT, Settings
@@ -17,7 +18,7 @@ from backend.integrations.litellm import LiteLLM
 from backend.integrations.neatlogs import Telemetry
 from backend.integrations.neatlogs_read import TraceReader, ReadbackUnavailable
 from backend.integrations.providers import Budget, StructuredProvider
-from backend.models import Edit, Patch, PipelineError, TestResult
+from backend.models import Edit, Patch, PipelineError, TestResult, TestCaseResult
 from backend.pipeline import Pipeline
 from backend.runtime import SECRET_NAMES, rates
 from backend.store import Store
@@ -54,12 +55,17 @@ class DemoRunner:
     def run(self, workspace, check):
         check()
         command=[sys.executable, str(self.suite), str(workspace/'app.py')]
+        started=time.monotonic()
         result=subprocess.run(command,capture_output=True,text=True,timeout=10)
         check()
         return TestResult(exit_code=result.returncode,output=(result.stdout+result.stderr)[-4000:],
                           command=['python','independent-acceptance.py','app.py'],
                           failure_kind=None if result.returncode==0 else 'assertion',
-                          assertions_passed=1 if result.returncode==0 else 0)
+                          assertions_passed=1 if result.returncode==0 else 0,
+                          cases=[TestCaseResult(name='result-equals-10',passed=result.returncode==0,
+                              duration_ms=(time.monotonic()-started)*1000,
+                              stdout=result.stdout[-4000:],stderr=result.stderr[-4000:],
+                              stacktrace=result.stderr[-6000:] if result.returncode else '')])
 
 
 class SeededFirstPatch:
