@@ -12,9 +12,9 @@ Status: implemented separate SQLite-backed worker; live remote browser execution
 
 ## Worker progress checklist
 
-Current validation: 157 automated tests passed, one skipped. Windows signal
+Current validation: 158 automated tests passed, one skipped. Windows signal
 delivery during blocked localhost HTTP I/O is verified without transport retry;
-the Linux workflow is prepared. This does not establish remote provider cancellation
+the Linux workflow passed (Actions `38225586443`). This does not establish remote provider cancellation
 or actual paid-provider graceful shutdown. Successful live recovery remains pending.
 
 The worker is a separate process. FastAPI only submits jobs and reads state; it must not execute agents through `BackgroundTasks`.
@@ -44,9 +44,10 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Verify real worker kill/restart at all fixture agent stages, lease fencing, HTTP cancellation, and API restart; isolated live-process evidence is saved.
 - [x] Verify actual GitHub Actions cancellation; remote run 38177020201 finished cancelled.
 - [x] Verify real Windows Ctrl+Break shutdown and hard interruption during an outstanding live Claude request, using isolated workers and saved evidence.
-- [ ] Verify Linux SIGINT/SIGTERM and graceful shutdown during blocked provider calls separately.
+- [x] Verify hosted Linux SIGINT/SIGTERM lifecycle, restart/cancellation and SIGTERM during blocked localhost HTTP I/O; saved reports under `evidence/lifecycle-linux/38225586443/`.
+- [ ] Verify actual paid-provider graceful shutdown separately; current blocked-I/O evidence uses a local provider fixture.
 - [x] Verify Windows SIGBREAK during real blocked localhost HTTP I/O; preserve interruption and uncertain reservation without transport retry. This is a local provider fixture, not a paid-provider shutdown result.
-- [x] Prepare credential-free hosted Linux lifecycle and blocked-I/O checks; deployment/run verification is separate.
+- [x] Deploy and successfully run credential-free hosted Linux lifecycle and blocked-I/O checks; actual public-host acceptance remains separate.
 
 ## Why a worker
 
@@ -90,7 +91,7 @@ Initialize telemetry once per worker process. Each issue run has an independent 
 
 Worker validation includes competing claims, heartbeat during a long operation, expired-owner writes rejected, kill/restart after each stage, cancellation during tests, API restart while a job runs, budgets across retries, and a crash between PR creation and persistence. Prove a duplicate delivery cannot create a second PR.
 
-Deployment gate: one trusted local operator initially. Public use requires per-tenant storage/authentication, queue capacity limits, isolated sandboxes, operational recovery, and GitHub App credentials; these are later work.
+Deployment gate: GitHub App identity, user-scoped history/authentication, queue capacity limits and restricted test execution are implemented. Actual public-host acceptance, backups/restore, trusted proxy configuration and broader operational verification remain pending.
 
 ## Controlled PR publication implementation
 
@@ -104,22 +105,13 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 ## Next work in order
 
-1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals and blocked-provider graceful shutdown before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
-3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
-4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
-5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
+1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
+2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
+3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
+4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
-Local audit update (October 12): current credential exclusion in files/artifacts,
-persisted response data and valid local Git history passed. Atomic queue and daily
-spending reservations are implemented. Unknown/rotated credentials, external
-traces/logs and actual public deployment acceptance remain pending; see
-[deployment readiness](backend/DEPLOYMENT_READINESS.md) and
-`evidence/security/credential-audit.json`.
-6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
-7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
-
-Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1, connected-user run `b220ce7e5cda4e14963c74fc04ad8711` and PR #3, finalized application readbacks, and a controlled hosted recovery drill are saved. PR #3 is now merged. Browser disconnect/history, runtime Entire context, broader repository support, and public deployment acceptance remain pending.
+Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.
 
 ## GitHub App backend milestone
 

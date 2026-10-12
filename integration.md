@@ -8,10 +8,10 @@ Status: live operator/provider/browser/PR evidence, finalized trace readback, an
 
 ## Integration progress checklist
 
-Current validation: 157 automated tests passed, one skipped. Current credential
-and common-pattern audit passed (395 files, 160 stored response records, 769 valid
+Current validation: 158 automated tests passed, one skipped. Current credential
+and common-pattern audit passed (401 files, 160 stored response records, 788 valid
 local Git blobs). Isolated Windows blocked-I/O shutdown is verified; hosted Linux
-verification is prepared. Remaining non-submission gates are successful unseeded
+verification passed (Actions `38225586443`). Remaining non-submission gates are successful unseeded
 live recovery, real-provider graceful shutdown, actual publication/disconnect
 fencing, external credentials/log review and acceptance on a real public host.
 
@@ -47,7 +47,8 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Show installed repository eligibility and reject browser submissions without an enabled source and reviewed test recipe before queueing.
 - [x] Check configured credentials and decrypted App user token are absent from exported successful user-run evidence.
 - [x] Audit current credentials and common secret patterns in local files/artifacts, stored response data and valid local Git history; review sandbox/dispatch exclusion and trace masking.
-- [ ] Verify external trace/dashboard and deployment-log exclusion on the actual public host.
+- [x] Audit current credential exclusion in selected finalized live Neatlogs payloads: three traces, 63 spans, no raw payload exports.
+- [ ] Verify external deployment-log exclusion and unknown/rotated credentials on the actual public host.
 - [x] Add observed successful/failed model-cost samples in `cfo.ai/measured-run-costs.json`; preserve original forecast assumptions and distinguish estimated model cost from full billed cost.
 
 Scope update: Connect GitHub leads to the authenticated workspace and confirmed disconnect. GitHub App identity/installation onboarding is implemented and verified in the controlled trial. The personal-token path remains for local operator development. Additional repository support and Entire Graph/Brain Continuous Memory remain optional later work.
@@ -145,15 +146,13 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 ## Next work in order
 
-1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals and blocked-provider graceful shutdown before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
-3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
-4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
-5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
-6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
-7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
+1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
+2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
+3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
+4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
-Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1, connected-user run `b220ce7e5cda4e14963c74fc04ad8711` and PR #3, finalized application readbacks, and a controlled hosted recovery drill are saved. PR #3 is now merged. Browser disconnect/history, runtime Entire context, broader repository support, and public deployment acceptance remain pending.
+Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.
 
 ## GitHub App backend milestone
 
@@ -231,8 +230,9 @@ recovery remains unchecked.
 
 - [x] Current credential exact-value exclusion audit: 384 files, 160 stored response records, 733 Git blobs and one encrypted user credential checked; no matches. Report: `evidence/security/credential-audit.json`.
 - [x] Atomic admission controls implemented and tested; daily reservations remain enforced after cancellation/failure.
-- [ ] Unknown/rotated credential scanning and external trace/dashboard/host-log review.
-- [ ] Public host/browser acceptance, edge request limits, Linux shutdown checks and second-user deployment verification.
+- [x] Common secret-pattern scanning locally and selected finalized live Neatlogs current-credential audit; reports are in `evidence/security/`.
+- [x] Hosted Linux shutdown, cancellation/restart and blocked localhost HTTP signal checks; see `evidence/lifecycle-linux/38225586443/`.
+- [ ] Public host/browser acceptance, edge/proxy verification, second-user deployment checks and external host-log/unknown-credential review.
 
 The read-only audit is repeatable with `python -m backend.security_audit`.
 [Deployment readiness](backend/DEPLOYMENT_READINESS.md) records scope and limits.

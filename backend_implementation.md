@@ -1,9 +1,9 @@
 # Torque backend implementation plan
 
 Workspace milestone: real session-based `/workspace` and landing OAuth buttons are
-implemented. User runs are polled from the API; live connected-user acceptance remains pending.
+implemented. User runs are polled from the API; the controlled connected-user run and publication are verified.
 
-Status: implementation in progress, October 11, 2026. Checklists distinguish tested code from
+Status: implementation and verification progress, October 12, 2026. Checklists distinguish tested code from
 pending live acceptance. Related plans: [worker](background_worker.md), [integrations](integration.md).
 The existing root `implementation.md` remains the historical frontend plan.
 
@@ -16,7 +16,8 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Add runtime/development dependency manifests, installed-environment lock, and installation instructions.
 - [x] Load root configuration, preserve deployment overrides, and validate execution limits.
 - [x] Add repeatable read-only current credential exclusion audit and atomic admission limits.
-- [ ] Complete external credential review and public-host acceptance; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
+- [x] Audit selected finalized live Neatlogs payloads and verify hosted Linux lifecycle/blocked-localhost I/O shutdown.
+- [ ] Complete host-log/unknown-credential review, actual paid-provider graceful shutdown and public-host acceptance; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [x] Implement typed submission, plan, patch, review, recovery, and test records; attempts persist structured JSON.
 - [x] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
 - [x] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.
@@ -48,7 +49,7 @@ Live demo run `6634790aa28943629348e02914d9b56c` reproduced the baseline bug, pa
 all three independent browser criteria after the first patch, and published
 [davre001/kokon #1](https://github.com/davre001/kokon/pull/1). Saved
 [evidence](evidence/runs/6634790aa28943629348e02914d9b56c/README.md) records source,
-verified content, published commit, model usage, and original artifacts. Latest tests: 74 passed.
+verified content, published commit, model usage, and original artifacts. Current automated validation: 158 passed, one skipped.
 
 Recovery uses authenticated finalized failure traces alongside local artifacts and passed a controlled seeded drill. Runtime Entire context and connected-user execution are verified. Unseeded slider attempts have not recovered successfully. See `backend/NEATLOGS_RECOVERY.md` and `backend/LIFECYCLE_VERIFICATION.md` for evidence and limits.
 
@@ -60,7 +61,7 @@ Scope update: `changes.md` now specifies a public landing page and a separate au
 
 Accept a GitHub issue URL, inspect a pinned repository revision, implement a focused patch in an isolated checkout, run real tests, recover from failures using trace evidence, and produce a verified pull request or an explicit failure with supporting artifacts.
 
-The hackathon release supports one local operator and one active run. Public multi-user hosting, GitHub App onboarding, broad language support, and automatic issue webhooks follow later. Public issue input is supported only when its source and destination repositories are configured for the operator; possession of a public issue URL does not grant write access.
+The controlled release supports local operator access and GitHub App connected users, with one executing worker job at a time and per-user admission/ownership controls. One connected-user flow is live verified. Public hosting acceptance, broad repository support and automatic issue webhooks remain separate later work. Repositories need an installation, deployment allowlist and reviewed test recipe; a public issue URL does not grant write access.
 
 First candidate: https://github.com/GabrieleLozupone/kokon/issues/4. Reproduce the reduced-motion video autoplay bug at a recorded commit before treating it as the demonstration case. Verify paused autoplay with reduced motion, manual playback, and unchanged ordinary playback. Use a controlled fork/test destination initially; publishing a PR to an external maintainer requires a separately authorized publish action.
 
@@ -145,20 +146,19 @@ Before demo: verify an actual finalized neatlogs trace, inspect Entire context/c
 - [x] Operator-owned source/fork permission checks, stable branch, draft PR, and SQLite publication lease.
 - [x] Mocked GitHub tests cover retry after a lost PR response, branch conflicts, changed artifacts, and concurrent publication.
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
-- [ ] GitHub App authentication and publication for connected visitors.
+- [x] GitHub App authentication and controlled connected-user publication; broader public-host acceptance remains separate.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The controlled single-operator flow is live-verified; the public multi-user flow remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and controlled connected-user flows are live-verified; acceptance on an actual public multi-user deployment remains pending.
 
 ## Next work in order
 
-1. Implement GitHub App connect/callback/session/disconnect, secure server-side credentials, and per-user repository/run authorization for the requested visitor flow.
-2. Connect the Next.js workspace to real submit/status/history/cancel/publish endpoints; show actual progress, errors, and PR URLs instead of simulation.
-3. Hosted readback and a controlled live recovery drill are complete (see `backend/NEATLOGS_RECOVERY.md`). Verify recovery on a live GitHub repository next; the original successful demo had no recovery retry.
-4. Implement genuine Entire target-repository context if required by the runtime plan. Development checkpoints already exist; Graph/Brain Continuous Memory remains optional.
-5. Add workspace/artifact retention, broader restart/cancellation acceptance, and public-deployment limits before expanding beyond the reviewed kokon recipe.
-6. Capture final screenshots and a short demo, update financial assumptions from measured usage, and complete submission evidence.
+1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
+2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
+3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
+4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
-Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted hierarchy/cancellation checks; live issue-to-draft-PR demo, authenticated finalized trace readback, and an explicitly seeded controlled live recovery drill completed. Live connected-user execution, runtime Entire context, and broad repository support remain pending.
+Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.
 
 ## GitHub App backend milestone
 
@@ -168,7 +168,7 @@ Evidence baseline (October 11, 2026): 105 automated tests passed plus targeted h
 - [x] User-scoped worker/publication credentials; local operator PAT is never substituted for a visitor.
 - [x] Disconnect invalidation, cooperative cancellation, publication/disconnect fencing, and signed authorization-revoked webhook.
 - [x] Tests for OAuth replay, session expiry, secure cookies, CSRF, cross-user access, installation permissions, and revocation.
-- [ ] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
-- [ ] Wire landing-page connection and workspace UI to these backend endpoints.
+- [x] Register/configure the actual GitHub App and complete live browser-login and installed-repository acceptance.
+- [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
 The earlier unchecked GitHub App items now refer to live acceptance and frontend integration. Backend code is implemented; [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.

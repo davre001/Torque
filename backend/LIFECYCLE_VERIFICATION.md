@@ -160,4 +160,13 @@ does not establish server-side provider cancellation or billing cancellation.
 Credential-free Linux verification is prepared in
 `.github/workflows/torque-lifecycle-checks.yml`. It runs actual SIGINT/SIGTERM
 lifecycle checks and SIGTERM during blocked local HTTP I/O, using isolated databases.
-Hosted execution remains pending until its reports are inspected.
+Hosted execution passed on October 12, 2026:
+[Actions run 38225586443](https://github.com/davre001/Torque/actions/runs/38225586443)
+ran exact workflow revision `68a09b850a1eb78e303c8af738ce71e98a1f2ed7`.
+Actual report readback verified SIGINT and SIGTERM interruption, stage kill/restart
+fencing, queued/running cancellation and API restart. The blocked localhost HTTP
+fixture received SIGTERM, exited cleanly after about 1.97 seconds, retained one
+uncertain fixture reservation and made no transport retry. No provider calls or
+production database writes occurred. Saved reports and hashes are in
+`evidence/lifecycle-linux/38225586443/`. Actual paid-provider graceful shutdown
+and public-host operational checks remain pending.

@@ -6,10 +6,10 @@ TypeScript and HTTP route checks pass. Connected-user issue-to-PR, browser histo
 
 ## Overall progress checklist
 
-Current validation: 157 automated tests passed, one skipped. Public API request
+Current validation: 158 automated tests passed, one skipped. Public API request
 boundaries and blocked-I/O shutdown are implemented and locally verified. Current
 credential/pattern audit and Entire target context are verified. Linux workflow
-execution and the outstanding live/public-host checks remain separate gates.
+execution passed (Actions `38225586443`); actual paid-provider and public-host checks remain separate gates.
 
 - [x] Add reviewed gallery keyboard acceptance and source/input guards for the current fork revision; local baseline and positive-fixture calibration pass.
 - [x] Push the updated runner workflow and reproduce the gallery baseline on hosted Linux (Actions `38183797125`); fresh issue-to-PR verification remains separate.
@@ -47,9 +47,11 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement retention cleanup and validate preservation/deletion with disposable fixtures; live preview selects no old runs.
 - [x] Verify isolated live-process restart/cancellation and actual GitHub Actions cancellation; see `backend/LIFECYCLE_VERIFICATION.md`.
 - [x] Verify Windows Ctrl+Break shutdown and live provider hard interruption with isolated-process evidence.
-- [ ] Finish Linux signals and blocked-provider graceful shutdown acceptance.
+- [x] Verify hosted Linux SIGINT/SIGTERM, restart/cancellation and graceful shutdown during blocked localhost provider-fixture I/O; Actions `38225586443`.
+- [ ] Verify graceful shutdown during an actual paid-provider request; this remains separate from the local HTTP fixture and earlier hard-kill probe.
 - [x] Audit current credential exclusion in local files/artifacts, response records and valid local Git history; implement atomic queue/spending controls.
-- [ ] Audit unknown/rotated secrets, external traces and host logs; verify public deployment controls on the actual host. See [deployment readiness](backend/DEPLOYMENT_READINESS.md).
+- [x] Audit common secret patterns locally and current credential exclusion in three actual finalized Neatlogs traces (63 spans).
+- [ ] Review host logs, unknown/rotated secrets outside scanned patterns and actual public deployment controls. No backend host is available; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [ ] Verify recovery on a live GitHub repository; controlled seeded recovery is already saved.
 - [x] Review fresh gallery and slider tasks/revisions after the fork PR merge; arbitrary repositories remain unsupported.
 - [x] Save the controlled hosted failure/recovery comparison and finalized readbacks.
@@ -63,7 +65,7 @@ tests have completed a live run. All three acceptance assertions passed and the 
 patch was published as [draft PR #1](https://github.com/davre001/kokon/pull/1).
 Commands are in [backend/README.md](backend/README.md). Finalized trace readback and
 controlled hosted recovery are saved in [recovery evidence](backend/NEATLOGS_RECOVERY.md).
-The Claude-only connected-user trial completed as [PR #3](https://github.com/davre001/kokon/pull/3), now merged; see [user-run evidence](evidence/github-app/README.md). Current routing uses Claude for all roles, within one shared budget. Runtime Entire context remains pending.
+The Claude-only connected-user trial completed as [PR #3](https://github.com/davre001/kokon/pull/3), now merged; see [user-run evidence](evidence/github-app/README.md). Current routing uses Claude for all roles, within one shared budget. Runtime Entire target context is verified in the saved live slider artifacts.
 
 Runtime database, checkouts, and logs will live under ignored `var/`. Selected sanitized run evidence belongs in `evidence/runs/`. Tests will be implemented alongside actual behavior.
 
@@ -79,15 +81,13 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 
 ## Next work in order
 
-1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals and blocked-provider graceful shutdown before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
-3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
-4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
-5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
-6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
-7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
+1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
+2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
+3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
+4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
-Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1, connected-user run `b220ce7e5cda4e14963c74fc04ad8711` and PR #3, finalized application readbacks, and a controlled hosted recovery drill are saved. PR #3 is now merged. Browser disconnect/history, runtime Entire context, broader repository support, and public deployment acceptance remain pending.
+Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.
 
 ## GitHub App backend milestone
 

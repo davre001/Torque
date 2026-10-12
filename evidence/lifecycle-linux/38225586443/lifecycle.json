@@ -1,0 +1,85 @@
+{
+  "mode": "live-processes-fixture-work",
+  "run_id": "7101794682874e6b8c339b1b03d40e76",
+  "provider_calls": 0,
+  "github_calls": 0,
+  "remote_actions_cancellation_verified": false,
+  "production_database_modified": false,
+  "outcomes": [
+    {
+      "case": "hard-kill-restart-investigating",
+      "run_id": "b2da0e463ae3447cb56cf1a66dc13295",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-implementing",
+      "run_id": "b9c2f492876d4d68a3fa7af3b7f51478",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-verifying",
+      "run_id": "02f8ac6b21224df39a706625d52512f9",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "hard-kill-restart-recovering",
+      "run_id": "7b4e1d94fcff484da90fdcad1ee0b5a2",
+      "status": "interrupted",
+      "event_count": 3,
+      "replayed": false,
+      "stale_owner_rejected": true
+    },
+    {
+      "case": "queued-api-cancellation",
+      "run_id": "098d5cf20f4e4e1c9b3c82b0ab33cffa",
+      "status": "cancelled",
+      "event_count": 2,
+      "executed": false
+    },
+    {
+      "case": "api-restart-during-worker",
+      "run_id": "6b16b0fbf68140a1b93a91467fce9060",
+      "status": "verifying",
+      "event_count": 2,
+      "heartbeat_renewed": true
+    },
+    {
+      "case": "running-api-cancellation",
+      "run_id": "6b16b0fbf68140a1b93a91467fce9060",
+      "status": "cancelled",
+      "event_count": 4,
+      "cooperative_exit": true
+    },
+    {
+      "case": "cooperative-worker-stop",
+      "run_id": "bdf061b0cb504998aa623581354bb339",
+      "status": "interrupted",
+      "event_count": 3,
+      "trigger": "fixture calls Worker.stop; not an OS signal test"
+    },
+    {
+      "case": "os-signal-SIGINT",
+      "run_id": "b5f39506056c4decbb2d4d4dec42eafb",
+      "status": "interrupted",
+      "event_count": 3,
+      "cooperative_exit": true
+    },
+    {
+      "case": "os-signal-SIGTERM",
+      "run_id": "d0bec6fdf749415499e0fca179a2000d",
+      "status": "interrupted",
+      "event_count": 3,
+      "cooperative_exit": true
+    }
+  ],
+  "os_signal_check": "passed: SIGINT and SIGTERM"
+}

@@ -50,6 +50,10 @@ SQLite database; configure the proxy's trusted addresses explicitly, never trust
 arbitrary forwarded headers. Configure edge connection/read timeouts and limits
 as well: an app-level body cap cannot stop a slow connection at the proxy.
 Public mode remains off locally and does not alter daily model admission limits.
+Keep frontend and API on HTTPS origins within the same site (for example,
+`torque.example` and `api.torque.example`), or use a same-origin proxy.
+The existing host-only session cookies use SameSite=Lax; unrelated frontend/API
+sites will not support credentialed cross-site fetch with that cookie policy.
 
 ## Public release remains blocked on
 
@@ -58,9 +62,11 @@ Public mode remains off locally and does not alter daily model admission limits.
 - [x] Implement app-level body/rate/host limits covering login, webhook, polling and publication; verify with local tests.
 - [ ] Verify edge connection/read limits and trusted proxy/host configuration on the deployed host.
 - [x] Disable operator bearer access and expose minimal health output in public mode; local HTTP tests pass.
-- [ ] Linux SIGINT/SIGTERM and graceful cancellation during blocked provider calls verified.
+- [x] Hosted Linux SIGINT/SIGTERM and blocked localhost provider-fixture shutdown verified; Actions `38225586443`.
+- [ ] Actual paid-provider graceful shutdown; fixture HTTP and earlier hard process kill do not establish this.
 - [x] Scan common secret patterns alongside current credentials in valid local Git history and artifacts.
-- [ ] Review external trace/export and deployment logs; unknown secrets outside recognizable patterns remain unverified.
+- [x] Read-only current-credential audit of three actual finalized Neatlogs traces (63 spans), without exporting raw payloads; `evidence/security/neatlogs-credential-audit.json`.
+- [ ] Review deployment logs and unknown secrets outside recognizable patterns; no production backend host yet.
 - [ ] Second-user isolation and shared-database admission behavior verified on the actual deployment.
 - [ ] Restore/retention and rollback procedure exercised on the production host.
 

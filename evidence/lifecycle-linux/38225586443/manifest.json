@@ -1,0 +1,26 @@
+{
+  "mode": "live-github-hosted-linux-fixture-lifecycle",
+  "request_id": "7ba14280e59e4b51b40ec8b12da0b046",
+  "workflow_sha": "68a09b850a1eb78e303c8af738ce71e98a1f2ed7",
+  "actions_run_id": 38225586443,
+  "actions_url": "https://github.com/davre001/Torque/actions/runs/38225586443",
+  "conclusion": "success",
+  "linux_sigint_sigterm_verified": true,
+  "blocked_local_http_sigterm_verified": true,
+  "real_provider_calls": 0,
+  "production_database_modified": false,
+  "files": [
+    {
+      "name": "lifecycle.json",
+      "sha256": "43c04f63476326f0275dfde4659de819c7deb9031c38fc06a7b40a470fe4b21b"
+    },
+    {
+      "name": "blocked-http.json",
+      "sha256": "a2a7323267b4cb4d276b71625bdb75c27ae67f5e5f65ef6f5949549d1ab4b0a8"
+    }
+  ],
+  "limitations": [
+    "Blocked I/O uses localhost provider fixture, not a real paid provider",
+    "Provider I/O timeout is awaited; server-side cancellation is not established"
+  ]
+}
