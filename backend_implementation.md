@@ -15,6 +15,8 @@ Mark functionality complete only after its relevant acceptance checks pass. File
 - [x] Identify kokon issue #4 as the first demo candidate.
 - [x] Add runtime/development dependency manifests, installed-environment lock, and installation instructions.
 - [x] Load root configuration, preserve deployment overrides, and validate execution limits.
+- [x] Add repeatable read-only current credential exclusion audit and atomic admission limits.
+- [ ] Complete external credential review and public-host acceptance; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [x] Implement typed submission, plan, patch, review, recovery, and test records; attempts persist structured JSON.
 - [x] Implement SQLite storage, events, idempotent submissions, and transactional state updates.
 - [x] Replace the legacy `suture` import and FastAPI background-task execution with queue submission.

@@ -43,7 +43,8 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Verify isolated live-process restart/cancellation and actual GitHub Actions cancellation; see `backend/LIFECYCLE_VERIFICATION.md`.
 - [x] Verify Windows Ctrl+Break shutdown and live provider hard interruption with isolated-process evidence.
 - [ ] Finish Linux signals and blocked-provider graceful shutdown acceptance.
-- [ ] Complete the broader credential audit and public queue/spending controls before deployment.
+- [x] Audit current credential exclusion in local files/artifacts, response records and valid local Git history; implement atomic queue/spending controls.
+- [ ] Audit unknown/rotated secrets, external traces and host logs; verify public deployment controls on the actual host. See [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [ ] Verify recovery on a live GitHub repository; controlled seeded recovery is already saved.
 - [ ] Review a fresh demo task/revision after the fork PR merge; arbitrary repositories remain unsupported.
 - [x] Save the controlled hosted failure/recovery comparison and finalized readbacks.

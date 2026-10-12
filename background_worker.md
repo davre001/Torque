@@ -102,6 +102,13 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
+
+Local audit update (October 12): current credential exclusion in files/artifacts,
+persisted response data and valid local Git history passed. Atomic queue and daily
+spending reservations are implemented. Unknown/rotated credentials, external
+traces/logs and actual public deployment acceptance remain pending; see
+[deployment readiness](backend/DEPLOYMENT_READINESS.md) and
+`evidence/security/credential-audit.json`.
 6. Review a fresh demo task/revision: the merged fork PR changed the default branch, and the runner deliberately rejects revisions outside its reviewed scope.
 7. Update cfo.ai assumptions from measured usage, then capture dashboard screenshots, demo video, and final submission links.
 

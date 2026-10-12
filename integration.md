@@ -213,3 +213,14 @@ from failing assertion indices. Sanitized diagnostics are emitted on the Neatlog
 acceptance span as `torque.acceptance_diagnostics`; finalized trace identity and
 local diagnostics remain separate evidence sources. A new hosted trial is pending
 publication of the updated suite. Successful live recovery remains unchecked.
+
+## Credential and deployment audit — October 12, 2026
+
+- [x] Current credential exact-value exclusion audit: 384 files, 160 stored response records, 733 Git blobs and one encrypted user credential checked; no matches. Report: `evidence/security/credential-audit.json`.
+- [x] Atomic admission controls implemented and tested; daily reservations remain enforced after cancellation/failure.
+- [ ] Unknown/rotated credential scanning and external trace/dashboard/host-log review.
+- [ ] Public host/browser acceptance, edge request limits, Linux shutdown checks and second-user deployment verification.
+
+The read-only audit is repeatable with `python -m backend.security_audit`.
+[Deployment readiness](backend/DEPLOYMENT_READINESS.md) records scope and limits.
+These results do not mark live recovery or public deployment complete.
