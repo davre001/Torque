@@ -50,6 +50,13 @@ branches to the reviewed default branch, and provision its secrets/variables
 before activation. Do not run target repository scripts in the agent job. The
 existing acceptance workflow remains separate and credential-free.
 
+GitHub reserves environment secret/variable names starting with `GITHUB_`.
+Use secret `TORQUE_GITHUB_APP_CLIENT_SECRET` and variables
+`TORQUE_GITHUB_APP_ID`, `TORQUE_GITHUB_APP_CLIENT_ID`, and
+`TORQUE_GITHUB_APP_CALLBACK_URL`. The workflow maps them to the backend's
+existing `GITHUB_APP_*` environment names. Local `.env` and Render names stay
+unchanged.
+
 Run `python -m backend dispatch` or the reconciliation workflow after failed
 dispatches. Automatic scheduling is deliberately not enabled before provisioning;
 enable a bounded schedule during deployment so queued work does not depend on
