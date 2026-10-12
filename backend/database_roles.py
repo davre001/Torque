@@ -42,6 +42,15 @@ def provision():
         # generated credential. Re-runs reuse it instead of making more roles.
         set_key(str(ROOT/'.env'),'TORQUE_MIGRATION_DATABASE_URL',migration)
         set_key(str(ROOT/'.env'),'TORQUE_DATABASE_URL',runtime)
+    else:
+        # Migrations can add tables after this role was first provisioned.
+        # Refresh DML grants without replacing the role or its password.
+        with psycopg.connect(migration,connect_timeout=10,prepare_threshold=None) as db:
+            schema=db.execute('SELECT current_schema()').fetchone()[0]
+            if db.execute("SELECT has_schema_privilege(%s,%s,'CREATE')",(role,schema)).fetchone()[0]:
+                raise ValueError('Runtime schema privileges are too broad')
+            for table in TABLES:
+                db.execute(sql.SQL('GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE {}.{} TO {}').format(sql.Identifier(schema),sql.Identifier(table),sql.Identifier(role)))
     from backend.store import Store
     store=Store(runtime);store.initialize()
     with store.transaction() as db:
