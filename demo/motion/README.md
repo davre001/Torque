@@ -1,49 +1,41 @@
-# TORQUE motion graphics
+﻿# TORQUE submission demo
 
-60-second silent graphics sequence, 1280x720, 24 fps. Native Higgsedit source is in `torque-motion.jsx`. Import this MP4 as an opening/interlude sequence, or cut its scenes around actual screen recordings.
+Final video: `final/TORQUE-demo.mp4` — 2:08, 1280×720, 24 fps, H.264/yuv420p.
+Silent, with on-screen narrative; voiceover omitted at the user's request after the Brielle generation was blocked by an empty provider credit balance.
 
-| Time | Scene |
-| --- | --- |
-| 0-7 | TORQUE introduction |
-| 7-14 | Problem |
-| 14-24 | Agent workflow |
-| 24-36 | Controlled trace-informed recovery |
-| 36-44 | Entire development checkpoints |
-| 44-53 | cfo.ai financial planning |
-| 53-60 | Closing |
+The film follows the user-selected iart-ai motion-design skills: restrained charcoal/lime art direction, grid composition, short eased entrances, one primary subject per shot, a circular reveal, hard cuts and readable evidence holds.
 
-## Recordings required for submission assembly
+It includes the actual issue, completed run, verification, correct kokon PR #1 recording, the complete Neatlogs recording, diagnostic/resolution evidence graphics, Entire checkpoint graphic and actual cfo.ai screenshot. The controlled diagnostic probe is labelled separately from the first-attempt issue-to-PR run. Financial forecasts are explicitly planning assumptions.
 
-- TORQUE issue, completed run, browser test results, and verified draft PR.
-- Neatlogs critical-incidents feature: actual incident, diagnosis, and resolution, with failure and passing traces.
-- Entire checkpoint and associated commit.
-- cfo.ai model; screenshots already exist in `cfo.ai/screenshots/`.
+## Timeline
 
-The graphics illustrate the workflow. They do not substitute for a recording of the critical-incidents feature. The GitHub example passed on attempt one; the recovery drill used a deliberately incorrect first patch and is a separate demonstration.
+- 0:00–0:17 — problem and agent workflow
+- 0:17–1:00 — issue, completed run, verification and PR
+- 1:00–1:22 — complete supplied Neatlogs recording
+- 1:22–1:43 — named assertion, unchanged passing check and shipped resolution
+- 1:43–1:51 — Entire checkpoint and commit
+- 1:51–2:02 — cfo.ai planning model
+- 2:02–2:08 — closing
 
-## Optional voiceover aligned to this graphics sequence
+## Sources and rendering
 
-0-7: TORQUE turns a GitHub issue into a verified pull request, with recovery when an attempt fails.
+`remotion/src/index.tsx` is the editable 1080p Remotion composition. Dependency installation could not complete because the drive ran out of space, so it was not used for this export and has not been render-validated.
 
-7-14: Fixing an issue means understanding the code, proving the patch works, and handling failures along the way.
+The delivered MP4 was rendered locally by `render_local.py` using Pillow and FFmpeg, following the same storyboard and motion direction. This renderer uses a quartic ease-out approximation for entrances. Run:
 
-14-24: TORQUE coordinates investigation, implementation, and verification. It tests a patch in an isolated workflow and reviews the result against the issue.
-
-24-36: In a controlled recovery drill, we deliberately seeded an incorrect patch. Neatlogs returned the finalized failure trace. Recovery revised the implementation, and the unchanged assertion passed.
-
-36-44: During development, Entire captured agent-assisted work in checkpoints linked to commits, preserving a record of the changes.
-
-44-53: With cfo.ai, we modeled pricing, inference and recovery costs, and how usage and success rates affect margins. These forecasts remain planning assumptions.
-
-53-60: TORQUE: fix, verify, recover. A real issue-to-PR result, alongside a separate controlled recovery demonstration.
-
-## Build
-
-Run in a Higgsedit environment. Set the source project directory to the desired location before building.
-
-```bash
-higgsedit build torque-motion.jsx
-higgsedit fonts add /home/user/torque-motion Inter:400 Inter:700
-higgsedit build torque-motion.jsx
-higgsedit render /home/user/torque-motion --out renders/torque-motion-graphics.mp4
+```powershell
+python demo/motion/remotion/prepare_assets.py
+.venv/Scripts/python.exe demo/motion/render_local.py
 ```
+
+To render the Remotion version after freeing sufficient disk space:
+
+```powershell
+cd demo/motion/remotion
+npm install
+npm run render
+```
+
+Original recordings remain untouched. The earlier `torque-motion-graphics.mp4` is the superseded basic graphics-only version. The new film is `final/TORQUE-demo.mp4`.
+
+Validation: selected shot previews inspected; complete final video decoded without errors; format checked with ffprobe.

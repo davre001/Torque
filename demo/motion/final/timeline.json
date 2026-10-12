@@ -1,0 +1,62 @@
+[
+  {
+    "seconds": 7,
+    "title": "A fix you can trust.",
+    "source": null
+  },
+  {
+    "seconds": 10,
+    "title": "One issue. A coordinated team.",
+    "source": null
+  },
+  {
+    "seconds": 12,
+    "title": "Respect reduced motion.",
+    "source": "issue.mp4"
+  },
+  {
+    "seconds": 10,
+    "title": "The patch is backed by evidence.",
+    "source": "run.mp4"
+  },
+  {
+    "seconds": 9,
+    "title": "Three browser checks passed.",
+    "source": "verified.mp4"
+  },
+  {
+    "seconds": 12,
+    "title": "A targeted fix. Ready for review.",
+    "source": "pr.mp4"
+  },
+  {
+    "seconds": 22,
+    "title": "Find the failure. Verify the fix.",
+    "source": "incident.mp4"
+  },
+  {
+    "seconds": 12,
+    "title": "Make the failing check visible.",
+    "source": null
+  },
+  {
+    "seconds": 9,
+    "title": "The incident is resolved.",
+    "source": null
+  },
+  {
+    "seconds": 8,
+    "title": "Keep the work behind the change.",
+    "source": null
+  },
+  {
+    "seconds": 11,
+    "title": "Model the economics.",
+    "source": "cfo-summary.png"
+  },
+  {
+    "seconds": 6,
+    "title": "From issue to evidence.",
+    "source": null
+  }
+]

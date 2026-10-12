@@ -1,0 +1,6 @@
+{
+  "name": "torque-launch-demo", "private": true, "version": "1.0.0",
+  "scripts": {"studio": "remotion studio src/index.tsx", "stills": "node scripts/stills.mjs", "render": "remotion render src/index.tsx TorqueLaunch out/torque-launch.mp4 --codec=h264 --pixel-format=yuv420p --concurrency=2"},
+  "dependencies": {"@remotion/cli": "4.0.535", "remotion": "4.0.535", "react": "19.2.0", "react-dom": "19.2.0", "zod": "3.25.76"},
+  "devDependencies": {"@types/react": "19.2.2", "typescript": "5.9.3"}
+}
