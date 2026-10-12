@@ -1,0 +1,35 @@
+{
+  "mode": "local-headless-real-slider-fixture-media",
+  "source_repository": "davre001/kokon",
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "baseline": {
+    "failure_kind": "assertion",
+    "assertions_passed": 1,
+    "failed": [
+      "slider-semantics",
+      "slider-keys",
+      "sweep-and-focus",
+      "image-descriptions"
+    ]
+  },
+  "positive_fixture": {
+    "failure_kind": null,
+    "assertions_passed": 5,
+    "kind": "Temporary manually corrected calibration fixture, never sent to an agent"
+  },
+  "provider_calls": 0,
+  "production_database_modified": false,
+  "media_scope": "Real website playback decisions, stubbed media methods; no decoded-video playback claim",
+  "files": [
+    {
+      "path": "site/index.html",
+      "source_sha256": "c15621e1165601f183ceb4959bc32bfb7c8b0da859390668414c144860b47a59",
+      "positive_sha256": "215c0241a05eaaacc423806b086aade34f3030f62912e9ac9fb302f7ef7af855"
+    },
+    {
+      "path": "site/assets/style.css",
+      "source_sha256": "610cb4881e820ecad6ba154213c07559aace4e311bfb4975f151309836abbb7a",
+      "positive_sha256": "134db38e19f66f65085c06793e43414d4deb6ccdef80e22ad3da5fb847cc6bd4"
+    }
+  ]
+}

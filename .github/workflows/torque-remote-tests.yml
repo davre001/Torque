@@ -14,13 +14,14 @@ on:
         required: false
         type: string
       acceptance_profile:
+        description: reduced-motion, gallery-keyboard, or slider-keyboard
         default: reduced-motion
         type: string
       source_repository:
         default: gabrielelozupone/kokon
         type: string
       files_bundle:
-        description: Base64 zlib-compressed JSON for reviewed gallery files only
+        description: Base64 zlib-compressed JSON for reviewed gallery or slider files only
         required: false
         type: string
 permissions:

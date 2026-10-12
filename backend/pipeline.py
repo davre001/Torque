@@ -73,7 +73,7 @@ class Pipeline:
                 originals = {name:context[name]["content"] for name in self.recipe.editable_files}
                 from backend.integrations.entire import EntireContext
                 with self.span('entire-target-context'):
-                    entire_context=EntireContext().search(result['source_repository'],sha,issue.get('title','issue investigation'))
+                    entire_context=EntireContext().search(result['source_repository'],sha,issue.get('title','issue investigation'),context)
                 save('entire-context',entire_context)
                 result['entire_context_status']=entire_context['status']
                 with self.span("baseline-tests"):

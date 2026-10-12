@@ -8,7 +8,19 @@ GALLERY_CRITERIA = [
     'Mouse opening, favoriting, and confirmed deletion remain functional.',
 ]
 
+SLIDER_SHA = '218143b523252ee95c2368adc83fef95b324b156'
+SLIDER_FILES = ['site/index.html', 'site/assets/style.css']
+SLIDER_CRITERIA = [
+    'The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.',
+    'ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.',
+    'Keyboard interaction stops automatic sweep animation and has visible focus styling.',
+    'Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.',
+    'Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved.',
+]
+
 def profile_for(recipe):
+    if recipe.editable_files == SLIDER_FILES and recipe.acceptance_criteria == SLIDER_CRITERIA:
+        return 'slider-keyboard'
     if recipe.editable_files == ['site/index.html'] and len(recipe.acceptance_criteria)==3:
         return 'reduced-motion'
     if recipe.editable_files == GALLERY_FILES and recipe.acceptance_criteria == GALLERY_CRITERIA:
@@ -16,6 +28,8 @@ def profile_for(recipe):
     raise ValueError('Remote recipe exceeds reviewed acceptance scope')
 
 def validate_source(profile, repository, sha):
+    if profile=='slider-keyboard':
+        return repository=='davre001/kokon' and sha==SLIDER_SHA
     if profile=='gallery-keyboard':
         return repository=='davre001/kokon' and sha==GALLERY_SHA
     if profile=='reduced-motion':

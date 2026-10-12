@@ -1,0 +1,9 @@
+{
+  "issue_url": "https://github.com/davre001/kokon/issues/7",
+  "title": "Torque demo: make the before/after slider keyboard accessible",
+  "state": "open",
+  "created": true,
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "purpose": "Unseeded live recovery candidate; acceptance and execution pending",
+  "upstream_issue": "https://github.com/GabrieleLozupone/kokon/issues/3"
+}

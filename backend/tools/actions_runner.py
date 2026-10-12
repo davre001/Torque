@@ -55,11 +55,12 @@ class ActionsRunner:
         if self.workflow_sha is not None and self.workflow_sha != sha:
             raise PipelineError("Runner workflow revision changed during this run")
         self.workflow_sha = sha
-        if self.profile=='gallery-keyboard':
+        if self.profile in {'gallery-keyboard','slider-keyboard'}:
             workflow=self._request('GET',f'/repos/{self.repository}/contents/.github/workflows/{self.workflow}',params={'ref':sha}).json()
             try:
                 if workflow.get('encoding')!='base64' or workflow.get('size',0)>20000:raise ValueError()
                 contents=base64.b64decode(workflow['content']).decode()
+                if self.profile=='slider-keyboard' and 'slider-keyboard' not in contents: raise ValueError()
                 if not all(marker in contents for marker in ('files_bundle:','acceptance_profile:','TORQUE_FILES_BUNDLE','TORQUE_ACCEPTANCE_PROFILE')):raise ValueError()
             except (KeyError,ValueError,UnicodeError):
                 raise PipelineError('Push the gallery-capable workflow before submitting gallery runs') from None
@@ -80,7 +81,7 @@ class ActionsRunner:
         self.preflight()
         if self.source is None:
             raise PipelineError("Remote runner source has not been pinned")
-        if self.profile=='gallery-keyboard':
+        if self.profile in {'gallery-keyboard','slider-keyboard'}:
             files=read_files(Path(workspace),self.recipe.editable_files)
             raw=json.dumps({name:item['content'] for name,item in files.items()}).encode()
             if len(raw)>250000:raise PipelineError('Gallery source bundle exceeds decoded input limit')
@@ -163,7 +164,7 @@ class ActionsRunner:
             record = json.loads(archive.read(item))
         if record["request_id"] != request_id or record["source_sha"] != self.source:
             raise PipelineError("Remote result identity does not match request")
-        if self.profile=='gallery-keyboard' and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
+        if self.profile in {'gallery-keyboard','slider-keyboard'} and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
             raise PipelineError('Remote gallery profile/source does not match request')
         signature = record["suite_sha256"]
         if self.suite_sha256 is not None and signature != self.suite_sha256:

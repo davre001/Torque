@@ -81,3 +81,19 @@ and graceful shutdown during blocked provider calls remain pending.
 
 Probe implementation: `backend/publication_crash_probe.py`. Each invocation makes
 a new isolated fixture and draft PR; inspect existing evidence before rerunning.
+
+## Unseeded slider recovery candidate
+
+Fork [issue #7](https://github.com/davre001/kokon/issues/7) is open and unresolved
+at reviewed SHA `218143b523252ee95c2368adc83fef95b324b156`. The independent
+slider suite reproduced four failing browser groups with one regression group
+passing; a labelled temporary positive calibration fixture passed all five.
+See `evidence/slider/acceptance-validation.json`. Profile, compressed two-file
+transport, immutable source gate, workflow capability check, and a dedicated
+`backend/recipes.slider.json` policy are implemented. Deployment and hosted
+baseline are still pending. No agent attempt or live recovery has run.
+
+The positive fixture is only test calibration and must never seed the live run.
+A naturally failed attempt followed by real hosted-evidence-driven correction
+is required for the live recovery milestone. A first-attempt success counts as
+a fix alone. PR publication is a separate explicit operation.

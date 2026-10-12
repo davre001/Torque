@@ -13,16 +13,16 @@ from backend.models import TestResult
 from backend.tools.repository import snapshot
 from backend.tools.files import safe_path
 from backend.tools.sandbox import DockerRunner
-from backend.acceptance_profiles import GALLERY_FILES, GALLERY_CRITERIA, validate_source
+from backend.acceptance_profiles import GALLERY_FILES, GALLERY_CRITERIA, SLIDER_FILES, SLIDER_CRITERIA, validate_source
 
-def decode_gallery_bundle(encoded):
+def decode_gallery_bundle(encoded, expected_files=GALLERY_FILES):
     if len(encoded)>60000:raise ValueError('Oversized gallery input')
     compressed=base64.b64decode(encoded,validate=True)
     decoder=zlib.decompressobj()
     raw=decoder.decompress(compressed,250001)
     if len(raw)>250000 or not decoder.eof or decoder.unused_data:raise ValueError('Invalid or oversized compressed input')
     files=json.loads(raw)
-    if not isinstance(files,dict) or set(files)!=set(GALLERY_FILES) or any(not isinstance(content,str) for content in files.values()):
+    if not isinstance(files,dict) or set(files)!=set(expected_files) or any(not isinstance(content,str) for content in files.values()):
         raise ValueError('Unreviewed gallery file scope')
     return files
 
@@ -37,7 +37,12 @@ def main():
         repository=os.getenv('TORQUE_SOURCE_REPOSITORY','gabrielelozupone/kokon').lower() or 'gabrielelozupone/kokon'
         if not validate_source(profile,repository,sha):raise ValueError('Source/profile not reviewed')
         record.update(acceptance_profile=profile,source_repository=repository)
-        if profile=='gallery-keyboard':
+        if profile=='slider-keyboard':
+            replacements=decode_gallery_bundle(os.environ['TORQUE_FILES_BUNDLE'],SLIDER_FILES)
+            suite=ROOT/'tests/acceptance/slider'
+            command=['python','/acceptance/test_slider.py']
+            criteria=SLIDER_CRITERIA
+        elif profile=='gallery-keyboard':
             replacements=decode_gallery_bundle(os.environ['TORQUE_FILES_BUNDLE'])
             suite=ROOT/'tests/acceptance/gallery'
             command=['python','/acceptance/test_gallery.py']

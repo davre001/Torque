@@ -177,3 +177,15 @@ It searches only the named target repository, saves sanitized result references,
 labels historical context separately from the pinned source revision. CLI login was
 verified against Torque; the demo fork is not mirrored, so target-context and live
 repository recovery acceptance remain unchecked.
+
+## Entire target context readback verified
+
+The user mirrored davre001/kokon in the EU region. Authenticated historical
+search returned no results; actual Entire code search returned Gallery.tsx.
+The runtime adapter now falls back to bounded code search, accepts only the
+requested repository and reviewed context files, and checks each returned line
+against local source before including it. Sanitized live adapter evidence is
+saved in `evidence/entire-runtime/target-context.json`. Its reviewed local
+fixture contains the previously documented harmless crash-test comment; this
+is adapter readback, not a new complete agent run or runtime checkpoint.
+Live repository recovery and broader credential/deployment acceptance remain pending.

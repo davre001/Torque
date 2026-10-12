@@ -1,0 +1,39 @@
+{
+  "repository": "davre001/kokon",
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "source": "entire-code-search",
+  "status": "available",
+  "results": [
+    {
+      "repo": "davre001/kokon",
+      "path": "src/components/Gallery.tsx",
+      "line": 11,
+      "context_line": "export function Gallery() {",
+      "file_sha256": "e07d94f29053ad51fdb2569d48c21167d0c33c36fa62d95af2f8ab8854eeea69",
+      "pinned_line_verified": true
+    }
+  ],
+  "command": [
+    "entire",
+    "search",
+    "gallery keyboard",
+    "--repo",
+    "gh/davre001/kokon",
+    "--compact",
+    "--limit",
+    "3"
+  ],
+  "code_command": [
+    "entire",
+    "search",
+    "Gallery",
+    "--repo",
+    "gh/davre001/kokon",
+    "--code",
+    "--json",
+    "--limit",
+    "3"
+  ],
+  "scope": "Actual Entire code-search output; matched lines checked against reviewed source plus the harmless crash-fixture comment. No agent run or recovery performed.",
+  "fixture_comment_present": true
+}
