@@ -1,4 +1,7 @@
-﻿export const API_BASE = (process.env.NEXT_PUBLIC_TORQUE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+// Production authentication must stay on the frontend origin for host-only cookies.
+export const API_BASE = process.env.NODE_ENV === 'production'
+  ? ''
+  : (process.env.NEXT_PUBLIC_TORQUE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '');
 export class ApiError extends Error {
   constructor(message: string, public status: number) { super(message); }
 }
