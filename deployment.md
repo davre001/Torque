@@ -1,0 +1,192 @@
+# Torque deployment plan
+
+Status: planning only. No production deployment has been completed. The current
+backend uses SQLite; PostgreSQL storage, cloud artifact storage, and the agent
+worker dispatch workflow must be implemented before following the deployment steps.
+This plan excludes hackathon submission preparation.
+
+## Hosting layout
+
+| Component | Where | Purpose |
+| --- | --- | --- |
+| Next.js frontend | Vercel, project root `frontend/ui` | Landing page, GitHub login entry, workspace, progress and history |
+| Python API | Render free Web Service, repository root | Authentication, permissions, admission, history, cancellation and explicit publication |
+| PostgreSQL database | Neon free plan, subject to current quotas | Shared durable users, encrypted credentials, sessions, queue, leases, runs, events and budgets |
+| Agent worker | GitHub Actions in `davre001/Torque`, new workflow | Start a separate Python process for one assigned run, then exit |
+| Independent acceptance tests | Existing `torque-remote-tests.yml` on GitHub Actions | Run reviewed tests separately from the credential-bearing agent worker |
+| Durable run artifacts | Private object storage; provider to be selected | Preserve verified patches and evidence after Actions runners disappear |
+| Tracing | Existing Neatlogs project | Workflow spans, failure investigation and recovery readback |
+
+The worker code stays in `backend/`. Deployment does not require moving it into
+another folder. The new agent workflow is separate from the existing test and
+lifecycle workflows. Do not deploy a continuously running worker on Render free.
+
+Render free services have ephemeral filesystems and sleep after inactivity; free
+Render PostgreSQL expires after 30 days. This plan therefore uses an external
+database. Verify all selected providers' quotas and eligibility before provisioning.
+Sources: [Render free limits](https://render.com/docs/free),
+[Neon free plan](https://neon.com/blog/neon-free-plan-1-gb-per-project).
+
+## 1. Prepare the repository before deploying
+
+- [ ] Implement PostgreSQL configuration and migrations. Choose the connection variable name and document it in `.env.example`; no cloud database variable is supported merely by writing this plan.
+- [ ] Replace SQLite-specific operations across storage, OAuth/session persistence, publication, queue claims, daily reservations and HTTP admission counters.
+- [ ] Preserve atomic admission and exclusive leases under concurrent API and worker processes.
+- [ ] Add a worker command that accepts an assigned run ID and refuses to claim a different run. Existing `python -m backend worker --once` claims any available queued run and is insufficient for targeted cloud dispatch.
+- [ ] Implement durable dispatch bookkeeping and reconciliation: handle accepted submissions followed by failed/uncertain workflow dispatch without duplicating execution or spending reservations.
+- [ ] Implement cancellation checks against the shared database, lease expiry, and interruption handling for runner shutdown or workflow cancellation.
+- [ ] Implement private durable artifact storage, content hashes, bounded downloads and retention. Publication must retrieve and revalidate the exact verified content.
+- [ ] Make publication and retention work without local worker files or local SQLite.
+- [ ] Add a production API proxy and verify OAuth/session behavior through it.
+- [ ] Test migration, concurrent claims, duplicate dispatch, expired leases, cancellation and publication retries.
+- [ ] Update preflight to verify the new database, storage and dispatch configuration without printing credentials.
+
+Do not replace a SQLite filename with a PostgreSQL URL and expect the existing
+backend to work. This is a storage and execution migration.
+
+## 2. Create the shared database
+
+- [ ] Create a Neon account and PostgreSQL project; select a region close to the API.
+- [ ] Review free compute/storage limits and backup capabilities.
+- [ ] Save the TLS connection string securely; never commit or paste it into chat.
+- [ ] Create appropriate application database roles; keep migration privileges separate where practical.
+- [ ] Apply the implemented migrations to an empty staging database first.
+- [ ] Back up local SQLite before any optional import of existing history.
+- [ ] If importing history, preserve user ownership, artifact hashes and encrypted credentials; retain the matching encryption key securely.
+- [ ] Configure API and worker to use the same production database.
+- [ ] Verify backup/export and restore procedures; do not assume free-tier point-in-time recovery.
+
+## 3. Provision private artifact storage
+
+- [ ] Select an object-storage provider with suitable free allowance, private access and retention controls.
+- [ ] Create a private bucket/container; block public listing and reads.
+- [ ] Give the worker bounded write/read access and the API only the access it needs.
+- [ ] Configure storage through the new adapter's documented environment variables.
+- [ ] Verify artifact upload, hash validation, publication retrieval and retention.
+- [ ] Confirm prompts, source archives and credentials are excluded from public evidence and logs.
+
+Actions artifacts may supplement demo evidence, but are not the default durable
+publication store: they have retention and access constraints. API and worker
+local disks are temporary staging space only.
+
+## 4. Deploy the API to Render
+
+- [ ] Connect `davre001/Torque` to Render and create a **Web Service**.
+- [ ] Use the repository root as the service root so `backend` imports and reviewed test files resolve correctly.
+- [ ] Choose a Python version compatible with the project's tested environment.
+- [ ] Build with `pip install -r requirements.txt`, after adding the PostgreSQL/storage dependencies to that manifest.
+- [ ] Start with `python -m uvicorn backend.api:app --host 0.0.0.0 --port $PORT`.
+- [ ] Set the health-check path to the actual route verified in the API code.
+- [ ] Add shared database/storage configuration through Render's secret environment settings.
+- [ ] Add GitHub App client configuration, session encryption key and webhook secret as required by the implemented routes.
+- [ ] Add a narrowly scoped server-side workflow dispatch credential; never use a visitor's token for deployment orchestration.
+- [ ] Leave `TORQUE_OPERATOR_TOKEN` empty in production and enable `TORQUE_PUBLIC_MODE=1` only once production HTTPS/origin settings are valid.
+- [ ] Preserve repository allowlists, reviewed recipes, request limits and daily spending limits.
+- [ ] Confirm no SQLite or local artifact path remains authoritative in production.
+- [ ] Record the generated Render HTTPS URL for the frontend proxy configuration.
+
+The API must not execute long agent runs inside a request. It accepts a job,
+dispatches its worker and returns a run ID. Expect cold starts on Render free;
+the worker must continue independently while the API sleeps.
+
+## 5. Deploy the agent worker to GitHub Actions
+
+- [ ] Add a new manually/API-dispatched agent workflow on the default branch, with an assigned run ID input.
+- [ ] Check out trusted Torque code at a controlled revision; disable persisted checkout credentials.
+- [ ] Install the tested Python dependencies and run the new targeted worker command.
+- [ ] Store database, provider, Neatlogs and required encryption secrets in protected Actions settings.
+- [ ] Limit workflow permissions and concurrency; enforce database leases even when workflow concurrency is configured.
+- [ ] Set an overall timeout with room for graceful finalization inside the existing execution cap.
+- [ ] Keep target repository code out of credential-bearing execution. Continue using the isolated acceptance-test workflow for untrusted code.
+- [ ] Confirm the acceptance workflow can be dispatched and polled from the agent job with appropriately scoped credentials.
+- [ ] Upload durable artifacts before finalizing a verified run; flush Neatlogs before process exit.
+- [ ] Exercise cancelled/expired jobs and verify they become interrupted without automatic paid replay.
+- [ ] Monitor Actions usage and storage allowances; do not claim unlimited free execution.
+
+GitHub documents token behavior for workflow triggers in
+[Triggering a workflow](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+Keep worker secrets separate from the credential-free test workflow.
+
+## 6. Deploy the frontend to Vercel
+
+- [ ] Import `davre001/Torque` into Vercel.
+- [ ] Set **Root Directory** to `frontend/ui` and select Next.js.
+- [ ] Use the frontend lockfile for installation and `npm run build` for the build.
+- [ ] Configure the implemented server-side API proxy to target the Render HTTPS URL.
+- [ ] Make browser API calls and login entry points use the same Vercel origin.
+- [ ] Never put database URLs, provider keys, App secrets or encryption keys in `NEXT_PUBLIC_*` variables or client code.
+- [ ] Deploy and record the stable production URL; do not use a temporary preview URL as the permanent OAuth callback.
+- [ ] Verify landing page, workspace, history and error states on the deployed frontend.
+
+External proxying is supported through
+[Vercel rewrites](https://vercel.com/docs/routing/rewrites), but cookie, redirect,
+host and origin behavior must be implemented and tested for Torque. A rewrite
+alone does not establish successful authentication.
+
+## 7. Configure production GitHub login and request boundaries
+
+- [ ] Set `TORQUE_FRONTEND_ORIGIN` to the stable Vercel HTTPS origin.
+- [ ] Set `GITHUB_APP_CALLBACK_URL` to `https://<frontend-production-host>/api/auth/github/callback` through the implemented proxy.
+- [ ] Update the GitHub App homepage and callback settings to these production URLs.
+- [ ] Configure the public webhook URL and signature secret if webhook delivery is enabled.
+- [ ] Verify forwarded host/protocol handling and backend host allowlisting through the proxy; trust only the configured proxy path.
+- [ ] Verify Secure, HttpOnly, host-only cookies and CSRF/origin checks in a real browser.
+- [ ] Verify login, refresh, disconnect, immediate reconnect and persistent history.
+- [ ] Verify two different users cannot read, cancel or publish each other's runs.
+- [ ] Confirm production API routes reject operator bearer access and expose minimal health information.
+
+The current SameSite=Lax cookie policy does not support ordinary credentialed
+cross-site requests between unrelated `vercel.app` and `onrender.com` origins.
+Use the tested same-origin proxy design, or same-site custom domains if available.
+Do not disable state or CSRF validation to make login succeed.
+
+## 8. Configure agent integrations
+
+- [ ] Set the selected provider mode and model alias; verify real provider availability within existing budgets.
+- [ ] Configure conservative token cost rates and retain the existing call/token/time/dollar caps.
+- [ ] Set `TORQUE_RUNNER=github-actions` and the reviewed Actions repository/ref configuration.
+- [ ] Enable only repositories with calibrated immutable acceptance profiles.
+- [ ] Configure Neatlogs ingest and readback credentials separately; verify an actual application trace.
+- [ ] Decide how runtime Entire authentication is securely provisioned on an ephemeral worker. Local CLI login is not automatically available in Actions.
+- [ ] Keep `TORQUE_ENTIRE_CONTEXT=0` until hosted runtime access is verified; do not describe it as enabled when unavailable.
+- [ ] Retain development checkpoint evidence separately from runtime repository context.
+
+## 9. Verify staging, then production
+
+- [ ] Run preflight against staging without exposing secrets.
+- [ ] Submit one authorized unresolved issue through the browser and follow real persisted progress.
+- [ ] Verify baseline reproduction, implementation, every acceptance criterion and review before publication.
+- [ ] Confirm the worker finishes while Render is idle or restarted.
+- [ ] Confirm history and artifacts survive API redeploys and runner deletion.
+- [ ] Test cancellation, worker interruption and dispatch reconciliation.
+- [ ] Review the verified patch, explicitly publish a controlled draft PR, and confirm retry does not create duplicates.
+- [ ] Audit deployed logs, database access and selected Neatlogs payloads for credentials.
+- [ ] Verify cold-start behavior, rate limits, daily admission limits and proxy request boundaries.
+- [ ] Demonstrate genuine recovery only when a real failed attempt is followed by an independently passing attempt; retain truthful failed evidence otherwise.
+- [ ] Repeat smoke checks using production settings before allowing broader access.
+
+## 10. Operations and rollback
+
+- [ ] Record frontend/API URLs, worker workflow, deployed commit and migration version without secrets.
+- [ ] Define database backups, private artifact retention and restore ownership.
+- [ ] Rehearse restoring database and artifact references together.
+- [ ] Document how to stop new admissions and cancel running workflows without refunding uncertain provider usage.
+- [ ] Roll back API/frontend/worker revisions only to versions compatible with the deployed schema.
+- [ ] Monitor database/storage/Actions quotas and model spending; distinguish estimates from actual bills.
+- [ ] Rotate deployment credentials when needed and retain the session encryption key required to decrypt existing user credentials.
+
+## Deployment completion
+
+- [ ] PostgreSQL migration complete and verified.
+- [ ] Private durable artifacts available.
+- [ ] Render API live.
+- [ ] Targeted Actions worker live.
+- [ ] Vercel frontend live.
+- [ ] Production GitHub login and per-user permissions verified.
+- [ ] End-to-end authorized run and explicit publication verified.
+- [ ] Backup, interruption and rollback checks passed.
+
+Related implementation and release gates:
+[backend readiness](backend/DEPLOYMENT_READINESS.md),
+[integration checklist](integration.md),
+[worker checklist](background_worker.md).
