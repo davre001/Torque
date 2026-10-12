@@ -2,8 +2,31 @@
   "cli_version": "0.11.4",
   "checkpoint_id": "01M4PR33WWQVR62WCF9XDEPP4N",
   "strategy": "manual-commit",
+  "branch": "main",
   "checkpoints_count": 294,
-  "files_touched": null,
+  "files_touched": [
+    ".env.example",
+    "backend.md",
+    "backend/GALLERY_VERIFICATION.md",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/PUBLICATION.md",
+    "backend/REMOTE_RUNNER.md",
+    "backend/__main__.py",
+    "backend/admission.py",
+    "backend/agents/investigator.py",
+    "backend/api.py",
+    "backend/gallery_baseline_probe.py",
+    "backend/integrations/entire.py",
+    "backend/models.py",
+    "backend/pipeline.py",
+    "backend/publication.py",
+    "backend/publication_crash_probe.py",
+    "backend/store.py",
+    "background_worker.md",
+    "integration.md",
+    "tests/test_admission.py",
+    "tests/test_publication.py"
+  ],
   "sessions": [
     {
       "metadata": "/0/metadata.json",
@@ -14,10 +37,10 @@
     }
   ],
   "token_usage": {
-    "input_tokens": 2310811,
+    "input_tokens": 2311665,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 151829248,
-    "output_tokens": 345650,
-    "api_call_count": 1196
+    "cache_read_tokens": 152077184,
+    "output_tokens": 345858,
+    "api_call_count": 1198
   }
 }
