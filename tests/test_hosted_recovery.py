@@ -35,10 +35,13 @@ def test_recovery_uses_only_verified_failed_trace_and_restores_parent(tmp_path,m
             check()
             if mode=='unavailable':raise ReadbackUnavailable('Neatlogs readback HTTP 403')
             closed=[s for s in exporter.get_finished_spans() if format(s.context.trace_id,'032x')==trace_id]
-            assert len(closed)==1
-            assert closed[0].parent is None
-            assert closed[0].name==expected_name
-            assert closed[0].status.status_code.name=='ERROR'
+            assert len(closed)==2
+            root=next(s for s in closed if s.parent is None)
+            child=next(s for s in closed if s.parent is not None)
+            assert child.parent.span_id==root.context.span_id
+            assert child.name=='acceptance-runner-diagnostics'
+            assert root.name==expected_name
+            assert root.status.status_code.name=='ERROR'
             return {'trace_id':trace_id,'finalization_status':'finalized',
                     'spans':[{'spanName':expected_name,'status':'ERROR' if mode=='hosted' else 'OK'}]}
     class Models(FixtureModels):
