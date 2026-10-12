@@ -23,7 +23,9 @@ def test_pytest_wrapper_requires_real_executed_tests(tmp_path, mode):
     (workspace/'test_actual.py').write_text(body)
     (acceptance/'config.json').write_text(json.dumps({'test_files': ['test_actual.py']}))
     script = (ROOT/'tests/acceptance/repository/run.py').read_text()
-    script = script.replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix()).replace('/tmp', output.as_posix())
+    # Replace /tmp first: Linux fixture paths themselves start with /tmp.
+    # Replacing it last corrupts the workspace/acceptance paths just inserted.
+    script = script.replace('/tmp', output.as_posix()).replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix())
     wrapper = tmp_path/'run.py'; wrapper.write_text(script)
     process = subprocess.run([sys.executable, str(wrapper)], capture_output=True, text=True, timeout=30)
     report = result(process)
@@ -43,7 +45,7 @@ def test_node_wrapper_requires_real_executed_tests(tmp_path, mode):
     (workspace/'actual.test.cjs').write_text(body)
     (acceptance/'config.json').write_text(json.dumps({'engine': 'node', 'test_files': ['actual.test.cjs']}))
     script = (ROOT/'tests/acceptance/repository/run.cjs').read_text()
-    script = script.replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix()).replace('/tmp', output.as_posix())
+    script = script.replace('/tmp', output.as_posix()).replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix())
     wrapper = tmp_path/'run.cjs'; wrapper.write_text(script)
     process = subprocess.run([node, str(wrapper)], capture_output=True, text=True, timeout=30)
     report = result(process)
