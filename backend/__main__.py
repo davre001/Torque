@@ -37,7 +37,7 @@ def main():
     if args.command == 'migrate':
         from backend.github_auth import GitHubAuth
         GitHubAuth(store).initialize()
-        print(json.dumps({'schema_version':1,'storage':'postgresql' if store.database.postgres else 'sqlite'}))
+        print(json.dumps({'schema_version':2,'storage':'postgresql' if store.database.postgres else 'sqlite'}))
     elif args.command == 'dispatch':
         from backend.dispatch import Dispatcher
         dispatcher = Dispatcher(store)

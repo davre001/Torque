@@ -85,12 +85,19 @@ class AgentProcessor:
                 raise PipelineError("GitHub authorization expired, disconnected, or repository access revoked") from None
         if github_token and github_token not in self.telemetry.redactor.secrets:
             self.telemetry.redactor.secrets += (github_token,)
-        recipe = load_recipes().get(f"{source_owner}/{repo}".lower())
+        from backend.repository_setup import active_recipe
+        recipe = active_recipe(store, run['user_id'], f'{source_owner}/{repo}') if run['user_id'] != 'operator' else None
+        if recipe is None:
+            recipe = load_recipes().get(f"{source_owner}/{repo}".lower())
         if recipe is None:
             raise PipelineError("No reviewed acceptance recipe for this repository")
         if os.getenv("TORQUE_RUNNER","docker") == "github-actions":
-            from backend.tools.actions_runner import ActionsRunner
-            runner = ActionsRunner(recipe)
+            if recipe.repository_setup:
+                from backend.tools.repository_runner import RepositoryRunner
+                runner = RepositoryRunner(recipe)
+            else:
+                from backend.tools.actions_runner import ActionsRunner
+                runner = ActionsRunner(recipe)
         elif os.getenv("TORQUE_RUNNER","docker") == "docker":
             runner = DockerRunner(recipe)
         else:

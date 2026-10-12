@@ -6,6 +6,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from backend.config import Settings
 from backend.models import Conflict, AdmissionDenied, SubmitRun, parse_issue
 from backend.store import Store
+from backend.repository_setup import SetupConfig
 
 def create_app(settings=None):
     settings = settings or Settings.load()
@@ -58,6 +59,21 @@ def create_app(settings=None):
     app.state.github_auth = auth
     auth.routes(app)
 
+    @app.post('/api/repositories/{owner}/{repo}/setup', status_code=202)
+    def configure_repository(owner: str, repo: str, body: SetupConfig, request: Request):
+        from backend.repository_setup import start_setup
+        from backend.models import PipelineError
+        user = auth.authenticate(request)
+        try:
+            return start_setup(store, auth, user, f'{owner}/{repo}', body)
+        except PipelineError as exc:
+            raise HTTPException(502, str(exc)) from None
+
+    @app.get('/api/repositories/{owner}/{repo}/setup')
+    def repository_setup(owner: str, repo: str, request: Request):
+        from backend.repository_setup import refresh_setup
+        return refresh_setup(store, auth, auth.authenticate(request), f'{owner}/{repo}')
+
     def operator(request: Request, authorization: Annotated[str | None, Header()] = None):
         if authorization is None and request.cookies.get(auth.cookie):
             return auth.authenticate(request)
@@ -93,16 +109,19 @@ def create_app(settings=None):
     def submit(body: SubmitRun, user=Depends(operator),
                idempotency_key: Annotated[str | None, Header(max_length=128)] = None):
         owner, repo, _ = parse_issue(body.issue_url)
-        if f"{owner}/{repo}".lower() not in settings.allowed_repositories:
+        from backend.repository_setup import setup_record, setup_recipe
+        setup = setup_record(store, user, f'{owner}/{repo}') if user != 'operator' else None
+        onboarded = setup_recipe(setup) if setup and setup['status'] == 'ready' else None
+        if user == 'operator' and f"{owner}/{repo}".lower() not in settings.allowed_repositories:
             raise HTTPException(403, "Repository must be explicitly listed in TORQUE_ALLOWED_REPOSITORIES")
         if user != 'operator':
             auth.authorize(user,f'{owner}/{repo}')
             from backend.repository_policy import eligibility, reviewed_recipes
-            policy = eligibility(f'{owner}/{repo}', settings.allowed_repositories, reviewed_recipes())
+            policy = eligibility(f'{owner}/{repo}', None, reviewed_recipes()) if onboarded is None else {'run_supported': True}
             if not policy['run_supported']:
                 raise HTTPException(422, policy['run_reason'])
         try:
-            run_id = store.submit(body.issue_url,user,idempotency_key,admission=admission)
+            run_id = store.submit(body.issue_url,user,idempotency_key,admission=admission,repository_setup=setup if onboarded else None)
         except AdmissionDenied as exc:
             raise HTTPException(429,str(exc)) from None
         except Conflict as exc:

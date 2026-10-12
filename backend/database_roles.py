@@ -9,7 +9,7 @@ from backend.config import ROOT,Settings
 
 TABLES=('schema_migrations','users','runs','jobs','attempts','events','publications',
         'admission_reservations','dispatches','artifact_records','oauth_states',
-        'github_connections','browser_sessions','http_admission')
+        'github_connections','browser_sessions','http_admission','repository_setups')
 
 
 def provision():

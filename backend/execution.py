@@ -9,6 +9,7 @@ from backend.config import ROOT
 from backend.models import PipelineError, Record
 
 class Recipe(Record):
+    repository_setup: dict | None = None
     image: str
     command: list[str] = Field(min_length=1,max_length=30)
     context_files: list[str] = Field(min_length=1,max_length=30)

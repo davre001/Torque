@@ -27,6 +27,12 @@ It is a bounded deployment design, not a high-throughput queue.
 
 ## Worker dispatch
 
+`TORQUE_ALLOWED_REPOSITORIES` restricts local operator/CLI access only. Signed-in
+GitHub App users select repositories granted to them through the configured App;
+submission and publication recheck that authorization. Execution additionally
+requires a reviewed recipe or that user's validated repository setup. An empty
+operator allowlist does not restrict browser users and does not bypass test setup.
+
 Set `TORQUE_WORKER_DISPATCH=github-actions` on the API only after the database and
 agent workflow are provisioned. Submitting a job persists its reservation and
 dispatch identity atomically. GitHub POST failures leave an uncertain dispatch;

@@ -83,8 +83,11 @@ def restore_check(path,migration_url):
     raw=cipher().decrypt(path.read_bytes())
     if len(raw)>MAX_BYTES:raise ValueError('Backup exceeds bound')
     archive=json.loads(raw)
-    if archive.get('format')!='torque-postgres-v1' or set(archive['tables'])!=set(TABLES):
+    if archive.get('format')!='torque-postgres-v1' or set(archive['tables']) not in (set(TABLES), set(TABLES)-{'repository_setups'}):
         raise ValueError('Unsupported backup format')
+    if 'repository_setups' not in archive['tables']:
+        archive['tables']['repository_setups'] = []
+        archive['tables']['schema_migrations'].append({'version': 2})
     schema='torque_restore_'+uuid.uuid4().hex
     with psycopg.connect(migration_url,autocommit=True,connect_timeout=10,prepare_threshold=None) as admin:
         admin.execute(sql.SQL('CREATE SCHEMA {}').format(sql.Identifier(schema)))

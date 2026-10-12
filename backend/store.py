@@ -22,7 +22,7 @@ class Store:
         if self.database.postgres and not migrate:
             with self.transaction() as db:
                 version=db.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
-                if version != 1:
+                if version != 2:
                     raise ValueError('Run database migrations with the migration credential first')
             return
         if not self.database.postgres:
@@ -32,7 +32,7 @@ class Store:
         with self.transaction() as db:
             db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY)')
             version = db.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
-            if version is not None and version > 1:
+            if version is not None and version > 2:
                 raise ValueError('Database schema is newer than this application')
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS users (
@@ -75,11 +75,19 @@ class Store:
                 CREATE TABLE IF NOT EXISTS http_admission (window INTEGER, actor TEXT, count INTEGER NOT NULL, PRIMARY KEY(window,actor));
             """)
             db.execute('INSERT OR IGNORE INTO schema_migrations VALUES(1)')
+            db.execute('''CREATE TABLE IF NOT EXISTS repository_setups (
+                user_id TEXT NOT NULL REFERENCES users(id), repository TEXT NOT NULL,
+                request_id TEXT NOT NULL, status TEXT NOT NULL, config TEXT NOT NULL,
+                source_sha TEXT NOT NULL, workflow_sha TEXT NOT NULL,
+                created_at REAL NOT NULL, updated_at REAL NOT NULL, result TEXT NOT NULL,
+                validation_day INTEGER NOT NULL DEFAULT 0, validation_count INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY(user_id,repository))''')
+            db.execute('INSERT OR IGNORE INTO schema_migrations VALUES(2)')
 
     def _event(self, db, run_id, data):
         db.execute("INSERT INTO events(run_id,created_at,data) VALUES(?,?,?)", (run_id,self.clock(),json.dumps(data)))
 
-    def submit(self, issue_url, user_id="operator", idempotency_key=None, admission=None):
+    def submit(self, issue_url, user_id="operator", idempotency_key=None, admission=None, repository_setup=None):
         with self.transaction() as db:
             if idempotency_key:
                 old = db.execute("SELECT * FROM runs WHERE user_id=? AND idempotency_key=?", (user_id,idempotency_key)).fetchone()
@@ -87,6 +95,11 @@ class Store:
                     if old["issue_url"] != issue_url:
                         raise Conflict("Idempotency key already used for another issue")
                     return old["run_id"]
+            if repository_setup:
+                row = db.execute('SELECT status,request_id FROM repository_setups WHERE user_id=? AND repository=?',
+                                 (user_id, repository_setup['repository'])).fetchone()
+                if not row or row['status'] != 'ready' or row['request_id'] != repository_setup['request_id']:
+                    raise Conflict('Repository test setup changed; refresh access before starting a run')
             if admission:
                 active = db.execute("SELECT COUNT(*) FROM jobs WHERE state IN ('queued','running')").fetchone()[0]
                 own = db.execute("SELECT COUNT(*) FROM jobs JOIN runs USING(run_id) WHERE jobs.state IN ('queued','running') AND user_id=?",(user_id,)).fetchone()[0]

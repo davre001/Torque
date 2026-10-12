@@ -47,7 +47,12 @@ do not upload the entire file.
 | `TORQUE_BACKEND_ORIGIN` | Generated `https://<api-host>.onrender.com` |
 | `GITHUB_APP_CALLBACK_URL` | Frontend origin + `/api/auth/github/callback` |
 | `GITHUB_APP_ID`, `GITHUB_APP_CLIENT_ID`, `GITHUB_APP_CLIENT_SECRET` | Existing App configuration |
-| `TORQUE_ALLOWED_REPOSITORIES` | Existing reviewed allowlist |
+| `TORQUE_ALLOWED_REPOSITORIES` | Optional local operator/CLI scope; GitHub App users use their permissions and validated test setup |
+
+Automatic user repository setup uses database schema 2 and the updated remote
+test workflow. Follow [repository onboarding rollout](REPOSITORY_ONBOARDING.md)
+before deploying this version. User-validated repositories are stored per user
+and do not need to be added to `TORQUE_ALLOWED_REPOSITORIES`.
 
 Do not provision `TORQUE_MIGRATION_DATABASE_URL`, `DATABASE_URL`, or
 `DATABASE_URL_POOLED` to the API. The schema is already migrated; the runtime role

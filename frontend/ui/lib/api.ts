@@ -15,7 +15,12 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   let data;
   try { data = await response.json(); }
   catch { throw new ApiError('Torque returned an unreadable response. Try refreshing progress.', response.status); }
-  if (!response.ok) throw new ApiError(typeof data.detail === 'string' ? data.detail : 'Request failed. Check your input and try again.', response.status);
+  if (!response.ok) {
+    const validation = Array.isArray(data.detail)
+      ? data.detail.map((item: { msg?: string }) => item.msg).filter((message: unknown) => typeof message === 'string').join(' ')
+      : '';
+    throw new ApiError(typeof data.detail === 'string' ? data.detail : validation || 'Request failed. Check your input and try again.', response.status);
+  }
   return data as T;
 }
 export const githubLogin = () => { window.location.assign(API_BASE + '/api/auth/github/connect'); };

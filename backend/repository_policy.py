@@ -4,7 +4,9 @@ from backend.models import PipelineError
 
 
 def eligibility(repository, allowed, recipes):
-    if repository.lower() not in allowed:
+    # None means GitHub App authorization was checked by the caller.
+    # Operator callers may still supply the explicit deployment allowlist.
+    if allowed is not None and repository.lower() not in allowed:
         return {'run_supported': False, 'run_reason': 'Repository is not enabled for this Torque deployment.'}
     if recipes is None:
         return {'run_supported': False, 'run_reason': 'Test recipe configuration is unavailable.'}

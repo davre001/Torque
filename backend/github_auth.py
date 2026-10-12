@@ -177,10 +177,19 @@ CREATE TABLE IF NOT EXISTS browser_sessions (hash TEXT PRIMARY KEY, user_id TEXT
         @app.get('/api/auth/github/repositories')
         def repositories(request:Request):
             from backend.repository_policy import eligibility, reviewed_recipes
-            repos=self.repositories(self.authenticate(request))
+            user = self.authenticate(request)
+            repos=self.repositories(user)
             recipes=reviewed_recipes()
+            from backend.repository_setup import setup_record, public_setup
             for repo in repos:
-                repo.update(eligibility(repo['full_name'],app.state.settings.allowed_repositories,recipes))
+                repo.update(eligibility(repo['full_name'],None,recipes))
+                setup = setup_record(self.store, user, repo['full_name'])
+                repo['setup'] = public_setup(setup)
+                if setup:
+                    repo.update(run_supported=setup['status'] == 'ready',
+                                run_reason=None if setup['status'] == 'ready' else 'Test setup ' + setup['status'] + '. Open setup for details.')
+                elif not repo['run_supported']:
+                    repo['run_reason'] = 'Set up and validate tests to enable this repository.'
                 if repo['app_permissions'].get('contents') not in {'read','write'} or repo['app_permissions'].get('issues') not in {'read','write'}:
                     repo.update(run_supported=False,run_reason='GitHub App needs Contents and Issues read access.')
             return {'repositories':repos}

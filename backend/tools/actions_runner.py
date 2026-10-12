@@ -164,9 +164,11 @@ class ActionsRunner:
             record = json.loads(archive.read(item))
         if record["request_id"] != request_id or record["source_sha"] != self.source:
             raise PipelineError("Remote result identity does not match request")
-        if self.profile in {'gallery-keyboard','slider-keyboard'} and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
+        if self.profile in {'gallery-keyboard','slider-keyboard','repository-tests'} and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
             raise PipelineError('Remote gallery profile/source does not match request')
         signature = record["suite_sha256"]
+        if self.profile == 'repository-tests' and (record.get('suite_revision') != self.suite_sha or not re.fullmatch('[a-f0-9]{64}', signature or '')):
+            raise PipelineError('Frozen repository tests do not match setup')
         if self.suite_sha256 is not None and signature != self.suite_sha256:
             raise PipelineError("Remote acceptance suite changed between attempts")
         self.suite_sha256 = signature

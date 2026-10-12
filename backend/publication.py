@@ -208,8 +208,10 @@ def publish_run(store,run_id,user_id='operator',destination=None):
         source_owner,source_repo,_=parse_issue(run['issue_url'])
         source=f'{source_owner}/{source_repo}'.lower()
         allowed=[item.strip().lower() for item in os.getenv('TORQUE_ALLOWED_REPOSITORIES','').split(',')]
-        recipe=load_recipes().get(source)
-        if source not in allowed or recipe is None:
+        from backend.repository_setup import active_recipe
+        onboarded = active_recipe(store, user_id, source) if user_id != 'operator' else None
+        recipe = onboarded or load_recipes().get(source)
+        if (user_id == 'operator' and source not in allowed) or recipe is None:
             raise Conflict('Source repository is not currently authorized')
         files=verified_files(run,recipe,store=store)
         publisher.validate_destination(run)

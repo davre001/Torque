@@ -24,6 +24,10 @@ on:
         description: Base64 zlib-compressed JSON for reviewed gallery or slider files only
         required: false
         type: string
+      repository_setup:
+        description: Managed repository test configuration
+        required: false
+        type: string
 permissions:
   contents: read
 jobs:
@@ -48,6 +52,7 @@ jobs:
           TORQUE_ACCEPTANCE_PROFILE: ${{ inputs.acceptance_profile }}
           TORQUE_SOURCE_REPOSITORY: ${{ inputs.source_repository }}
           TORQUE_FILES_BUNDLE: ${{ inputs.files_bundle }}
+          TORQUE_REPOSITORY_SETUP: ${{ inputs.repository_setup }}
         run: python -u -m backend.remote_job
       - name: Save machine-readable result
         if: always()

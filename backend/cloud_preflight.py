@@ -19,7 +19,7 @@ def check(store, probe=False):
                 version=db.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
                 db.execute('SELECT COUNT(*) FROM artifact_records').fetchone()
                 db.execute('SELECT COUNT(*) FROM dispatches').fetchone()
-            if version != 1:raise ValueError('Schema version')
+            if version != 2:raise ValueError('Schema version')
             if mode=='github-actions':
                 from backend.dispatch import Dispatcher
                 dispatcher=Dispatcher(store)

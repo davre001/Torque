@@ -16,7 +16,8 @@ async function proxy(request: NextRequest) {
   if (request.nextUrl.origin !== origin || (request.method === 'POST' && request.headers.get('origin') !== origin)) {
     return Response.json({ detail: 'Invalid request origin' }, { status: 403 });
   }
-  if (!request.nextUrl.pathname.startsWith('/api/auth/') && request.nextUrl.pathname !== '/api/runs' && !request.nextUrl.pathname.startsWith('/api/runs/')) {
+  const repositorySetup = /^\/api\/repositories\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/setup$/.test(request.nextUrl.pathname);
+  if (!repositorySetup && !request.nextUrl.pathname.startsWith('/api/auth/') && request.nextUrl.pathname !== '/api/runs' && !request.nextUrl.pathname.startsWith('/api/runs/')) {
     return Response.json({ detail: 'Not Found' }, { status: 404 });
   }
   const headers = new Headers({ 'x-torque-proxy-secret': secret });
