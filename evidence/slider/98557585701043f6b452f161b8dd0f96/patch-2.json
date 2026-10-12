@@ -1,0 +1,47 @@
+{
+  "summary": "Fix keyboard accessibility of the comparison slider: reset split and sync aria-valuenow in show(), use aria-valuenow as source of truth in keydown handler, fix b.role to setAttribute, add aria attributes and keydown handler to #cmp, update alt text in show(), and add :focus-visible outline to .cmp",
+  "edits": [
+    {
+      "path": "site/index.html",
+      "original_sha256": "c15621e1165601f183ceb4959bc32bfb7c8b0da859390668414c144860b47a59",
+      "content": null,
+      "replacements": [
+        {
+          "search": "        <div class=\"cmp\" id=\"cmp\" style=\"--split: 50%\">",
+          "replacement": "        <div class=\"cmp\" id=\"cmp\" style=\"--split: 50%\" tabindex=\"0\" role=\"slider\" aria-label=\"Before/after comparison\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"50\">"
+        },
+        {
+          "search": "          <img class=\"bg-blur\" id=\"cmp-bg\" alt=\"\">\n          <img class=\"after\" id=\"cmp-after\" alt=\"\">\n          <img class=\"before\" id=\"cmp-before\" alt=\"\">",
+          "replacement": "          <img class=\"bg-blur\" id=\"cmp-bg\" alt=\"\">\n          <img class=\"after\" id=\"cmp-after\" alt=\"\">\n          <img class=\"before\" id=\"cmp-before\" alt=\"\">"
+        },
+        {
+          "search": "    after.src = img(e.after);\n    before.src = img(e.before);\n    bg.src = img(e.after);\n    // An expansion: the original sits in the middle of the wider result.\n    before.style.cssText = e.expand ? \"object-fit: contain; transform: scale(0.555); transform-origin: center;\" : \"\";\n    $(\"cmp-mode\").textContent = e.mode;\n    $(\"cmp-prompt\").textContent = e.prompt;\n    if (animate && !matchMedia(\"(prefers-reduced-motion: reduce)\").matches) sweep();",
+          "replacement": "    after.src = img(e.after);\n    before.src = img(e.before);\n    bg.src = img(e.after);\n    after.alt = `After: ${e.mode} — ${e.prompt}`;\n    before.alt = `Before: ${e.mode} — ${e.prompt}`;\n    // An expansion: the original sits in the middle of the wider result.\n    before.style.cssText = e.expand ? \"object-fit: contain; transform: scale(0.555); transform-origin: center;\" : \"\";\n    $(\"cmp-mode\").textContent = e.mode;\n    $(\"cmp-prompt\").textContent = e.prompt;\n    setSplit(50);\n    if (animate && !matchMedia(\"(prefers-reduced-motion: reduce)\").matches) sweep();"
+        },
+        {
+          "search": "  const setSplit = (v) => cmp.style.setProperty(\"--split\", `${Math.max(0, Math.min(100, v))}%`);",
+          "replacement": "  const setSplit = (v) => { const c = Math.max(0, Math.min(100, v)); cmp.style.setProperty(\"--split\", `${c}%`); cmp.setAttribute(\"aria-valuenow\", Math.round(c)); };"
+        },
+        {
+          "search": "  const fromPointer = (ev) => { const r = cmp.getBoundingClientRect(); setSplit(((ev.clientX - r.left) / r.width) * 100); };\n  let dragging = false;\n  cmp.addEventListener(\"pointerdown\", (ev) => { dragging = true; cancelAnimationFrame(raf); cmp.setPointerCapture(ev.pointerId); fromPointer(ev); });\n  cmp.addEventListener(\"pointermove\", (ev) => dragging && fromPointer(ev));\n  cmp.addEventListener(\"pointerup\", () => (dragging = false));\n  cmp.addEventListener(\"pointercancel\", () => (dragging = false));",
+          "replacement": "  const fromPointer = (ev) => { const r = cmp.getBoundingClientRect(); setSplit(((ev.clientX - r.left) / r.width) * 100); };\n  let dragging = false;\n  cmp.addEventListener(\"pointerdown\", (ev) => { dragging = true; cancelAnimationFrame(raf); cmp.setPointerCapture(ev.pointerId); fromPointer(ev); });\n  cmp.addEventListener(\"pointermove\", (ev) => dragging && fromPointer(ev));\n  cmp.addEventListener(\"pointerup\", () => (dragging = false));\n  cmp.addEventListener(\"pointercancel\", () => (dragging = false));\n  cmp.addEventListener(\"keydown\", (ev) => {\n    const moves = { ArrowLeft: -5, ArrowRight: 5 };\n    if (ev.key in moves) { ev.preventDefault(); cancelAnimationFrame(raf); setSplit((parseInt(cmp.getAttribute(\"aria-valuenow\"), 10) || 50) + moves[ev.key]); }\n    else if (ev.key === \"Home\") { ev.preventDefault(); cancelAnimationFrame(raf); setSplit(0); }\n    else if (ev.key === \"End\") { ev.preventDefault(); cancelAnimationFrame(raf); setSplit(100); }\n  });"
+        },
+        {
+          "search": "    b.className = \"tab\"; b.type = \"button\"; b.role = \"tab\"; b.textContent = e.label;",
+          "replacement": "    b.className = \"tab\"; b.type = \"button\"; b.setAttribute(\"role\", \"tab\"); b.textContent = e.label;"
+        }
+      ]
+    },
+    {
+      "path": "site/assets/style.css",
+      "original_sha256": "610cb4881e820ecad6ba154213c07559aace4e311bfb4975f151309836abbb7a",
+      "content": null,
+      "replacements": [
+        {
+          "search": ".cmp { position: relative; border-radius: 16px; overflow: hidden; background: #000; user-select: none; touch-action: pan-y; cursor: ew-resize; aspect-ratio: 16 / 9; }",
+          "replacement": ".cmp { position: relative; border-radius: 16px; overflow: hidden; background: #000; user-select: none; touch-action: pan-y; cursor: ew-resize; aspect-ratio: 16 / 9; }\n.cmp:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }"
+        }
+      ]
+    }
+  ]
+}

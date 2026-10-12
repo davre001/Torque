@@ -54,13 +54,16 @@ def main(workspace='/workspace'):
                 assert abs(float(cmp.get_attribute('aria-valuenow'))-split())<0.1
             def keyboard():
                 tab_to_slider()
-                page.keyboard.press('Home');assert split()==0
-                page.keyboard.press('ArrowLeft');assert split()==0
-                page.keyboard.press('ArrowRight');assert split()==5
-                page.keyboard.press('End');assert split()==100
-                page.keyboard.press('ArrowRight');assert split()==100
-                page.keyboard.press('ArrowLeft');assert split()==95
-                assert float(cmp.get_attribute('aria-valuenow'))==95
+                sequence=[]
+                for key,expected in [('Home',0),('ArrowLeft',0),('ArrowRight',5),
+                                     ('End',100),('ArrowRight',100),('ArrowLeft',95)]:
+                    before=split();page.keyboard.press(key);actual=split()
+                    sequence.append(key)
+                    assert actual==expected, (
+                        f'keys={sequence!r}; before={before}; key={key}; '
+                        f'expected split={expected}; actual split={actual}')
+                actual_aria=float(cmp.get_attribute('aria-valuenow'))
+                assert actual_aria==95, f'Expected aria-valuenow=95; actual={actual_aria}'
             def sweep_focus():
                 reset('no-preference');page.locator('#tabs .tab').nth(1).click()
                 tab_to_slider();page.keyboard.press('Home');page.wait_for_timeout(400)

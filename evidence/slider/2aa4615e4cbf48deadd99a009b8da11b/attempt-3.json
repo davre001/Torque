@@ -1,0 +1,75 @@
+{
+  "number": 3,
+  "patch_sha256": "9316f9199bd10dabeb7aff8bc63766342f71bedffeac642f7a4521ca90042f1f",
+  "tests_passed": false,
+  "review": {
+    "approved": false,
+    "rationale": "Independent acceptance tests failed",
+    "satisfied_criteria": []
+  },
+  "budget": {
+    "calls": 8,
+    "tokens": 51247,
+    "estimated_cost_usd": 0.2519850000000001,
+    "usage": [
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5067,
+        "output_tokens": 547,
+        "estimated_cost_usd": 0.023406
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5034,
+        "output_tokens": 1168,
+        "estimated_cost_usd": 0.032622
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5107,
+        "output_tokens": 762,
+        "estimated_cost_usd": 0.026751
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5800,
+        "output_tokens": 951,
+        "estimated_cost_usd": 0.031665
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4917,
+        "output_tokens": 1601,
+        "estimated_cost_usd": 0.038766
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4941,
+        "output_tokens": 1027,
+        "estimated_cost_usd": 0.030228
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 6085,
+        "output_tokens": 1114,
+        "estimated_cost_usd": 0.034965
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 6109,
+        "output_tokens": 1017,
+        "estimated_cost_usd": 0.033582
+      }
+    ]
+  },
+  "trace_id": "23a018f3233355b837448eb9812b232b",
+  "test_trace_id": "b1fbd46c0a0c41a0d4d22ddd52c0f90f"
+}

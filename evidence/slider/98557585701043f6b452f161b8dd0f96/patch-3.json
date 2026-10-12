@@ -1,0 +1,16 @@
+{
+  "summary": "Fix the aria-valuenow zero-value bug: introduce a splitVal variable to track current split position instead of reading from the DOM attribute (parseInt('0',10)||50 would incorrectly return 50 when at position 0). Update setSplit to maintain splitVal and use it in the keydown handler.",
+  "edits": [
+    {
+      "path": "site/index.html",
+      "original_sha256": "c15621e1165601f183ceb4959bc32bfb7c8b0da859390668414c144860b47a59",
+      "content": null,
+      "replacements": [
+        {
+          "search": "  let raf = 0;\n  const setSplit = (v) => cmp.style.setProperty(\"--split\", `${Math.max(0, Math.min(100, v))}%`);",
+          "replacement": "  let raf = 0;\n  let splitVal = 50;\n  const setSplit = (v) => { splitVal = Math.max(0, Math.min(100, v)); cmp.style.setProperty(\"--split\", `${splitVal}%`); cmp.setAttribute(\"aria-valuenow\", Math.round(splitVal)); };"
+        }
+      ]
+    }
+  ]
+}

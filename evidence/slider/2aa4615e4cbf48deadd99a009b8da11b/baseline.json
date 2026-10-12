@@ -1,0 +1,11 @@
+{
+  "exit_code": 1,
+  "output": "slider-semantics: Slider is not reachable by Tab\nslider-keys: Slider is not reachable by Tab\nsweep-and-focus: Slider is not reachable by Tab\nimage-descriptions: Image description lacks selected mode/prompt\nTORQUE_TEST_RESULT={\"failure_kind\": \"assertion\", \"assertions_passed\": 1}\n",
+  "timed_out": false,
+  "command": [
+    "python",
+    "/acceptance/test_slider.py"
+  ],
+  "failure_kind": "assertion",
+  "assertions_passed": 1
+}

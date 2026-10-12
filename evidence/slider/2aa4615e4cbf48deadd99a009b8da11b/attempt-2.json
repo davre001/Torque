@@ -1,0 +1,47 @@
+{
+  "number": 2,
+  "patch_sha256": "50607fd32da1ed2ac12ec32137853bfaedb1989be1387e17a6aaf6f8b98bb9b5",
+  "tests_passed": false,
+  "review": {
+    "approved": false,
+    "rationale": "Independent acceptance tests failed",
+    "satisfied_criteria": []
+  },
+  "budget": {
+    "calls": 4,
+    "tokens": 24436,
+    "estimated_cost_usd": 0.11444400000000002,
+    "usage": [
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5067,
+        "output_tokens": 547,
+        "estimated_cost_usd": 0.023406
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5034,
+        "output_tokens": 1168,
+        "estimated_cost_usd": 0.032622
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5107,
+        "output_tokens": 762,
+        "estimated_cost_usd": 0.026751
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5800,
+        "output_tokens": 951,
+        "estimated_cost_usd": 0.031665
+      }
+    ]
+  },
+  "trace_id": "23a018f3233355b837448eb9812b232b",
+  "test_trace_id": "3da7d0eba07da8dc6d759619626ceb04"
+}

@@ -1,0 +1,11 @@
+{
+  "run_id": "6de4f02f375e44a297cc09e387f8d3c1",
+  "issue_url": "https://github.com/davre001/kokon/issues/7",
+  "user_id": "github:141245473",
+  "mode": "real-github-app-authorized-worker-trial",
+  "seeded_failure": false,
+  "entire_context_enabled": true,
+  "recipe": "backend/recipes.slider.json",
+  "prior_configuration_failure": "c8f542337c71495f97de6028383ac9c0",
+  "investigation_context_bytes": 9406
+}

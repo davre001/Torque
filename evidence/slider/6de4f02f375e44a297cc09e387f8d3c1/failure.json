@@ -1,0 +1,63 @@
+{
+  "error": "Patch exceeds size limit or contains binary content",
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "entire-context.json",
+        "sha256": "2c0486852a9f4ddadab63edd99ed34cb31f7c3678abbd33c297fa6e1338452f9"
+      },
+      {
+        "name": "baseline.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "4686bbc2a3c8eec1d9c2a2df7df9b4b60a24ef0ff6452d4ce7f1b1e5baadb20c"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "5053c47425f72bff4f15f772182c104f",
+    "test_image": "sha256:3bfa2107a37d112c710f27eed16b55921b487be581b3e23b66154eb3819355e0",
+    "acceptance_suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+    "budget": {
+      "calls": 2,
+      "tokens": 32862,
+      "estimated_cost_usd": 0.11445,
+      "usage": [
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5067,
+          "output_tokens": 267,
+          "estimated_cost_usd": 0.019206
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 26473,
+          "output_tokens": 1055,
+          "estimated_cost_usd": 0.095244
+        }
+      ]
+    },
+    "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+    "source_repository": "davre001/kokon",
+    "entire_context_status": "available",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "Add keyboard accessibility to the before/after comparison slider (#cmp) in the Torque demo. The #cmp element needs: tabindex, role=slider, aria-label, aria-valuemin/max/now attributes, keyboard event handling (ArrowLeft/Right ±5, Home=0, End=100) that also cancels the sweep animation, visible focus styling, and meaningful alt text on the before/after images that updates with each example's mode and prompt. The decorative blur background image keeps alt=\"\".",
+      "acceptance_criteria": [
+        "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+        "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+        "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+        "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+        "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+      ],
+      "files": [
+        "site/index.html",
+        "site/assets/style.css"
+      ]
+    }
+  }
+}

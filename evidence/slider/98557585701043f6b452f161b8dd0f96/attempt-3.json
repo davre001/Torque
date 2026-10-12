@@ -1,0 +1,82 @@
+{
+  "number": 3,
+  "patch_sha256": "3db215c90536eb58e0a386f495b64a3917fe05de6fe22805b31fc2169171d40a",
+  "tests_passed": false,
+  "review": {
+    "approved": false,
+    "rationale": "Independent acceptance tests failed",
+    "satisfied_criteria": []
+  },
+  "budget": {
+    "calls": 9,
+    "tokens": 56151,
+    "estimated_cost_usd": 0.28169699999999986,
+    "usage": [
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5067,
+        "output_tokens": 307,
+        "estimated_cost_usd": 0.019806
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4721,
+        "output_tokens": 1099,
+        "estimated_cost_usd": 0.030648
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4769,
+        "output_tokens": 1303,
+        "estimated_cost_usd": 0.033852
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4793,
+        "output_tokens": 1062,
+        "estimated_cost_usd": 0.030309
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5788,
+        "output_tokens": 1458,
+        "estimated_cost_usd": 0.039234
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5812,
+        "output_tokens": 1662,
+        "estimated_cost_usd": 0.042366
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4956,
+        "output_tokens": 1180,
+        "estimated_cost_usd": 0.032568
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 4980,
+        "output_tokens": 1078,
+        "estimated_cost_usd": 0.03111
+      },
+      {
+        "model": "claude-sonnet-4.6",
+        "usage": "provider-reported",
+        "input_tokens": 5828,
+        "output_tokens": 288,
+        "estimated_cost_usd": 0.021804
+      }
+    ]
+  },
+  "trace_id": "6be9d833a671bf62d4cc8504cfb64223",
+  "test_trace_id": "bf8171819baa61ce4e1045ae0f4638a8"
+}

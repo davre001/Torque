@@ -1,0 +1,14 @@
+{
+  "summary": "Make the before/after comparison slider in site/index.html keyboard accessible by: adding tabindex=\"0\", role=\"slider\", aria-label, aria-valuemin, aria-valuemax, and aria-valuenow to the #cmp element; handling ArrowLeft/ArrowRight (±5 points), Home (0), and End (100) keyboard events that also cancel the sweep animation; updating aria-valuenow whenever setSplit is called; giving the before/after images descriptive alt text (mode + prompt) that updates on example change while keeping the bg-blur image decorative (alt=\"\"); and adding a visible :focus-visible outline to .cmp in style.css.",
+  "acceptance_criteria": [
+    "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+    "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+    "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+    "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+    "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+  ],
+  "files": [
+    "site/index.html",
+    "site/assets/style.css"
+  ]
+}

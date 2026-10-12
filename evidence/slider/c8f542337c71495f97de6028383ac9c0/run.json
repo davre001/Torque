@@ -1,0 +1,45 @@
+{
+  "run_id": "c8f542337c71495f97de6028383ac9c0",
+  "user_id": "github:141245473",
+  "issue_url": "https://github.com/davre001/kokon/issues/7",
+  "status": "failed",
+  "current_agent": null,
+  "created_at": 1791767155.9101114,
+  "updated_at": 1791767318.7459877,
+  "cancel_requested": false,
+  "idempotency_key": "slider-live-20261012",
+  "error": "Investigation context exceeds size limit; review context selection",
+  "pr_url": null,
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "entire-context.json",
+        "sha256": "2c0486852a9f4ddadab63edd99ed34cb31f7c3678abbd33c297fa6e1338452f9"
+      },
+      {
+        "name": "baseline.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "failure.json",
+        "sha256": "4dcd3cbadae49e35d96b8c2f041e3da7f1ad3a437967b26a64d8a625b413b456"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "8bd5db172fb16258b57c3e38c2526f47",
+    "test_image": "sha256:e44b4dcade831ef2456efe6e491b364309eaa77cf49356bb1abd8f779c39f4a0",
+    "acceptance_suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+    "budget": {
+      "calls": 0,
+      "tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "usage": []
+    },
+    "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+    "source_repository": "davre001/kokon",
+    "entire_context_status": "available",
+    "baseline_passed": false
+  },
+  "attempts": []
+}

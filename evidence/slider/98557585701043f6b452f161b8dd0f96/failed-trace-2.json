@@ -1,0 +1,21 @@
+{
+  "trace_id": "90b2606c4b47a4416d723f21b2068eb9",
+  "project_id": "00fd5eb9-0f63-473e-babc-4621191e4a4d",
+  "host": "https://app.neatlogs.com",
+  "finalization_status": "finalized",
+  "status": "ERROR",
+  "total_tokens": 0,
+  "llm_calls": 0,
+  "spans": [
+    {
+      "spanId": "d74df1f6c907a98e",
+      "parentSpanId": null,
+      "spanName": "acceptance-tests-98557585701043f6b452f161b8dd0f96-2",
+      "spanType": "WORKFLOW",
+      "status": "ERROR",
+      "model": null,
+      "provider": null,
+      "totalTokens": 0
+    }
+  ]
+}

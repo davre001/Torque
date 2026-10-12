@@ -1,0 +1,40 @@
+{
+  "repository": "davre001/kokon",
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "source": "entire-search",
+  "status": "available",
+  "results": [
+    {
+      "id": "439aa67ae375da02f3e67073c65f58382f4f7e95",
+      "type": "commit",
+      "repo": "davre001/kokon",
+      "title": "Torque verified fix for b220ce7e5cda4e14963c74fc04ad8711",
+      "date": "2026-10-11T19:56:20.000Z"
+    },
+    {
+      "id": "47b033c92bea54e48ec9569b682d670ae7ec19cf",
+      "type": "commit",
+      "repo": "davre001/kokon",
+      "title": "Torque verified fix for b4064768c6b540a2852a172cbd6dbc1b",
+      "date": "2026-10-11T23:27:49.000Z"
+    },
+    {
+      "id": "ae520d0100cdac1deaddea191c8bdd72d058ef5d",
+      "type": "commit",
+      "repo": "davre001/kokon",
+      "title": "Torque verified fix for 6634790aa28943629348e02914d9b56c",
+      "date": "2026-10-11T05:50:11.000Z"
+    }
+  ],
+  "command": [
+    "entire",
+    "search",
+    "Torque demo: make the before/after slider keyboard accessible",
+    "--repo",
+    "gh/davre001/kokon",
+    "--compact",
+    "--limit",
+    "3"
+  ],
+  "scope": "Historical context; not proof these records belong to source_sha"
+}

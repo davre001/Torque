@@ -9,7 +9,7 @@ from pathlib import Path
 from backend.config import ROOT
 
 class EntireContext:
-    def search(self, repository, revision, query, context=None):
+    def search(self, repository, revision, query, context=None, code_query=None):
         record = {'repository':repository,'source_sha':revision,'source':'entire-search',
                   'status':'disabled','results':[]}
         if os.getenv('TORQUE_ENTIRE_CONTEXT','0') != '1':
@@ -41,7 +41,7 @@ class EntireContext:
                     continue
                 hits.append({k:hit[k] for k in ('id','type','repo','title','snippet','date') if k in hit})
             if not hits and context:
-                term=Path(next(iter(context))).stem
+                term=code_query or Path(next(iter(context))).stem
                 code_command=[executable,'search',term,'--repo','gh/'+repository,'--code','--json','--limit','3']
                 record['code_command']=['entire',*code_command[1:]]
                 with tempfile.TemporaryFile() as output:

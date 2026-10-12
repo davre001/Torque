@@ -1,0 +1,160 @@
+{
+  "error": "Independent verification failed after the configured recovery limit",
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "entire-context.json",
+        "sha256": "2c0486852a9f4ddadab63edd99ed34cb31f7c3678abbd33c297fa6e1338452f9"
+      },
+      {
+        "name": "baseline.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "efe15dba6c96a1843aaf15a6647879ff00b006a9daa67c8520a61a9c652019b8"
+      },
+      {
+        "name": "patch-1.json",
+        "sha256": "ef3f6a32aaef41fc4e5d2a62e228a408351b79ded8319a63ee130f86609e75e2"
+      },
+      {
+        "name": "tests-1.json",
+        "sha256": "5a0c3a5308958a56a85bb29eb9b509f4fda1ed47e7677aa1f74a05b3271908bf"
+      },
+      {
+        "name": "attempt-1.json",
+        "sha256": "e3434c27b6ec3aada57c4d95da2ea1d224bff197d3a7b7d1ca09f239e599ef7e"
+      },
+      {
+        "name": "recovery-1.json",
+        "sha256": "9147385e4996d076d0d5d0cfd32c6626838d7c8b34ce47f5ccc6f474cd9b2c01"
+      },
+      {
+        "name": "patch-2.json",
+        "sha256": "0124bb0d6013db17d9afb7323bb6d0989c6add18cb83fbf1e991a04aaba28366"
+      },
+      {
+        "name": "tests-2.json",
+        "sha256": "5a0c3a5308958a56a85bb29eb9b509f4fda1ed47e7677aa1f74a05b3271908bf"
+      },
+      {
+        "name": "attempt-2.json",
+        "sha256": "e7212477f60d809c9eb0e293a8beda66bea19ae17f64a250941b3c4a359d0c0d"
+      },
+      {
+        "name": "failed-trace-2.json",
+        "sha256": "2db80b2e5eaa0907bedca78f0140f5c3bc2fe5c9635c47e6fca48842c8538e1c"
+      },
+      {
+        "name": "recovery-2.json",
+        "sha256": "6a7b6677fe8262a8893219a2937b6430f96df91ce2e6db6087b9f2e08c85c8f6"
+      },
+      {
+        "name": "patch-3.json",
+        "sha256": "ccf503b73b4dbde5df7363fe0183ee28c125b58a5b65a7c3ef6bd169236e8609"
+      },
+      {
+        "name": "tests-3.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "attempt-3.json",
+        "sha256": "8338901e3f6eb48ea5767fc48aca8408bed63c1ad8d59a8d5277995572ad3bad"
+      }
+    ],
+    "recovery_evidence_source": "neatlogs-public-api+local-artifacts",
+    "trace_id": "6be9d833a671bf62d4cc8504cfb64223",
+    "test_image": "sha256:90c44d3cbdbc83e79d8d36c1d75205635c27552c2a24180ca9bed0bbcb7da627",
+    "acceptance_suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+    "budget": {
+      "calls": 9,
+      "tokens": 56151,
+      "estimated_cost_usd": 0.28169699999999986,
+      "usage": [
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5067,
+          "output_tokens": 307,
+          "estimated_cost_usd": 0.019806
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4721,
+          "output_tokens": 1099,
+          "estimated_cost_usd": 0.030648
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4769,
+          "output_tokens": 1303,
+          "estimated_cost_usd": 0.033852
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4793,
+          "output_tokens": 1062,
+          "estimated_cost_usd": 0.030309
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5788,
+          "output_tokens": 1458,
+          "estimated_cost_usd": 0.039234
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5812,
+          "output_tokens": 1662,
+          "estimated_cost_usd": 0.042366
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4956,
+          "output_tokens": 1180,
+          "estimated_cost_usd": 0.032568
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4980,
+          "output_tokens": 1078,
+          "estimated_cost_usd": 0.03111
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5828,
+          "output_tokens": 288,
+          "estimated_cost_usd": 0.021804
+        }
+      ]
+    },
+    "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+    "source_repository": "davre001/kokon",
+    "entire_context_status": "available",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "Make the before/after comparison slider in site/index.html keyboard accessible by: adding tabindex=\"0\", role=\"slider\", aria-label, aria-valuemin, aria-valuemax, and aria-valuenow to the #cmp element; handling ArrowLeft/ArrowRight (±5 points), Home (0), and End (100) keyboard events that also cancel the sweep animation; updating aria-valuenow whenever setSplit is called; giving the before/after images descriptive alt text (mode + prompt) that updates on example change while keeping the bg-blur image decorative (alt=\"\"); and adding a visible :focus-visible outline to .cmp in style.css.",
+      "acceptance_criteria": [
+        "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+        "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+        "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+        "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+        "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+      ],
+      "files": [
+        "site/index.html",
+        "site/assets/style.css"
+      ]
+    }
+  }
+}

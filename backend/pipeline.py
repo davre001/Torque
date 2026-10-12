@@ -73,7 +73,8 @@ class Pipeline:
                 originals = {name:context[name]["content"] for name in self.recipe.editable_files}
                 from backend.integrations.entire import EntireContext
                 with self.span('entire-target-context'):
-                    entire_context=EntireContext().search(result['source_repository'],sha,issue.get('title','issue investigation'),context)
+                    entire_context=EntireContext().search(result['source_repository'],sha,issue.get('title','issue investigation'),context,
+                        next(iter(self.recipe.investigation_terms.values()),[None])[0])
                 save('entire-context',entire_context)
                 result['entire_context_status']=entire_context['status']
                 with self.span("baseline-tests"):
@@ -100,6 +101,9 @@ class Pipeline:
                     for name,text in originals.items():
                         safe_path(workspace,name).write_bytes(text.encode())
                     current = read_files(workspace,self.recipe.context_files)
+                    if self.recipe.investigation_terms:
+                        from backend.tools.files import investigation_context
+                        current = investigation_context(current,self.recipe.investigation_terms)
                     with self.span("implementer","AGENT",attempt=number):
                         patch = implementer.implement(self.implementer_provider,plan,current,strategy)
                     with self.span("apply-approved-edits"):
@@ -115,6 +119,8 @@ class Pipeline:
                             from opentelemetry.trace import Status as SpanStatus, StatusCode
                             test_span.set_attribute('torque.assertions_passed', tests.assertions_passed)
                             test_span.set_attribute('torque.failure_kind', tests.failure_kind or 'none')
+                            test_span.set_attribute('torque.acceptance_diagnostics',
+                                                    artifacts.sanitize(tests.output[-4000:]))
                             test_span.set_status(SpanStatus(StatusCode.OK if tests.passed else StatusCode.ERROR,
                                                           None if tests.passed else 'Independent acceptance tests failed'))
                     attempt_trace = format(test_span.get_span_context().trace_id, '032x') if test_span is not None else None
@@ -170,7 +176,8 @@ class Pipeline:
                     evidence_source = 'neatlogs-public-api+local-artifacts' if hosted else 'local-artifacts'
                     result['recovery_evidence_source'] = evidence_source
                     with self.span('recovery-hosted-evidence' if hosted else 'recovery-local-evidence','AGENT',attempt=number):
-                        strategy = recovery.recover(self.implementer_provider,plan,failure,changed,hosted,self.recipe)
+                        strategy = recovery.recover(self.implementer_provider,plan,failure,changed,hosted,self.recipe,
+                                                    patch=patch)
                     save(f"recovery-{number}",{"strategy":strategy,"evidence_source":evidence_source,
                                              'failed_trace_id':attempt_trace, 'readback_error':None if hosted else readback_error})
             except PipelineError as exc:

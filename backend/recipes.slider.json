@@ -22,15 +22,15 @@
     ],
     "investigation_terms": {
       "site/index.html": [
-        "cmp",
-        "setSplit",
-        "sweep",
-        "reel"
+        "id=\"cmp\"",
+        "function show(i, animate)",
+        "const setSplit",
+        "const fromPointer",
+        "const reel ="
       ],
       "site/assets/style.css": [
-        ".cmp",
-        ".handle",
-        ":focus"
+        ".cmp {",
+        ".cmp .handle"
       ]
     },
     "suite_directory": "remote-managed",

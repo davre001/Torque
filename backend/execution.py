@@ -52,6 +52,7 @@ class Limits:
                    max_tokens=int(os.getenv("TORQUE_MAX_TOKENS","100000")),
                    max_seconds=int(os.getenv("TORQUE_MAX_SECONDS","900")),
                    max_calls=int(os.getenv("TORQUE_MAX_CALLS","12")),
+                   max_patch_bytes=int(os.getenv("TORQUE_MAX_PATCH_BYTES","100000")),
                    recovery_retries=int(os.getenv("TORQUE_RECOVERY_RETRIES","2")))
 
 def load_recipes(path=None):

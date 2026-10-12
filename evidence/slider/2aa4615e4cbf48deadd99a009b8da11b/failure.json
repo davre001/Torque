@@ -1,0 +1,153 @@
+{
+  "error": "Independent verification failed after the configured recovery limit",
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "entire-context.json",
+        "sha256": "2c0486852a9f4ddadab63edd99ed34cb31f7c3678abbd33c297fa6e1338452f9"
+      },
+      {
+        "name": "baseline.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "2cb14c0e6860c475a07b249f899c4b7a1aab6be3ece3ef93fa4b18617d1dcd21"
+      },
+      {
+        "name": "patch-1.json",
+        "sha256": "bef38e2576db5ac1ec76e318e82630bd0e41804cb0d47a7e83a697a668b0e3fe"
+      },
+      {
+        "name": "tests-1.json",
+        "sha256": "5a0c3a5308958a56a85bb29eb9b509f4fda1ed47e7677aa1f74a05b3271908bf"
+      },
+      {
+        "name": "attempt-1.json",
+        "sha256": "0a80732b6e9801977e075ad1d3a03fe29d9bf8845861282ba69b6a4f6b467799"
+      },
+      {
+        "name": "failed-trace-1.json",
+        "sha256": "19be09084bbbf64aa950b2fbf69cabd9180624dc06613951d1059764cd4a02ca"
+      },
+      {
+        "name": "recovery-1.json",
+        "sha256": "721c211535ad0fc5dce2090937a107678482241d0eb042ee4575e094935fcf85"
+      },
+      {
+        "name": "patch-2.json",
+        "sha256": "f19ae76fc4991f7080f0b3d96b122baa456346b3fb034807d0ab961bf74eb7ab"
+      },
+      {
+        "name": "tests-2.json",
+        "sha256": "5a0c3a5308958a56a85bb29eb9b509f4fda1ed47e7677aa1f74a05b3271908bf"
+      },
+      {
+        "name": "attempt-2.json",
+        "sha256": "d60717469a18e77dbd15e5b0e6b8391fa43407de872c562de73a305f8716011a"
+      },
+      {
+        "name": "recovery-2.json",
+        "sha256": "246b3c80015d6d7c1ebc7b329e91729782b989fa822a9ca5622953bb56194742"
+      },
+      {
+        "name": "patch-3.json",
+        "sha256": "cc24712165e8fba00e032a4a9a4d72a995140e748f2a1010e8f1546a60dbacbb"
+      },
+      {
+        "name": "tests-3.json",
+        "sha256": "5a0c3a5308958a56a85bb29eb9b509f4fda1ed47e7677aa1f74a05b3271908bf"
+      },
+      {
+        "name": "attempt-3.json",
+        "sha256": "6765131d7229aa9b193c96505c7181151a05993c4827f952ee5c7ca42bdedaa1"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "23a018f3233355b837448eb9812b232b",
+    "test_image": "sha256:0ab6a92323ff23d57e6ac265a828cd5e8573b9f07a067b4801032e192d575978",
+    "acceptance_suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+    "budget": {
+      "calls": 8,
+      "tokens": 51247,
+      "estimated_cost_usd": 0.2519850000000001,
+      "usage": [
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5067,
+          "output_tokens": 547,
+          "estimated_cost_usd": 0.023406
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5034,
+          "output_tokens": 1168,
+          "estimated_cost_usd": 0.032622
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5107,
+          "output_tokens": 762,
+          "estimated_cost_usd": 0.026751
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5800,
+          "output_tokens": 951,
+          "estimated_cost_usd": 0.031665
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4917,
+          "output_tokens": 1601,
+          "estimated_cost_usd": 0.038766
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 4941,
+          "output_tokens": 1027,
+          "estimated_cost_usd": 0.030228
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 6085,
+          "output_tokens": 1114,
+          "estimated_cost_usd": 0.034965
+        },
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 6109,
+          "output_tokens": 1017,
+          "estimated_cost_usd": 0.033582
+        }
+      ]
+    },
+    "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+    "source_repository": "davre001/kokon",
+    "entire_context_status": "available",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "Make the before/after comparison slider in site/index.html keyboard accessible and update image alt text to be descriptive.\n\nChanges required:\n\n1. **site/index.html – #cmp element**: Add `tabindex=\"0\"`, `role=\"slider\"`, `aria-label=\"Before/after comparison\"`, `aria-valuemin=\"0\"`, `aria-valuemax=\"100\"`, `aria-valuenow=\"50\"`. Update `#cmp-before` and `#cmp-after` alt attributes to be set dynamically from the example's mode/prompt; the `#cmp-bg` decorative image keeps `alt=\"\"`.\n\n2. **site/index.html – JavaScript**: \n   - Extend `setSplit` to also update `cmp.setAttribute('aria-valuenow', Math.round(v))`.\n   - Add a `keydown` listener on `#cmp` that handles ArrowLeft (−5), ArrowRight (+5), Home (0), End (100), stops the animation (`cancelAnimationFrame(raf)`), and calls `setSplit`.\n   - Update `show()` to set `before.alt` and `after.alt` using the example's mode and prompt (e.g. `\"Before – ${e.mode}: ${e.prompt}\"`/`\"After – ${e.mode}: ${e.prompt}\"`).\n\n3. **site/assets/style.css**: Add a visible focus style for `#cmp:focus-visible` (e.g. outline) so keyboard focus is clearly indicated.\n\nAll existing pointer-drag logic, tab/example selection, sweep animation, and reduced-motion/video behaviour are preserved.",
+      "acceptance_criteria": [
+        "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+        "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+        "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+        "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+        "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+      ],
+      "files": [
+        "site/index.html",
+        "site/assets/style.css"
+      ]
+    }
+  }
+}

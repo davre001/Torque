@@ -1,0 +1,27 @@
+{
+  "mode": "live-hosted-slider-baseline",
+  "request_id": "d1da7fd975584b798953fa9e4b161613",
+  "source_repository": "davre001/kokon",
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "actions_run_id": 38212472888,
+  "actions_url": "https://github.com/davre001/Torque/actions/runs/38212472888",
+  "workflow_sha": "6b26912902db05536aa07cf48db7f22b236ff3df",
+  "workflow_conclusion": "success",
+  "suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+  "image_digest": "sha256:50304c3db6493edd21cbcad4ab5b9347b0429d74561c7c96f50e55c9beb6d90f",
+  "baseline_reproduced": true,
+  "provider_calls": 0,
+  "pr_writes": 0,
+  "production_database_modified": false,
+  "result": {
+    "exit_code": 1,
+    "output": "slider-semantics: Slider is not reachable by Tab\nslider-keys: Slider is not reachable by Tab\nsweep-and-focus: Slider is not reachable by Tab\nimage-descriptions: Image description lacks selected mode/prompt\nTORQUE_TEST_RESULT={\"failure_kind\": \"assertion\", \"assertions_passed\": 1}\n",
+    "timed_out": false,
+    "command": [
+      "python",
+      "/acceptance/test_slider.py"
+    ],
+    "failure_kind": "assertion",
+    "assertions_passed": 1
+  }
+}

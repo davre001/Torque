@@ -1,0 +1,14 @@
+{
+  "summary": "Add keyboard accessibility to the before/after comparison slider (#cmp) in the Torque demo. The #cmp element needs: tabindex, role=slider, aria-label, aria-valuemin/max/now attributes, keyboard event handling (ArrowLeft/Right ±5, Home=0, End=100) that also cancels the sweep animation, visible focus styling, and meaningful alt text on the before/after images that updates with each example's mode and prompt. The decorative blur background image keeps alt=\"\".",
+  "acceptance_criteria": [
+    "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+    "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+    "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+    "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+    "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+  ],
+  "files": [
+    "site/index.html",
+    "site/assets/style.css"
+  ]
+}

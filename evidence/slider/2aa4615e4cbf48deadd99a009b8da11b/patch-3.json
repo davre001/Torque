@@ -1,0 +1,43 @@
+{
+  "summary": "Add keyboard accessibility to the before/after comparison slider: tabindex, role, aria attributes on #cmp; setSplit updates aria-valuenow; keydown handler for ArrowLeft/Right/Home/End; show() sets before/after alt text; focus-visible outline in CSS.",
+  "edits": [
+    {
+      "path": "site/index.html",
+      "original_sha256": "c15621e1165601f183ceb4959bc32bfb7c8b0da859390668414c144860b47a59",
+      "content": null,
+      "replacements": [
+        {
+          "search": "        <div class=\"cmp\" id=\"cmp\" style=\"--split: 50%\">",
+          "replacement": "        <div class=\"cmp\" id=\"cmp\" style=\"--split: 50%\" tabindex=\"0\" role=\"slider\" aria-label=\"Before/after comparison\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"50\">"
+        },
+        {
+          "search": "          <img class=\"after\" id=\"cmp-after\" alt=\"\">\n          <img class=\"before\" id=\"cmp-before\" alt=\"\">",
+          "replacement": "          <img class=\"after\" id=\"cmp-after\" alt=\"\">\n          <img class=\"before\" id=\"cmp-before\" alt=\"\">"
+        },
+        {
+          "search": "  const setSplit = (v) => cmp.style.setProperty(\"--split\", `${Math.max(0, Math.min(100, v))}%`);",
+          "replacement": "  const setSplit = (v) => { const c = Math.max(0, Math.min(100, v)); cmp.style.setProperty(\"--split\", `${c}%`); cmp.setAttribute(\"aria-valuenow\", Math.round(c)); };"
+        },
+        {
+          "search": "    after.src = img(e.after);\n    before.src = img(e.before);\n    bg.src = img(e.after);",
+          "replacement": "    after.src = img(e.after);\n    after.alt = `After – ${e.mode}: ${e.prompt}`;\n    before.src = img(e.before);\n    before.alt = `Before – ${e.mode}: ${e.prompt}`;\n    bg.src = img(e.after);"
+        },
+        {
+          "search": "  cmp.addEventListener(\"pointercancel\", () => (dragging = false));",
+          "replacement": "  cmp.addEventListener(\"pointercancel\", () => (dragging = false));\n  cmp.addEventListener(\"keydown\", (ev) => {\n    const keys = [\"ArrowLeft\", \"ArrowRight\", \"Home\", \"End\"];\n    if (!keys.includes(ev.key)) return;\n    ev.preventDefault();\n    cancelAnimationFrame(raf);\n    const current_split = parseFloat(cmp.getAttribute(\"aria-valuenow\") ?? \"50\") || 50;\n    let next = current_split;\n    if (ev.key === \"ArrowLeft\") next = current_split - 5;\n    else if (ev.key === \"ArrowRight\") next = current_split + 5;\n    else if (ev.key === \"Home\") next = 0;\n    else if (ev.key === \"End\") next = 100;\n    setSplit(next);\n  });"
+        }
+      ]
+    },
+    {
+      "path": "site/assets/style.css",
+      "original_sha256": "610cb4881e820ecad6ba154213c07559aace4e311bfb4975f151309836abbb7a",
+      "content": null,
+      "replacements": [
+        {
+          "search": ".cmp { position: relative; border-radius: 16px; overflow: hidden; background: #000; user-select: none; touch-action: pan-y; cursor: ew-resize; aspect-ratio: 16 / 9; }",
+          "replacement": ".cmp { position: relative; border-radius: 16px; overflow: hidden; background: #000; user-select: none; touch-action: pan-y; cursor: ew-resize; aspect-ratio: 16 / 9; }\n.cmp:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }"
+        }
+      ]
+    }
+  ]
+}

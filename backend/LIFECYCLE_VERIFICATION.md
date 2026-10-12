@@ -91,9 +91,49 @@ passing; a labelled temporary positive calibration fixture passed all five.
 See `evidence/slider/acceptance-validation.json`. Profile, compressed two-file
 transport, immutable source gate, workflow capability check, and a dedicated
 `backend/recipes.slider.json` policy are implemented. Deployment and hosted
-baseline are still pending. No agent attempt or live recovery has run.
+baseline are verified. No agent attempt or live recovery has run.
 
 The positive fixture is only test calibration and must never seed the live run.
 A naturally failed attempt followed by real hosted-evidence-driven correction
 is required for the live recovery milestone. A first-attempt success counts as
 a fix alone. PR publication is a separate explicit operation.
+
+Hosted slider baseline (October 12, 2026):
+[Actions run 38212472888](https://github.com/davre001/Torque/actions/runs/38212472888)
+executed workflow revision `6b26912902db05536aa07cf48db7f22b236ff3df`.
+Four assertion groups failed as expected; pointer/tab/media-call regression
+passed. No infrastructure failure, model calls, PR writes, or production queue
+changes occurred. Readback saved in
+`evidence/slider/hosted-baseline-d1da7fd975584b798953fa9e4b161613.json`.
+
+## Live slider trial setup failures
+
+Run `c8f542337c71495f97de6028383ac9c0` stopped at the 16 KB
+investigation context guard, with zero model calls. Reviewed excerpts were
+narrowed to 9,406 bytes without changing source or acceptance criteria.
+Run `6de4f02f375e44a297cc09e387f8d3c1` stopped at the patch
+footprint guard after two genuine Claude calls (~$0.11445 estimated). The two
+source files total 63,104 bytes; the guard counts both old and new bytes.
+A process-only 150,000-byte cap is used for the next trial. The default
+100,000-byte cap, file/hash checks, model spending limits, and suite remain intact.
+Both outcomes are configuration/guard failures, not live test-driven recovery.
+Their sanitized records and baseline/context artifacts are saved under evidence/slider/.
+
+Run `9e664ae55b434decbb1f8da7abb2cf7c` stopped before implementation
+at the existing conservative prompt-token reservation guard after one model
+call (~$0.023286 estimated). Implementation previously received both complete
+files; it now receives the same operator-reviewed excerpts as investigation.
+Full-file SHA and exact unique replacement validation remain authoritative.
+The 150,000-token/$2 run limits were not raised. This is not agent recovery.
+
+## Genuine live recovery attempt ? not successful
+
+Run `98557585701043f6b452f161b8dd0f96` failed after all three attempts.
+Attempt results were 4/5, 4/5, 1/5 assertions. Recovery 2 retrieved the actual
+failed Neatlogs attempt trace, while recovery 1 fell back to local artifacts.
+Runtime Entire target context was available. Both bounded recovery retries
+were exhausted; no PR was created. Evidence, hashes, and diagnosis are saved
+in `evidence/slider/98557585701043f6b452f161b8dd0f96/`.
+The failed final patch omitted previously successful changes after reset to
+pinned originals. Implementation instructions now explicitly require a complete
+solution each retry. This prompt correction is not yet live-verified.

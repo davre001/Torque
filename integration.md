@@ -33,7 +33,7 @@ User-reported credential entry is setup progress, not proof of provider access. 
 - [x] Verify GitHub source/destination identities and token permissions; select the demo fork.
 - [x] Implement issue fetching, authenticated branch writes, and idempotent verified PR publication.
 - [ ] Verify authorization separately before any upstream public contribution.
-- [ ] Implement a supported Entire context adapter and save actual target-repository context evidence.
+- [x] Implement supported Entire search/code context and save actual target-repository runtime evidence in the live slider trial.
 - [x] Review shared hook/settings files and commit appropriate configuration without local state.
 - [x] Use real workspace API polling, saved events, recovery/failure states, acceptance results, and actual PR links; landing preview remains labeled simulation.
 - [x] Verify a live connected-user browser run with source installation access and a supported recipe; run `b220ce7e5cda4e14963c74fc04ad8711`, PR #3.
@@ -189,3 +189,27 @@ saved in `evidence/entire-runtime/target-context.json`. Its reviewed local
 fixture contains the previously documented harmless crash-test comment; this
 is adapter readback, not a new complete agent run or runtime checkpoint.
 Live repository recovery and broader credential/deployment acceptance remain pending.
+
+Slider issue #7: dedicated reviewed profile and workflow deployed at `6b26912`;
+hosted original-source baseline reproduced four assertions and passed one
+regression group. The recipe is `backend/recipes.slider.json`, separate from
+the completed gallery profile. No live agent or recovery attempt has run yet.
+
+Live slider run `98557585701043f6b452f161b8dd0f96` retrieved runtime Entire
+context and attempted genuine recovery twice. The second recovery fetched its
+actual failed Neatlogs trace. All three attempts failed independent verification
+(4/5, 4/5, 1/5), so successful live repository recovery remains unchecked. No PR
+was created. Exported evidence and diagnosis are in evidence/slider/98557585701043f6b452f161b8dd0f96/.
+The prompt now explains that recovery retries must rebuild the whole fix from
+pinned originals; that change awaits a fresh live trial.
+
+Recovery diagnostics update (October 12, 2026): the slider suite now reports
+key sequence, previous value, expected value, and actual value without changing
+its five acceptance groups. The actual failed patch reproduced:
+`Home -> ArrowLeft; before=0; expected split=0; actual split=45`.
+The labelled calibration fixture still passes 5/5. Recovery receives bounded
+complete replacement strings and instructions distinguishing test-group counts
+from failing assertion indices. Sanitized diagnostics are emitted on the Neatlogs
+acceptance span as `torque.acceptance_diagnostics`; finalized trace identity and
+local diagnostics remain separate evidence sources. A new hosted trial is pending
+publication of the updated suite. Successful live recovery remains unchecked.

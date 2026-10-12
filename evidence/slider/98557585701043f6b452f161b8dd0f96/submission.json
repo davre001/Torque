@@ -1,0 +1,13 @@
+{
+  "run_id": "98557585701043f6b452f161b8dd0f96",
+  "issue_url": "https://github.com/davre001/kokon/issues/7",
+  "user_id": "github:141245473",
+  "mode": "real-github-app-authorized-worker-trial",
+  "seeded_failure": false,
+  "entire_context_enabled": true,
+  "recipe": "backend/recipes.slider.json",
+  "investigation_context_bytes": 9406,
+  "patch_bytes_cap": 150000,
+  "patch_cap_reason": "Two source files total 63104 bytes; guard counts both old and new contents",
+  "implementation_context": "Reviewed bounded excerpts with full-file source hashes"
+}

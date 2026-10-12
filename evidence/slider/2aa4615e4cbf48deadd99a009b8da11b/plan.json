@@ -1,0 +1,14 @@
+{
+  "summary": "Make the before/after comparison slider in site/index.html keyboard accessible and update image alt text to be descriptive.\n\nChanges required:\n\n1. **site/index.html – #cmp element**: Add `tabindex=\"0\"`, `role=\"slider\"`, `aria-label=\"Before/after comparison\"`, `aria-valuemin=\"0\"`, `aria-valuemax=\"100\"`, `aria-valuenow=\"50\"`. Update `#cmp-before` and `#cmp-after` alt attributes to be set dynamically from the example's mode/prompt; the `#cmp-bg` decorative image keeps `alt=\"\"`.\n\n2. **site/index.html – JavaScript**: \n   - Extend `setSplit` to also update `cmp.setAttribute('aria-valuenow', Math.round(v))`.\n   - Add a `keydown` listener on `#cmp` that handles ArrowLeft (−5), ArrowRight (+5), Home (0), End (100), stops the animation (`cancelAnimationFrame(raf)`), and calls `setSplit`.\n   - Update `show()` to set `before.alt` and `after.alt` using the example's mode and prompt (e.g. `\"Before – ${e.mode}: ${e.prompt}\"`/`\"After – ${e.mode}: ${e.prompt}\"`).\n\n3. **site/assets/style.css**: Add a visible focus style for `#cmp:focus-visible` (e.g. outline) so keyboard focus is clearly indicated.\n\nAll existing pointer-drag logic, tab/example selection, sweep animation, and reduced-motion/video behaviour are preserved.",
+  "acceptance_criteria": [
+    "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+    "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+    "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+    "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+    "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+  ],
+  "files": [
+    "site/index.html",
+    "site/assets/style.css"
+  ]
+}

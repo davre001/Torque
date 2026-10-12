@@ -1,0 +1,71 @@
+{
+  "run_id": "9e664ae55b434decbb1f8da7abb2cf7c",
+  "user_id": "github:141245473",
+  "issue_url": "https://github.com/davre001/kokon/issues/7",
+  "status": "failed",
+  "current_agent": null,
+  "created_at": 1791767713.4922235,
+  "updated_at": 1791767881.5691502,
+  "cancel_requested": false,
+  "idempotency_key": "slider-live-20261012-patch-cap-v3",
+  "error": "Model call, token, or estimated dollar budget exhausted",
+  "pr_url": null,
+  "result": {
+    "verified": false,
+    "artifacts": [
+      {
+        "name": "entire-context.json",
+        "sha256": "2c0486852a9f4ddadab63edd99ed34cb31f7c3678abbd33c297fa6e1338452f9"
+      },
+      {
+        "name": "baseline.json",
+        "sha256": "583a7ecec9b95ad7c09b6353f74ee9e426340944df0d4ca1043cfe14adf59dc3"
+      },
+      {
+        "name": "plan.json",
+        "sha256": "8605b5c3caf1b78c2cc3c87144c93c119cfb18697a76a29ccea34cce608dacb6"
+      },
+      {
+        "name": "failure.json",
+        "sha256": "57645c1ee57943ae75584f3f84670b86e569cec2753d32fcb1e8d545157d2f6c"
+      }
+    ],
+    "recovery_evidence_source": "local-artifacts",
+    "trace_id": "cd5a5d3bc0f9850842f00a4b35f5d6b4",
+    "test_image": "sha256:4a55448dacdab48df10ebe47892d27f1d565a6c2eefab58aef84a938b2dbdc73",
+    "acceptance_suite_sha256": "827dbf21ae329cc69bfa599cb43809115ab629c63310a3d9fdd2a7e50d939ae0",
+    "budget": {
+      "calls": 1,
+      "tokens": 5606,
+      "estimated_cost_usd": 0.023286,
+      "usage": [
+        {
+          "model": "claude-sonnet-4.6",
+          "usage": "provider-reported",
+          "input_tokens": 5067,
+          "output_tokens": 539,
+          "estimated_cost_usd": 0.023286
+        }
+      ]
+    },
+    "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+    "source_repository": "davre001/kokon",
+    "entire_context_status": "available",
+    "baseline_passed": false,
+    "plan": {
+      "summary": "Make the before/after comparison slider in site/index.html keyboard accessible and update image alt text to include mode/prompt context.\n\nChanges required:\n\n1. **site/index.html – `#cmp` element**: Add `tabindex=\"0\"`, `role=\"slider\"`, `aria-label=\"Before/after comparison\"`, `aria-valuemin=\"0\"`, `aria-valuemax=\"100\"`, `aria-valuenow=\"50\"`. Update `cmp-before` and `cmp-after` `alt` attributes dynamically to reflect the current example's mode and prompt.\n\n2. **site/index.html – JavaScript**: \n   - Update `setSplit` to also set `aria-valuenow` on `cmp`.\n   - In the `show()` function, update `alt` text on `before` and `after` images using the example's `mode` and `prompt` fields.\n   - Add a `keydown` listener on `cmp` that handles `ArrowLeft` (−5), `ArrowRight` (+5), `Home` (0), `End` (100), each clamped to 0–100. The handler must call `cancelAnimationFrame(raf)` to stop the sweep animation.\n\n3. **site/assets/style.css**: Add a visible focus style for `#cmp:focus-visible` (e.g., `outline: 3px solid #fff; outline-offset: 2px;`) and ensure the existing `outline: none` default doesn't suppress it.\n\nNo changes to pointer dragging logic, tab/example selection, or video playback behavior are needed beyond what is described above.",
+      "acceptance_criteria": [
+        "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+        "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+        "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+        "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+        "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
+      ],
+      "files": [
+        "site/index.html",
+        "site/assets/style.css"
+      ]
+    }
+  },
+  "attempts": []
+}
