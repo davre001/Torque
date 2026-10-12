@@ -41,7 +41,13 @@ def main():
         owner, repo, _ = parse_issue(issue.issue_url)
         if f"{owner}/{repo}".lower() not in settings.allowed_repositories:
             parser.error("Add repository to TORQUE_ALLOWED_REPOSITORIES first")
-        print(json.dumps({"run_id":store.submit(issue.issue_url),"status":"queued"}))
+        from backend.admission import Admission
+        from backend.models import AdmissionDenied
+        try:
+            run_id = store.submit(issue.issue_url,admission=Admission.load())
+        except AdmissionDenied as exc:
+            parser.error(str(exc))
+        print(json.dumps({"run_id":run_id,"status":"queued"}))
     elif args.command == "status":
         record = store.get(args.run_id,"operator")
         if record is None:

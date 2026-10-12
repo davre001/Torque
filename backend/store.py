@@ -5,7 +5,7 @@ from pathlib import Path
 import sqlite3
 import time
 import uuid
-from backend.models import Conflict, LeaseLost, Status, TERMINAL
+from backend.models import Conflict, AdmissionDenied, LeaseLost, Status, TERMINAL
 
 class Store:
     def __init__(self, path: Path, clock=time.time):
@@ -54,13 +54,16 @@ class Store:
                 CREATE TABLE IF NOT EXISTS publications (
                     run_id TEXT PRIMARY KEY REFERENCES runs(run_id), destination TEXT NOT NULL,
                     owner TEXT, lease_until REAL, commit_sha TEXT, pr_url TEXT);
+                CREATE TABLE IF NOT EXISTS admission_reservations (
+                    run_id TEXT PRIMARY KEY REFERENCES runs(run_id),
+                    user_id TEXT NOT NULL, created_at REAL NOT NULL, cost_usd REAL NOT NULL);
                 PRAGMA user_version=1;
             """)
 
     def _event(self, db, run_id, data):
         db.execute("INSERT INTO events(run_id,created_at,data) VALUES(?,?,?)", (run_id,self.clock(),json.dumps(data)))
 
-    def submit(self, issue_url, user_id="operator", idempotency_key=None):
+    def submit(self, issue_url, user_id="operator", idempotency_key=None, admission=None):
         with self.transaction() as db:
             if idempotency_key:
                 old = db.execute("SELECT * FROM runs WHERE user_id=? AND idempotency_key=?", (user_id,idempotency_key)).fetchone()
@@ -68,10 +71,22 @@ class Store:
                     if old["issue_url"] != issue_url:
                         raise Conflict("Idempotency key already used for another issue")
                     return old["run_id"]
+            if admission:
+                active = db.execute("SELECT COUNT(*) FROM jobs WHERE state IN ('queued','running')").fetchone()[0]
+                own = db.execute("SELECT COUNT(*) FROM jobs JOIN runs USING(run_id) WHERE jobs.state IN ('queued','running') AND user_id=?",(user_id,)).fetchone()[0]
+                since = int(self.clock() // 86400) * 86400
+                count, spend = db.execute("SELECT COUNT(*),COALESCE(SUM(cost_usd),0) FROM admission_reservations WHERE created_at>=? AND user_id=?",(since,user_id)).fetchone()
+                total = db.execute("SELECT COALESCE(SUM(cost_usd),0) FROM admission_reservations WHERE created_at>=?",(since,)).fetchone()[0]
+                if active >= admission.queue or own >= admission.per_user_active or count >= admission.per_user_daily:
+                    raise AdmissionDenied("Run admission limit reached; retry later")
+                if spend + admission.reserve_usd > admission.per_user_usd or total + admission.reserve_usd > admission.global_usd:
+                    raise AdmissionDenied("Daily spending reservation limit reached; retry tomorrow")
             db.execute("INSERT OR IGNORE INTO users(id,created_at) VALUES(?,?)", (user_id,self.clock()))
             run_id = uuid.uuid4().hex
             db.execute("INSERT INTO runs(run_id,user_id,issue_url,status,created_at,updated_at,idempotency_key) VALUES(?,?,?,?,?,?,?)", (run_id,user_id,issue_url,Status.QUEUED,self.clock(),self.clock(),idempotency_key))
             db.execute("INSERT INTO jobs(run_id,state) VALUES(?, 'queued')", (run_id,))
+            if admission:
+                db.execute("INSERT INTO admission_reservations VALUES(?,?,?,?)",(run_id,user_id,self.clock(),admission.reserve_usd))
             self._event(db,run_id,{"status":"queued"})
             return run_id
 
@@ -147,6 +162,33 @@ class Store:
             if status == Status.CANCELLED:
                 db.execute("UPDATE jobs SET state='done' WHERE run_id=? AND state='queued'", (run_id,))
             self._event(db,run_id,{"status":status,"cancel_requested":True})
+
+    def release_rejected_publication(self,run_id,user_id):
+        """Repair only one legacy claim rejected before any GitHub writes.
+
+        Never release ambiguous failures, earlier retries, active owners, or saved
+        remote identities. New requests validate destination before claiming.
+        """
+        rejection='Destination is not the verified source repository or its fork'
+        with self.transaction() as db:
+            run=db.execute('SELECT * FROM runs WHERE run_id=? AND user_id=?',(run_id,user_id)).fetchone()
+            publication=db.execute('SELECT * FROM publications WHERE run_id=?',(run_id,)).fetchone()
+            if not run or not publication or run['status']!=Status.READY or run['error']!=rejection or run['pr_url']:
+                return False
+            if any(publication[key] is not None for key in ('owner','lease_until','commit_sha','pr_url')):
+                return False
+            events=[json.loads(row[0]) for row in db.execute('SELECT data FROM events WHERE run_id=? ORDER BY id',(run_id,))]
+            claims=[event for event in events if event.get('status')=='publishing']
+            if len(claims)!=1 or claims[0].get('destination')!=publication['destination']:
+                return False
+            outcome=events[-1] if events else {}
+            if outcome.get('status')!=Status.READY or outcome.get('error')!=rejection:
+                return False
+            db.execute('DELETE FROM publications WHERE run_id=?',(run_id,))
+            db.execute('UPDATE runs SET error=NULL,updated_at=? WHERE run_id=?',(self.clock(),run_id))
+            self._event(db,run_id,{'status':Status.READY,'publication_destination_released':publication['destination'],
+                                  'reason':'Single legacy attempt rejected before GitHub writes'})
+            return True
 
     def claim_publication(self,run_id,user_id,destination):
         with self.transaction() as db:

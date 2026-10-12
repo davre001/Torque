@@ -100,7 +100,7 @@ def test_publication_lock_and_real_pr_completion(tmp_path):
     assert store.history('operator')[0]['pr_url'].endswith('/pull/1')
 
 
-def github_fixture(*,stale=False,wrong_owner=False,collision=False,timeout_on_pr=False):
+def github_fixture(*,stale=False,wrong_owner=False,collision=False,timeout_on_pr=False,unrelated=False):
     state={'writes':[],'ref':None,'pr':None,'timed_out':False}
     content=b'fixed\n'
     blob=hashlib.sha1(f'blob {len(content)}\0'.encode()+content).hexdigest()
@@ -113,7 +113,7 @@ def github_fixture(*,stale=False,wrong_owner=False,collision=False,timeout_on_pr
         if path=='/user': value={'login':'operator'}
         elif path=='/repos/operator/demo':
             value={'id':2,'full_name':DEST,'owner':{'login':'other' if wrong_owner else 'operator'},
-                   'permissions':{'push':True},'source':{'id':1},'default_branch':'main'}
+                   'permissions':{'push':True},'source':{'id':3 if unrelated else 1},'default_branch':'main'}
         elif path=='/repos/source/demo': value={'id':1}
         elif path.endswith('/commits/main'): value={'sha':'f'*40 if stale else SHA}
         elif path.endswith('/git/commits/'+SHA): value={'tree':{'sha':'b'*40}}
@@ -167,3 +167,45 @@ def test_stale_base_owner_and_branch_collisions_are_rejected(option):
     assert not any(path.endswith('/pulls') for path,_ in state['writes'])
     if option!='collision':
         assert not state['writes']
+
+
+def test_invalid_destination_does_not_lock_first_request(tmp_path,monkeypatch):
+    import backend.publication as publication
+    store=Store(tmp_path/'db');store.initialize()
+    run_id=store.submit('https://github.com/source/demo/issues/4')
+    _,worker=store.claim(60)
+    store.update(run_id,worker,Status.READY,result=record()['result'])
+    state,client=github_fixture(unrelated=True)
+    monkeypatch.setenv('TORQUE_ALLOWED_REPOSITORIES','source/demo')
+    monkeypatch.setattr(publication,'load_recipes',lambda:{'source/demo':object()})
+    monkeypatch.setattr(publication,'verified_files',lambda *args:{'index.html':'fixed\n'})
+    monkeypatch.setattr(publication,'Publisher',lambda token,destination:Publisher('fixture-key',destination,client))
+    with pytest.raises(Conflict,match='not the verified source'):
+        publication.publish_run(store,run_id,destination=DEST)
+    assert not state['writes']
+    with store.transaction() as db:
+        assert db.execute('SELECT count(*) FROM publications WHERE run_id=?',(run_id,)).fetchone()[0]==0
+    assert store.get(run_id)['status']=='ready_to_publish'
+    assert store.claim_publication(run_id,'operator','operator/correct-fork')
+
+
+@pytest.mark.parametrize('case',['single-rejection','unknown-usage','previous-retry','active-owner','wrong-user'])
+def test_legacy_rejection_repair_preserves_ambiguous_and_active_locks(tmp_path,case):
+    store=Store(tmp_path/'db');store.initialize()
+    run_id=store.submit('https://github.com/source/demo/issues/4')
+    _,worker=store.claim(60);store.update(run_id,worker,Status.READY,result={'verified':True})
+    rejection='Destination is not the verified source repository or its fork'
+    owner=store.claim_publication(run_id,'operator',DEST)
+    if case=='previous-retry':
+        store.finish_publication(run_id,owner,error='Remote usage unknown')
+        owner=store.claim_publication(run_id,'operator',DEST)
+    if case!='active-owner':
+        store.finish_publication(run_id,owner,error='Remote usage unknown' if case=='unknown-usage' else rejection)
+    released=store.release_rejected_publication(run_id,'other-user' if case=='wrong-user' else 'operator')
+    assert released==(case=='single-rejection')
+    if released:
+        assert store.get(run_id)['error'] is None
+        assert store.claim_publication(run_id,'operator','operator/correct-fork')
+    else:
+        with pytest.raises(Conflict,match='destination cannot change'):
+            store.claim_publication(run_id,'operator','operator/correct-fork')

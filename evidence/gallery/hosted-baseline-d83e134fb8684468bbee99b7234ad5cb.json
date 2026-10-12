@@ -1,0 +1,27 @@
+{
+  "mode": "live-hosted-gallery-baseline",
+  "request_id": "d83e134fb8684468bbee99b7234ad5cb",
+  "source_repository": "davre001/kokon",
+  "source_sha": "3b7fe6d714cf7764e54a877c69c64eb0bdb38655",
+  "actions_run_id": 38183797125,
+  "actions_url": "https://github.com/davre001/Torque/actions/runs/38183797125",
+  "workflow_sha": "baf0d4f3cd0d02a4ddff2d1ed3ecaccbe68de0e6",
+  "workflow_conclusion": "success",
+  "suite_sha256": "3fe796558f2a151d7d6dd2033a4ee8b98f8a37f963c3ea5eaad3305b2594a8ee",
+  "image_digest": "sha256:cb2f1e84e8b14351eb3e878199e92671bc7323d9d4a86103847c051c7258972e",
+  "baseline_reproduced": true,
+  "provider_calls": 0,
+  "pr_writes": 0,
+  "production_database_modified": false,
+  "result": {
+    "exit_code": 1,
+    "output": "card-keyboard: Tab never reaches a gallery card\naction-keyboard: Tab never reaches a gallery card\nthumbnail-alt: Alt text must describe the prompt\nFailed checks: card-keyboard, action-keyboard, thumbnail-alt\nTORQUE_TEST_RESULT={\"failure_kind\": \"assertion\", \"assertions_passed\": 1}\n",
+    "timed_out": false,
+    "command": [
+      "python",
+      "/acceptance/test_gallery.py"
+    ],
+    "failure_kind": "assertion",
+    "assertions_passed": 1
+  }
+}

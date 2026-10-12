@@ -1,0 +1,16 @@
+{
+  "run_id": "b4064768c6b540a2852a172cbd6dbc1b",
+  "issue_url": "https://github.com/davre001/kokon/issues/4",
+  "previous_destination": "davre001/tacet",
+  "validated_destination": "davre001/kokon",
+  "previous_destination_branch_absent": true,
+  "previous_destination_prs_absent": true,
+  "verified_files_checked": [
+    "src/components/Gallery.tsx",
+    "src/styles.css"
+  ],
+  "rejected_binding_released": true,
+  "github_writes": 0,
+  "production_database_modified": true,
+  "repair_scope": "Rejected publication binding and error cleared; audit event saved; verified artifacts retained."
+}

@@ -71,6 +71,11 @@ class Pipeline:
                 if any(path not in context for path in self.recipe.editable_files):
                     raise PipelineError("Every editable file must also be a context file")
                 originals = {name:context[name]["content"] for name in self.recipe.editable_files}
+                from backend.integrations.entire import EntireContext
+                with self.span('entire-target-context'):
+                    entire_context=EntireContext().search(result['source_repository'],sha,issue.get('title','issue investigation'))
+                save('entire-context',entire_context)
+                result['entire_context_status']=entire_context['status']
                 with self.span("baseline-tests"):
                     log.info("Starting baseline tests for run %s",run_id)
                     baseline = self.runner.run(workspace,check)
@@ -84,7 +89,7 @@ class Pipeline:
                 if self.recipe.require_baseline_failure and (baseline.passed or baseline.failure_kind != "assertion"):
                     raise PipelineError("Baseline did not reproduce an acceptance failure; investigate before spending model credits")
                 with self.span("investigator","AGENT"):
-                    plan = investigator.investigate(self.investigator_provider,issue,context,self.recipe)
+                    plan = investigator.investigate(self.investigator_provider,issue,context,self.recipe,artifacts.sanitize(entire_context))
                 result["plan"] = plan.model_dump()
                 save("plan",plan.model_dump())
                 strategy = None

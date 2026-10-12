@@ -4,7 +4,7 @@ import secrets
 from typing import Annotated
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from backend.config import Settings
-from backend.models import Conflict, SubmitRun, parse_issue
+from backend.models import Conflict, AdmissionDenied, SubmitRun, parse_issue
 from backend.store import Store
 
 def create_app(settings=None):
@@ -12,6 +12,8 @@ def create_app(settings=None):
     store = Store(settings.database)
     from backend.github_auth import GitHubAuth
     auth = GitHubAuth(store)
+    from backend.admission import Admission
+    admission = Admission.load()
 
     @asynccontextmanager
     async def lifespan(app):
@@ -77,7 +79,9 @@ def create_app(settings=None):
             if not policy['run_supported']:
                 raise HTTPException(422, policy['run_reason'])
         try:
-            run_id = store.submit(body.issue_url,user,idempotency_key)
+            run_id = store.submit(body.issue_url,user,idempotency_key,admission=admission)
+        except AdmissionDenied as exc:
+            raise HTTPException(429,str(exc)) from None
         except Conflict as exc:
             raise HTTPException(409,str(exc)) from exc
         return {"run_id":run_id,"status":store.get(run_id,user)["status"]}

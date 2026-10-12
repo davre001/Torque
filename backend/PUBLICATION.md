@@ -18,4 +18,20 @@ The publisher checks saved artifact hashes, the current workspace digest, passin
 
 Configuration or verification conflicts return HTTP 409; provider/network failures return 502 and retain a safe error. Retry the same run to reconcile uncertain remote results. An active publication lease blocks concurrent publication and cancellation; after a crashed process, its lease expires in 15 minutes. GitHub base changes are checked again before PR creation and against the returned PR; GitHub does not provide an atomic lock on concurrent default-branch updates.
 
-Implemented tests use mocked GitHub responses. A live PR has not been created as part of implementation. Dashboard trace readback and runtime Entire checkpoint links are not asserted by publication.
+Destination ownership, access, and source/fork relationship are validated with
+read-only GitHub requests before the publication destination is locked. A rejected
+unrelated repository can therefore be corrected without rerunning the agent.
+Once a valid publication is claimed, the destination remains fixed for ambiguous
+failures and retries to prevent duplicate PRs across repositories.
+
+A strict legacy repair releases only one prior claim that ended with the explicit
+unrelated-destination rejection, has no active owner or saved remote identities,
+and has no earlier publication retry. Other failures retain their locks. The
+[saved repair evidence](../evidence/gallery/destination-rejection-repair.json)
+also confirms no branch or PR existed in the rejected repository before repairing
+the gallery demo run. The verified patch remains unchanged; no GitHub writes were
+performed during repair. Regression coverage includes invalid first destinations,
+active/ambiguous claims, and legacy retry protection; the full suite passed 138
+tests with one Windows skip.
+
+Automated tests use mocked GitHub responses. Normal live publication and the controlled live crash/reconciliation trial are verified; see [lifecycle scope](LIFECYCLE_VERIFICATION.md). The crash trial used an isolated database, deterministic fixture review, and clock-advanced lease expiry. Dashboard trace readback and runtime Entire checkpoint links are not asserted by publication.

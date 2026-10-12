@@ -61,12 +61,23 @@ $0.02 reservation and 128 output tokens, with no retry or production DB writes.
 Its reservation is saved by the probe; this does not establish durable production
 budget accounting across crashes or remote provider cancellation.
 
-## Pending publication crash trial
+## Live publication crash trial
 
-Publication lost-response reconciliation remains covered by mocked tests; a live
-publication crash/recovery acceptance trial is still pending. The previous demo
-PR is merged, so its verified source no longer matches the fork default branch.
-A fresh issue and verified run are needed. Preserve the source revision gate.
-The trial must kill a publication subprocess after GitHub returns a successful
-PR creation but before SQLite completion, wait for publication lease expiry,
-retry the same run, and verify the same PR/head with no second PR creation.
+The controlled trial passed on October 12, 2026. See the
+[report](../evidence/publication-crash/56cfbe0c39e140c6b4f4838f64a8206f/report.json)
+and [draft PR #6](https://github.com/davre001/kokon/pull/6).
+The publisher subprocess was killed after GitHub accepted PR creation and before
+SQLite recorded completion. An immediate retry was fenced by the active lease.
+After advancing only the isolated Store clock by 901 seconds, retry completed
+using the same PR and head. Exactly one PR-creation POST occurred; a further
+completed request also created nothing.
+
+This used an isolated database, the current reviewed fork revision, and only a
+non-executing comment. All four real gallery browser checks passed. Review was a
+labelled deterministic fixture, with no model calls. It does not establish a fresh
+agent fix or a real 15-minute wait. The production 900-second lease and completed
+user run were unchanged. PR #6 remains draft and unmerged. Linux SIGINT/SIGTERM
+and graceful shutdown during blocked provider calls remain pending.
+
+Probe implementation: `backend/publication_crash_probe.py`. Each invocation makes
+a new isolated fixture and draft PR; inspect existing evidence before rerunning.

@@ -90,7 +90,8 @@ class Publisher:
             raise Conflict('Repository tree is truncated; publication is unsupported')
         return {item['path']:(item['mode'],item['type'],item['sha']) for item in tree['tree'] if item['type']!='tree'}
 
-    def publish(self,run,files):
+    def validate_destination(self,run):
+        """Read-only validation before durable publication ownership is claimed."""
         source_owner,source_repo,_=parse_issue(run['issue_url'])
         source=f'{source_owner}/{source_repo}'.lower()
         sha=run['result']['source_sha']
@@ -103,6 +104,11 @@ class Publisher:
             raise Conflict('Destination must be owned by the authenticated operator with write access')
         if destination['id']!=upstream['id'] and destination.get('source',{}).get('id')!=upstream['id'] and destination.get('parent',{}).get('id')!=upstream['id']:
             raise Conflict('Destination is not the verified source repository or its fork')
+        return sha,user,destination
+
+    def publish(self,run,files):
+        # Recheck after claiming ownership; preflight is not a write authorization.
+        sha,user,destination=self.validate_destination(run)
         base=destination['default_branch']
         prefix=f'/repos/{self.destination}'
         branch='torque/'+run['run_id']
@@ -192,8 +198,10 @@ def publish_run(store,run_id,user_id='operator',destination=None):
         recipe=load_recipes().get(source)
         if source not in allowed or recipe is None:
             raise Conflict('Source repository is not currently authorized')
-        owner=store.claim_publication(run_id,user_id,publisher.destination)
         files=verified_files(run,recipe)
+        publisher.validate_destination(run)
+        store.release_rejected_publication(run_id,user_id)
+        owner=store.claim_publication(run_id,user_id,publisher.destination)
         url,head=publisher.publish(run,files)
         store.finish_publication(run_id,owner,pr_url=url,commit_sha=head)
         return store.get(run_id,user_id)

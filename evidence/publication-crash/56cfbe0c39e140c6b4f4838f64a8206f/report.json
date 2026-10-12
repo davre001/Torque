@@ -1,0 +1,185 @@
+{
+  "mode": "live-github-publication-crash-isolated-fixture",
+  "probe_id": "56cfbe0c39e140c6b4f4838f64a8206f",
+  "run_id": "3327369315804f05b31478334b832a2c",
+  "source_repository": "davre001/kokon",
+  "source_sha": "218143b523252ee95c2368adc83fef95b324b156",
+  "pr_url": "https://github.com/davre001/kokon/pull/6",
+  "published_commit_sha": "5c7dfdf503b7f2e650ecb9ac07248d8ee34453d1",
+  "crash_boundary": "After successful POST /pulls response, before SQLite completion",
+  "status_after_kill": "publishing",
+  "pr_url_after_kill": null,
+  "active_lease_retry_rejected": true,
+  "lease_expiry_mode": "Isolated Store clock advanced 901 seconds; no real 15-minute wait",
+  "production_publication_lease_seconds": 900,
+  "status_after_retry": "completed",
+  "matching_pr_count": 1,
+  "post_pulls_count": 1,
+  "same_pr_and_head": true,
+  "repeated_completed_request_no_new_pr": true,
+  "draft": true,
+  "merged": false,
+  "browser_assertions_passed": 4,
+  "review_kind": "deterministic-probe-fixture, not an LLM review",
+  "provider_calls": 0,
+  "production_run_modified": false,
+  "fixture_database_isolated": true,
+  "change": "Only a non-executing comment appended to Gallery.tsx; not a new issue fix",
+  "requests": [
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/pulls"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/commits/master"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/commits/218143b523252ee95c2368adc83fef95b324b156"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/trees/b1bda07afeab2f2fdf868a446826b8f39b06ba99"
+    },
+    {
+      "phase": "crash",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/git/trees"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/trees/8e9dfac43f732cf8fd440e7e16acc9392b4ed5c8"
+    },
+    {
+      "phase": "crash",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/git/commits"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/ref/heads/torque/3327369315804f05b31478334b832a2c"
+    },
+    {
+      "phase": "crash",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/git/refs"
+    },
+    {
+      "phase": "crash",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/commits/master"
+    },
+    {
+      "phase": "crash",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/pulls"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/pulls"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/commits/master"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/commits/218143b523252ee95c2368adc83fef95b324b156"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/trees/b1bda07afeab2f2fdf868a446826b8f39b06ba99"
+    },
+    {
+      "phase": "retry",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/git/trees"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/trees/8e9dfac43f732cf8fd440e7e16acc9392b4ed5c8"
+    },
+    {
+      "phase": "retry",
+      "method": "POST",
+      "path": "/repos/davre001/kokon/git/commits"
+    },
+    {
+      "phase": "retry",
+      "method": "GET",
+      "path": "/repos/davre001/kokon/git/ref/heads/torque/3327369315804f05b31478334b832a2c"
+    }
+  ]
+}

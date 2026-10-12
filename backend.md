@@ -7,7 +7,7 @@ TypeScript and HTTP route checks pass. The connected-user issue-to-PR trial is v
 ## Overall progress checklist
 
 - [x] Add reviewed gallery keyboard acceptance and source/input guards for the current fork revision; local baseline and positive-fixture calibration pass.
-- [ ] Push the updated runner workflow and verify gallery acceptance on hosted Linux before a fresh issue-to-PR trial.
+- [x] Push the updated runner workflow and reproduce the gallery baseline on hosted Linux (Actions `38183797125`); fresh issue-to-PR verification remains separate.
 
 Checked items mean completed setup or verified behavior, not merely an existing placeholder. Update these lists with each implementation milestone; detailed acceptance criteria live in the linked plans.
 
@@ -42,7 +42,7 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [x] Implement retention cleanup and validate preservation/deletion with disposable fixtures; live preview selects no old runs.
 - [x] Verify isolated live-process restart/cancellation and actual GitHub Actions cancellation; see `backend/LIFECYCLE_VERIFICATION.md`.
 - [x] Verify Windows Ctrl+Break shutdown and live provider hard interruption with isolated-process evidence.
-- [ ] Finish Linux signals, blocked-provider graceful shutdown, and live publication crash/reconciliation acceptance.
+- [ ] Finish Linux signals and blocked-provider graceful shutdown acceptance.
 - [ ] Complete the broader credential audit and public queue/spending controls before deployment.
 - [ ] Verify recovery on a live GitHub repository; controlled seeded recovery is already saved.
 - [ ] Review a fresh demo task/revision after the fork PR merge; arbitrary repositories remain unsupported.
@@ -74,7 +74,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 ## Next work in order
 
 1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals, blocked-provider graceful shutdown, and live publication crash/reconciliation before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
+2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals and blocked-provider graceful shutdown before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
@@ -95,3 +95,5 @@ Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1
 - [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
 GitHub App code and the controlled connected-user issue-to-PR trial are verified; additional live acceptance is listed above. [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.
+
+- [x] Controlled live publication crash/reconciliation: PR #6 recovered after process kill with one PR-creation POST. Isolated database and clock-advanced lease expiry; deterministic fixture review, no model calls. See [scope and report](backend/LIFECYCLE_VERIFICATION.md).

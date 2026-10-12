@@ -5,9 +5,9 @@ Ubuntu VM for each test job. Docker isolation runs on that VM. This first implem
 supports reviewed public kokon task profiles: landing-video reduced motion and gallery
 keyboard accessibility. Each profile has a fixed editable scope and source policy.
 
-Status: reduced-motion execution and cancellation have live evidence. The new gallery
-profile passes local suite calibration and automated contract tests; its updated
-workflow must be pushed and its hosted baseline verified before live agent use.
+Status: reduced-motion execution and cancellation have live evidence. The gallery
+profile passes local suite calibration and automated contract tests, and its hosted
+Linux baseline reproduces the three accessibility failures with working mouse behavior.
 See [gallery setup and evidence](GALLERY_VERIFICATION.md).
 
 ## Enable it
@@ -31,7 +31,7 @@ Each job uploads a bounded result.json artifact. The backend correlates the rand
 source SHA, workflow revision, and acceptance-suite digest. Cancellation requests remote job
 cancellation; a ten-minute workflow timeout is a backstop. GitHub queues and image builds count
 against the backend wall-time budget. Reduced-motion sandbox compatibility is live-verified;
-gallery sandbox compatibility is pending deployment of the updated workflow.
+gallery sandbox compatibility is verified by the saved hosted baseline.
 
 GitHub Actions artifacts expire after one day. Local sanitized attempt artifacts remain available.
 PR publication remains a separate explicit action; the runner never publishes a PR.

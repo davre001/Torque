@@ -41,6 +41,9 @@ class LeaseLost(RuntimeError):
 class Conflict(ValueError):
     pass
 
+class AdmissionDenied(Conflict):
+    pass
+
 class Cancelled(RuntimeError):
     pass
 

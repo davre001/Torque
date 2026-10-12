@@ -1,0 +1,18 @@
+{
+  "run_id": "b4064768c6b540a2852a172cbd6dbc1b",
+  "issue_url": "https://github.com/davre001/kokon/issues/4",
+  "status": "completed",
+  "verified": true,
+  "pr_url": "https://github.com/davre001/kokon/pull/5",
+  "published_commit_sha": "47b033c92bea54e48ec9569b682d670ae7ec19cf",
+  "source_sha": "3b7fe6d714cf7764e54a877c69c64eb0bdb38655",
+  "destination_repository": "davre001/kokon",
+  "github_readback": {
+    "state": "closed",
+    "draft": false,
+    "merged": true,
+    "head_matches": true,
+    "run_marker_matches": true
+  },
+  "publication_crash_tested": false
+}

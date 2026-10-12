@@ -39,7 +39,7 @@ Live dispatch and all three browser criteria passed in the saved demo.
 - [x] Verify real worker kill/restart at all fixture agent stages, lease fencing, HTTP cancellation, and API restart; isolated live-process evidence is saved.
 - [x] Verify actual GitHub Actions cancellation; remote run 38177020201 finished cancelled.
 - [x] Verify real Windows Ctrl+Break shutdown and hard interruption during an outstanding live Claude request, using isolated workers and saved evidence.
-- [ ] Verify Linux SIGINT/SIGTERM, graceful shutdown during blocked provider calls, and live publication crash/reconciliation separately.
+- [ ] Verify Linux SIGINT/SIGTERM and graceful shutdown during blocked provider calls separately.
 
 ## Why a worker
 
@@ -98,7 +98,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 ## Next work in order
 
 1. Browser history/disconnect/reconnection is user-verified. Finish live publication/disconnect fencing acceptance.
-2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals, blocked-provider graceful shutdown, and live publication crash/reconciliation before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
+2. Retention, local restart/API-restart/cancellation, remote cancellation, Windows Ctrl+Break, and live provider hard interruption are verified. Finish Linux signals and blocked-provider graceful shutdown before public deployment; see [scope and evidence](backend/LIFECYCLE_VERIFICATION.md).
 3. Capture genuine Entire target-repository runtime context if retained in scope. Development checkpoints are verified; Graph/Brain remains optional.
 4. Demonstrate recovery on a live GitHub repository; the saved hosted-recovery drill deliberately seeded its first failure.
 5. Audit credential exclusion across responses, sandbox environments, Git history, traces, and evidence; add public queue/spending limits before deployment.
@@ -119,3 +119,5 @@ Evidence baseline (October 11, 2026): 115 automated tests passed. Operator PR #1
 - [x] Wire landing-page connection and workspace UI to these backend endpoints.
 
 GitHub App code and the controlled connected-user issue-to-PR trial are verified; additional live acceptance is listed above. [GitHub App setup](backend/GITHUB_APP.md) records the required settings and current limitations. Expired sessions require reconnection; automatic token refresh is not implemented. The reviewed public-source allowlist/recipes and controlled user-owned publication policy still apply.
+
+- [x] Controlled live publication crash/reconciliation: PR #6 recovered after process kill with one PR-creation POST. Isolated database and clock-advanced lease expiry; deterministic fixture review, no model calls. See [scope and report](backend/LIFECYCLE_VERIFICATION.md).
