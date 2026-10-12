@@ -3,17 +3,92 @@
   "checkpoint_id": "01M4PSH5G0M4290TRHGQ7EATS5",
   "session_id": "01a125e7-1457-7da1-8823-6eee2fb38ccb",
   "strategy": "manual-commit",
-  "created_at": "2026-10-12T00:52:37.1772444Z",
-  "checkpoints_count": 304,
-  "files_touched": null,
+  "created_at": "2026-10-12T00:53:07.5071617Z",
+  "branch": "main",
+  "checkpoints_count": 10,
+  "save_step_count": 4,
+  "files_touched": [
+    ".github/workflows/torque-remote-tests.yml",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/acceptance_profiles.py",
+    "backend/integrations/entire.py",
+    "backend/pipeline.py",
+    "backend/recipes.slider.json",
+    "backend/remote_job.py",
+    "backend/slider_baseline_probe.py",
+    "backend/tools/actions_runner.py",
+    "evidence/entire-runtime/target-context.json",
+    "evidence/slider/acceptance-validation.json",
+    "evidence/slider/positive-fixture.patch",
+    "integration.md",
+    "tests/acceptance/slider/Dockerfile",
+    "tests/acceptance/slider/README.md",
+    "tests/acceptance/slider/seccomp_profile.json",
+    "tests/acceptance/slider/test_slider.py",
+    "tests/test_entire_context.py",
+    "tests/test_slider_profile.py"
+  ],
   "agent": "Codex",
-  "model": "",
+  "model": "gpt-6.1-sol",
+  "turn_id": "39efb063c7b4",
   "compact_transcript_start": 0,
   "token_usage": {
-    "input_tokens": 2363280,
+    "input_tokens": 2364211,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 160934912,
-    "output_tokens": 360219,
-    "api_call_count": 1258
-  }
+    "cache_read_tokens": 161279872,
+    "output_tokens": 360446,
+    "api_call_count": 1260,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 304
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-12T00:53:05.6959671Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 18,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 18,
+    "total_lines_changed": 18,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 511,
+      "agent_lines_removed": 409
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 9,
+      "user_lines_removed": 0,
+      "agent_lines_added": 511,
+      "agent_lines_removed": 409,
+      "user_added_per_file": {
+        "evidence/slider/demo-issue.json": 9
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 9,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3840,
+      "agent_lines_removed": 829,
+      "user_added_per_file": {
+        "evidence/slider/demo-issue.json": 9
+      }
+    }
+  ]
 }
