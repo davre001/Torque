@@ -2,8 +2,27 @@
   "cli_version": "0.11.4",
   "checkpoint_id": "01M4Q1FA6JWRKGYAGNPXWJMC0M",
   "strategy": "manual-commit",
-  "checkpoints_count": 329,
-  "files_touched": null,
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": [
+    ".env.example",
+    ".github/workflows/torque-lifecycle-checks.yml",
+    "backend.md",
+    "backend/DEPLOYMENT_READINESS.md",
+    "backend/LIFECYCLE_VERIFICATION.md",
+    "backend/README.md",
+    "backend/api.py",
+    "backend/blocked_shutdown_probe.py",
+    "backend/integrations/providers.py",
+    "backend/public_boundary.py",
+    "backend/security_audit.py",
+    "backend_implementation.md",
+    "background_worker.md",
+    "cfo.ai/README.md",
+    "integration.md",
+    "tests/test_provider_shutdown.py",
+    "tests/test_public_boundary.py"
+  ],
   "sessions": [
     {
       "metadata": "/0/metadata.json",
@@ -14,10 +33,10 @@
     }
   ],
   "token_usage": {
-    "input_tokens": 2602164,
+    "input_tokens": 2602339,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 193600768,
-    "output_tokens": 415243,
-    "api_call_count": 1487
+    "cache_read_tokens": 193792768,
+    "output_tokens": 415394,
+    "api_call_count": 1488
   }
 }
