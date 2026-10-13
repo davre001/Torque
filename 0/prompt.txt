@@ -674,3 +674,17 @@ so the error is not from torque?
 
 ## My request:
 fix that
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+not just for kokon, for all users
