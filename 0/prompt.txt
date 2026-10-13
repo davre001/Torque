@@ -1,0 +1,1308 @@
+# Context from my IDE setup:
+
+## Active file: videoSKILL.md
+
+## Open tabs:
+- videoSKILL.md: videoSKILL.md
+- SKILL.md: SKILL.md
+- README.md: demo/motion/README.md
+
+## My request:
+Inspect Torque’s connected Vercel project, enable automatic deployments from main, and deploy the latest commit. Keep all credentials private.
+
+---
+
+# Context from my IDE setup:
+
+## Active file: deployment.md
+
+## Open tabs:
+- deployment.md: deployment.md
+- SKILL (1).md: SKILL (1).md
+- SKILL (2).md: SKILL (2).md
+- SKILL (3).md: SKILL (3).md
+- SKILL.md: SKILL.md
+
+## My request:
+noe, check deployment.md, backend.md , backend implement.md , integration.md and background worker.md  and confirm all that has been done and things that remain
+
+---
+
+# Context from my IDE setup:
+
+## Active file: deployment.md
+
+## Open tabs:
+- deployment.md: deployment.md
+- SKILL (1).md: SKILL (1).md
+- SKILL (2).md: SKILL (2).md
+- SKILL (3).md: SKILL (3).md
+- SKILL.md: SKILL.md
+
+## My request:
+finish up erything and update those mds
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_9cLSBcBvgZ8klkKrZT6Sy6el\",0]","question":"Please connect Render, GitHub, and Neon through their account integrations so I can finish the hosted setup and verification. Let me know when they’re connected; don’t paste credentials here.","answer":"how do i connect them"}]
+</send_user_message_question_reply>
+
+---
+
+# Context from my IDE setup:
+
+## Active file: .env
+
+## Open tabs:
+- .env: .env
+- launch-v2.html: demo/motion/launch-v2.html
+- .gitignore: .gitignore
+
+## My request:
+[$plugin-management:plugin-management](C:\Users\USER\\.codex\plugins\cache\openai-curated-remote\plugin-management\0.1.0\skills\plugin-management\SKILL.md)
+
+---
+
+# Context from my IDE setup:
+
+## Active file: c:\Users\USER\.codex\plugins\cache\openai-curated-remote\plugin-management\0.1.0\skills\plugin-management\SKILL.md
+
+## Open tabs:
+- SKILL.md: c:\Users\USER\.codex\plugins\cache\openai-curated-remote\plugin-management\0.1.0\skills\plugin-management\SKILL.md
+- .env: .env
+- launch-v2.html: demo/motion/launch-v2.html
+- .gitignore: .gitignore
+
+## My request:
+IVE CONNECTED THEM IN CHATGPT
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- narration-v2.txt: demo/motion/narration-v2.txt
+- .env: .env
+- SKILL.md: c:\Users\USER\.codex\plugins\cache\openai-curated-remote\plugin-management\0.1.0\skills\plugin-management\SKILL.md
+- launch-v2.html: demo/motion/launch-v2.html
+- .gitignore: .gitignore
+
+## My request:
+NEON IS CONNECTED
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_8cfdc16cc4ac47d1a640a9f34c4fb2d7\",0]","question":"Render’s account tool requires a confirmed workspace before inspecting services. Both connections list only “Aaron’s workspace.” Is that the workspace to use for Torque?","answer":"Yes, use Aaron’s workspace"}]
+</send_user_message_question_reply>
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+CHECK AGAIN
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+DONE
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+CHECK AGAIN
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+THE DATABSE IS SUSPENDED, I CLCIKED CONNECT, IN THE DB ROLE SECTION, AM I CHOOSING DB OWNER OR TOQUETUNTIME.....
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+# Computes
+
+[All projects](https://console.neon.tech/app/)TORQUE
+
+production
+
+**Default**
+
+###
+
+**SUSPENDED**
+
+`ep-jolly-dawn-b591q6be`
+
+**Suspended**
+
+An hour ago
+
+**Size**
+
+0.25 ↔ 2 CU
+
+**Connect**
+
+**Edit**
+
+Read Replicas: Scale your application by offloading your read workload to a read-only instance of your database.
+
+**Add Read Replica**
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/NEATLOGS_RECOVERY.md
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+DONE
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+- DEPLOYMENT_READINESS.md: backend/DEPLOYMENT_READINESS.md
+
+## My request:
+DONE
+
+---
+
+# Context from my IDE setup:
+
+## Active file: demo/motion/skills/motion-background/SKILL.md
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+CONFIRM THAT
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+HOW DO I CONFIRM THE PENDING ONES
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+
+
+| <br>**rolname** | **rolsuper** | **rolcreatedb** | **rolcreaterole** | **rolbypassrls** |   |
+| :-------------- | :----------- | :-------------- | :---------------- | :--------------- | - |
+| **1**           | neondb_owner | f               | t                 | t                | t |
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+HOW DO I CHAmge it, vant find where
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+yeah, f in 4 colums\
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+yea 2\
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+
+
+| torque_runtime_4833357e53e3 | admission_reservations      | t                  | t | t | t |   |
+| --------------------------- | --------------------------- | ------------------ | - | - | - | - |
+| **2**                       | torque_runtime_4833357e53e3 | artifact_records   | t | t | t | t |
+| **3**                       | torque_runtime_4833357e53e3 | attempts           | t | t | t | t |
+| **4**                       | torque_runtime_4833357e53e3 | browser_sessions   | t | t | t | t |
+| **5**                       | torque_runtime_4833357e53e3 | dispatches         | t | t | t | t |
+| **6**                       | torque_runtime_4833357e53e3 | events             | t | t | t | t |
+| **7**                       | torque_runtime_4833357e53e3 | github_connections | t | t | t | t |
+| **8**                       | torque_runtime_4833357e53e3 | http_admission     | t | t | t | t |
+| **9**                       | torque_runtime_4833357e53e3 | jobs               | t | t | t | t |
+| **10**                      | torque_runtime_4833357e53e3 | oauth_states       | t | t | t | t |
+| **11**                      | torque_runtime_4833357e53e3 | publications       | t | t | t | t |
+| **12**                      | torque_runtime_4833357e53e3 | repository_setups  | t | t | t | t |
+| **13**                      | torque_runtime_4833357e53e3 | runs               | t | t | t | t |
+| **14**                      | torque_runtime_4833357e53e3 | schema_migrations  | t | t | t | t |
+| **15**                      | torque_runtime_4833357e53e3 | users              | t | t | t | t |
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+yea f and t
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+okay lets go
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+yea ready
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+yea ready
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+before that, remove setup config in repo access;&#x20;
+
+
+
+Repositories connected through your GitHub App installation.
+
+- davre001/ROYALSTACKSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/RoyastacksSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/FluxPaySet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/ShieldPassSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/PortfolioSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/CVlySet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/KINSHIPSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/AEGISSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/EncoreSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/SomnixSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/swotSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/TacetSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/connectSet up and validate tests to enable this repository.
+
+  Set up tests
+- davre001/TorqueSet up and validate tests to enable this repository.
+
+  Set up tests
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+COMMIT & PUSH , WITH CHECKPOINTS
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+SOME ARE LEFT UNCOMMITED, COMMIT AND PUSH ALL THE mds and verification json except the skill.,md , dont forget to add checkpoint
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+i dont have an n **unresolved issue URL**
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+before that,&#x20;
+
+
+
+on the live page, it doesnt bring out ready,&#x20;
+
+
+
+## Repository access
+
+Repositories connected through your GitHub App installation.
+
+- davre001/ROYALSTACK
+- davre001/Royastacks
+- davre001/FluxPay
+- davre001/ShieldPass
+- davre001/Portfolio
+- davre001/CVly
+- davre001/KINSHIP
+- davre001/AEGIS
+- davre001/Encore
+- davre001/Somnix
+- davre001/swot
+- davre001/Tacet
+- davre001/connect
+- davre001/Torque
+- davre001/kokon
+
+
+
+and the run torque is not clicking
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+do it
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+1. davre001/ROYALSTACKNot ready
+2. davre001/RoyastacksNot ready
+3. davre001/FluxPayNot ready
+4. davre001/ShieldPassNot ready
+5. davre001/PortfolioNot ready
+6. davre001/CVlyNot ready
+7. davre001/KINSHIPNot ready
+8. davre001/AEGISNot ready
+9. davre001/EncoreNot ready
+10. davre001/SomnixNot ready
+11. davre001/swotNot ready
+12. davre001/TacetNot ready
+13. davre001/connectNot ready
+14. davre001/TorqueNot ready
+15. davre001/kokonReady to run
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+CHECK KOKON AND CREATE AND ISSUE, SEND ME THE URL
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+The reviewed demo fork must retain the verified upstream revision or reviewed gallery revision
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+so the error is not from torque?
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+fix that
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+not just for kokon, for all users
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+Runner workflow revision changed during this run
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+Progress is temporarily unavailable. Showing the last saved result. Cannot reach Torque. Check that the backend API is running.
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+i sub,itted another run, stop all running processes'
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+the worker fails from github; 59 workflow runs
+
+-
+
+#### [Torque agent c85a1114e7414cdf89b75d2c9d028962 5358d76ccd424278905684894076f20b](https://github.com/davre001/Torque/actions/runs/38337433191)
+
+failed:
+
+**Torque agent worker**#4:Manually runby[davre001](https://github.com/davre001)
+
+[torque-runner-v1](https://github.com/davre001/Torque/tree/refs/tags/torque-runner-v1)
+
+now
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+not still woking;   Queued
+
+Run active
+
+[https://github.com/davre001/kokon/issues/7](https://github.com/davre001/kokon/issues/7)
+
+1. 1Queued
+2. 2Investigating
+3. 3Implementing
+4. 4Recovering (if needed)
+5. 5Verifying
+6. 6Ready to publish
+7. 7Publishing
+8. 8Completed
+
+Waiting for the separate worker to pick up this run.
+
+Last checked 3:46:45 AMRefresh progress
+
+Activity (1)
+
+1.
+
+Request cancellation
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+it has been investigating for the past 5 minutes , the bbackend and worker says OK!
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+Run wall-time budget exhausted
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+I SEE THIS ERROR BEFORE I STILL EVEN INPUT THE ISSUE URL
+
+
+
+What should we fix?
+
+Choose an issue in an installed repository with a supported test recipe.
+
+Run Torque
+
+## Failed
+
+[https://github.com/davre001/kokon/issues/7](https://github.com/davre001/kokon/issues/7)
+
+1. Queued
+2. Investigating
+3. 3Implementing
+4. 4Recovering (if needed)
+5. 5Verifying
+6. 6Ready to publish
+7. 7Publishing
+8. 8Completed
+
+Failed
+
+Last checked 8:59:50 AMRefresh progress
+
+Run wall-time budget exhausted
+
+0 model calls · 0 tokens · $0.0000 estimated
+
+Trace ID: `305da6c9783cd6379f767b7add4388e3`
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+WHEN I CLICK RUN TORQUE , IT DIDNT REFRESH THE PAGE; IT STILL SHOWS THE  OLD OUTPUT
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+Run admission limit reached; retry later
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+PER USER? what about new user ?
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+oh ok
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+one last thing, add a =button under the repository that enables users reconfirm TOrque access to to their repository
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+commit and push
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+why are asnsome torque says not ready
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+Under **Repository tests**, choose the repository and validate its npm or pytest tests. If validation succeeds, it should show **“Ready to run.”** &#x20;
+
+is this neccessary, why cagithubnt it just show " ready to run " immediately after repo access from
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+yea do that
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+commit and push
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+- davre001/CVlySetup needed
+
+  Not Found
+- davre001/KINSHIPSetup needed
+
+  Not Found
+- davre001/AEGISSetup needed
+
+  Not Found
+- davre001/EncoreSetup needed
+
+  Not Found
+- davre001/SomnixSetup needed
+
+  Not Found
+- davre001/swotSetup needed
+
+  Not Found
+- davre001/TacetSetup needed
+
+  Not Found
+- davre001/connectSetup needed
+
+  Not Found
+- davre001/TorqueSetup needed
+
+  Not Found
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+- davre001/ROYALSTACKSetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/RoyastacksSetup needed
+
+  Test command needs manual setup; supported commands are vitest run, jest --runInBand and node --test
+- davre001/FluxPaySetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+- davre001/ShieldPassSetup needed
+
+  Test command needs manual setup; supported commands are vitest run, jest --runInBand and node --test
+- davre001/PortfolioSetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/CVlySetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/KINSHIPSetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/AEGISSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+- davre001/EncoreSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+- davre001/SomnixSetup needed
+
+  Test command needs manual setup; supported commands are vitest run, jest --runInBand and node --test
+- davre001/swotSetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/TacetSetup needed
+
+  No supported tests detected; configure tests manually
+- davre001/connectSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+- davre001/TorqueSetup needed
+
+  Test command needs manual setup; supported commands are vitest run, jest --runInBand and node --test
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+i used anpother github account , it connected but at the point of connection, i had no repo . so i went to fork a repo, but its not reflecting on torque.... and also the aouth, did not ask for permission to access my repo, it just said ' authorize app '
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+it is empty
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+how do i install it
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+when i tried opening the url , it says ; 404 , didnt find anything here
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+i cant find Where can this GitHub App be installed?”
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+C:\Users\USER\OneDrive\Documents\Torque\1000453497.jpg
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+the url is the same one u said i should paste
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+its the real url i cpoied
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+[https://github.com/apps/torque-by-suture](https://github.com/apps/torque-by-suture)
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+i got this ;&#x20;
+
+| detail | "Start login at /api/auth/github/connect; callback requires OAuth state" |
+| ------ | ------------------------------------------------------------------------ |
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+## Repository access
+
+Repositories connected through your GitHub App installation.
+
+- davre-tech/EncoreSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+how do i validate it
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+what if i dont know where the edit needs to be fixed.... i should not need all this stress
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+remove it now
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+## epository access
+
+Repositories connected through your GitHub App installation.
+
+- davre-tech/EncoreSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+
+Reconfirm Torque access
+
+Access rechecked. Torque can access 1 repository.
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+## pository access
+
+Repositories connected through your GitHub App installation.
+
+- davre-tech/EncoreSetup needed
+
+  Tests failed; fix the test setup and retry
