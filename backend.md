@@ -1,12 +1,57 @@
 # Backend implementation progress
 
+## Database verification update — October 13, 2026
+
+User-provided Neon SQL results confirm schema version 2 and runtime role
+`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
+SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
+no CREATE on public schema, and USAGE on the events sequence. These are user-reported
+checks, not an independent agent query. Fresh schema-2 encrypted backup and
+production worker/end-to-end verification remain pending.
+
+
+## Current status — October 12, 2026
+
+Connected-account update: Render's actual service is live on `e582fb9` in Oregon
+with automatic `main` deployments. Its dashboard health-check path is empty even
+though `/health` responds; configure that path on the existing service. Latest
+GitHub CI run `38296501216` passed; no agent-worker runs exist among the 47
+repository runs inspected. Neon tools and GitHub secret/dispatch administration
+are unavailable here, so schema and hosted worker acceptance remain pending.
+
+Current local verification: **192 Python tests passed, 5 skipped**; TypeScript,
+proxy contracts and the production frontend build passed. Dotenv loading was
+disabled during Python tests; `.env` was not read or changed. Older test counts
+below describe historical milestones, not the current suite.
+
+The API/agent/queue/authentication/publication implementation and controlled live
+trial evidence are complete within their recorded scopes. Storage now supports
+local SQLite and opt-in shared PostgreSQL, with private database artifacts and
+targeted Actions dispatch. Repository onboarding requires schema **2**; saved
+Neon schema-1 evidence does not verify that rollout.
+
+The Vercel frontend is deployed at https://torque-pied.vercel.app from `e582fb9`
+with automatic `main` deployments enabled. Production proxy setting names are
+present. Render API https://torque-sxqr.onrender.com is live: health 200/ok,
+proxied signed-out session response, GitHub OAuth redirect and direct-access 403
+were verified. Full browser login and Actions execution require account/session
+access; earlier statements that no host exists are historical.
+
+Remaining gates: schema-2 migration/grants and fresh backup; protected Actions
+provisioning and hosted worker trial; production OAuth, second-user isolation and
+complete issue-to-PR flow; successful unseeded recovery; real paid-provider graceful
+shutdown; disconnect during publication; deployed log audits, quotas, off-machine
+backups and rollback. Entire access in hosted workers remains disabled/unverified.
+See [deployment status](deployment.md) and
+[current verification](evidence/deployment/current-verification.json).
+
 Workspace update: `/workspace` now uses real session, repository, submit/status/history,
 cancel/publish, and confirmed-disconnect endpoints. Landing Connect GitHub starts OAuth.
 TypeScript and HTTP route checks pass. Connected-user issue-to-PR, browser history and confirmed disconnect/reconnection are verified.
 
 ## Overall progress checklist
 
-Current validation: 158 automated tests passed, one skipped. Public API request
+Current validation: 192 automated tests passed, five skipped (October 12, 2026). Public API request
 boundaries and blocked-I/O shutdown are implemented and locally verified. Current
 credential/pattern audit and Entire target context are verified. Linux workflow
 execution passed (Actions `38225586443`); actual paid-provider and public-host checks remain separate gates.
@@ -51,7 +96,7 @@ Checked items mean completed setup or verified behavior, not merely an existing 
 - [ ] Verify graceful shutdown during an actual paid-provider request; this remains separate from the local HTTP fixture and earlier hard-kill probe.
 - [x] Audit current credential exclusion in local files/artifacts, response records and valid local Git history; implement atomic queue/spending controls.
 - [x] Audit common secret patterns locally and current credential exclusion in three actual finalized Neatlogs traces (63 spans).
-- [ ] Review host logs, unknown/rotated secrets outside scanned patterns and actual public deployment controls. No backend host is available; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
+- [ ] Review host logs, unknown/rotated secrets outside scanned patterns and actual public deployment controls. Render basic health/proxy checks pass; hosted log/configuration review remains pending; see [deployment readiness](backend/DEPLOYMENT_READINESS.md).
 - [ ] Verify recovery on a live GitHub repository; controlled seeded recovery is already saved.
 - [x] Review fresh gallery and slider tasks/revisions after the fork PR merge; arbitrary repositories remain unsupported.
 - [x] Save the controlled hosted failure/recovery comparison and finalized readbacks.
@@ -84,7 +129,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
 2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
 3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
-4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+4. Inspect the existing Render API and complete hosted worker provisioning, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. Render is now live with basic health/proxy checks; full hosted acceptance remains pending.
 5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
 Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.

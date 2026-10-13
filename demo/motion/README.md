@@ -1,41 +1,27 @@
-﻿# TORQUE submission demo
+﻿# TORQUE narrated demo — current delivery
 
-Final video: `final/TORQUE-demo.mp4` — 2:08, 1280×720, 24 fps, H.264/yuv420p.
-Silent, with on-screen narrative; voiceover omitted at the user's request after the Brielle generation was blocked by an empty provider credit balance.
+The active edit uses a white background, black text, subtle monochrome motion elements and the actual logo from frontend/ui/public/logo.png.
 
-The film follows the user-selected iart-ai motion-design skills: restrained charcoal/lime art direction, grid composition, short eased entrances, one primary subject per shot, a circular reveal, hard cuts and readable evidence holds.
+Narration source: the supplied Belle B MP3 in the repository root. Audio is processed locally. edit-timing.json maps measured speech cues to 30 fps cuts; narration-alignment.json preserves the local ASR word estimates. Those estimates are approximate and are used for edit timing, not authoritative captions.
 
-It includes the actual issue, completed run, verification, correct kokon PR #1 recording, the complete Neatlogs recording, diagnostic/resolution evidence graphics, Entire checkpoint graphic and actual cfo.ai screenshot. The controlled diagnostic probe is labelled separately from the first-attempt issue-to-PR run. Financial forecasts are explicitly planning assumptions.
+Key cues: Meet Torque 0:06.17; workflow 0:15.87; actual issue 0:25.40; completed run 0:38.33; named test diagnostics 1:06.97; exact assertion 1:16.77; passing check 1:19.57; resolved incident 1:23.13; Entire 1:31.60; cfo.ai 1:39.77; closing 1:53.83.
 
-## Timeline
+The new screen-capture (19).webm opens a different incident first. This edit uses its later portion containing the correct d5d9ddaa incident, diagnosis, recommendation and Resolved status. The recording does not show the written resolution note itself. The earlier trace recording supplies the original generic error, named failing child span and passing check.
 
-- 0:00–0:17 — problem and agent workflow
-- 0:17–1:00 — issue, completed run, verification and PR
-- 1:00–1:22 — complete supplied Neatlogs recording
-- 1:22–1:43 — named assertion, unchanged passing check and shipped resolution
-- 1:43–1:51 — Entire checkpoint and commit
-- 1:51–2:02 — cfo.ai planning model
-- 2:02–2:08 — closing
+Final delivery: final-v2/TORQUE-demo-final.mp4 — 1920x1080, 30 fps, approximately 2:01 including the ending hold. This supersedes the previous silent 720p video.
 
-## Sources and rendering
+Editable canvas composition: launch-v2.html. Local renderer: render_browser.py. Timing compiler: build_timing.py. Applied project skills are in skills/; all four user-supplied skills passed validation after moving version into supported metadata.
 
-`remotion/src/index.tsx` is the editable 1080p Remotion composition. Dependency installation could not complete because the drive ran out of space, so it was not used for this export and has not been render-validated.
-
-The delivered MP4 was rendered locally by `render_local.py` using Pillow and FFmpeg, following the same storyboard and motion direction. This renderer uses a quartic ease-out approximation for entrances. Run:
+Render commands:
 
 ```powershell
-python demo/motion/remotion/prepare_assets.py
-.venv/Scripts/python.exe demo/motion/render_local.py
+.venv/Scripts/python.exe demo/motion/build_timing.py
+.venv/Scripts/python.exe demo/motion/render_browser.py --preview
+.venv/Scripts/python.exe demo/motion/render_browser.py
 ```
 
-To render the Remotion version after freeing sufficient disk space:
+Speech alignment can be regenerated with align_narration.py once the local model is available. The downloaded model and intermediate picture export are ignored by Git.
 
-```powershell
-cd demo/motion/remotion
-npm install
-npm run render
-```
+The closing card includes the demo address `torque-pied.vercel.app` in a rounded monochrome browser field. The address types in from 117.53?118.93 seconds and remains visible through the ending hold. `assemble_final.py` replaces the outro while preserving the narration; export-verification.json records the final stream metadata.
 
-Original recordings remain untouched. The earlier `torque-motion-graphics.mp4` is the superseded basic graphics-only version. The new film is `final/TORQUE-demo.mp4`.
-
-Validation: selected shot previews inspected; complete final video decoded without errors; format checked with ffprobe.
+Export verified: 1920x1080 H.264, 30 fps, 3,642 frames, 121.4 seconds; AAC narration matches video duration. Full video/audio decode passed.

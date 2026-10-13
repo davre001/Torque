@@ -1,10 +1,63 @@
 # Torque deployment plan
 
-Status: Phase 1 code is implemented; Phase 2 database and restore checks passed.
-Phase 3 private artifact checks passed in an isolated Neon schema.
-Production-browser verification remains pending. No production deployment has
-been completed. SQLite remains the local default; PostgreSQL is opt-in.
+## Database verification update — October 13, 2026
+
+User-provided Neon SQL results confirm schema version 2 and runtime role
+`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
+SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
+no CREATE on public schema, and USAGE on the events sequence. These are user-reported
+checks, not an independent agent query. Fresh schema-2 encrypted backup and
+production worker/end-to-end verification remain pending.
+
+
+Status updated October 12, 2026: cloud preparation is implemented and the Vercel
+frontend is deployed. Saved Neon database, encrypted restore and private artifact
+checks passed in isolated schemas. Production API/worker and browser acceptance
+are partly verified: the configured Render API is healthy and OAuth entry/proxy
+boundaries pass. Worker execution and full browser acceptance remain unverified.
+SQLite remains the local default; PostgreSQL is opt-in.
 This plan excludes hackathon submission preparation.
+
+## Current verified state and remaining gates
+
+Connected-account verification: Render and GitHub are now accessible. The user
+confirmed **Aaron's workspace** for Render. Service `srv-db6e8op42hec73bu7nd0`
+is live on `e582fb9`, Python/free, repository root, branch `main`, region **Oregon**,
+with automatic commit deployments. Its configured health-check path is empty;
+set `/health` in the existing service dashboard. `render.yaml` remains a proposed
+Frankfurt/manual-deploy configuration, not a description of the deployed service.
+Verify Neon region before any regional migration; do not recreate the service.
+No Render error-level logs were returned after the latest deployment finished.
+GitHub CI [38296501216](https://github.com/davre001/Torque/actions/runs/38296501216)
+passed for the same commit. All 47 repository workflow runs were inspected;
+none used `torque-agent-worker.yml`, so hosted agent execution is not verified.
+The available GitHub tools support reads but not secret provisioning or dispatch.
+Neon is reported connected by the user but its tools are not exposed here yet.
+
+- [x] Vercel project `torque` is connected to `davre001/Torque`, root `frontend/ui`, Next.js, production branch `main`, with automatic Git deployments enabled.
+- [x] Production commit `e582fb90260bca3b5edeb88300ab277026facd9d` reached READY in deployment `dpl_A9Teim4ZBr7WmS7gawY76aqnCyKB`; stable URL: https://torque-pied.vercel.app. The earlier landing check returned HTTP 200 and Torque's title.
+- [x] Required production Vercel settings are present: `TORQUE_BACKEND_ORIGIN`, `TORQUE_FRONTEND_ORIGIN`, `TORQUE_PROXY_SECRET`. Presence was checked without printing values; correctness and matching API settings remain unverified.
+- [x] Configured Render API https://torque-sxqr.onrender.com returned HTTP 200 with `status: ok`. Authenticated Vercel session probing reached Torque and returned `GitHub login required`; OAuth entry returned 302 to GitHub; direct Render OAuth without the proxy secret returned 403.
+- [x] Current local verification: 192 Python tests passed, 5 skipped; TypeScript and proxy cookie/redirect/origin/body-limit/secret-isolation checks passed; production Next.js build passed with network access for Google Fonts. Local tests disabled dotenv loading and did not access `.env`.
+- [x] Edge workspace browser contract passed: simulated session, CSRF submission, recovery/progress, acceptance results, terminal polling, explicit publication result, persisted failure display, confirmed disconnect and expired-session gate. API responses were intercepted; this is not production login or worker evidence.
+- [x] Targeted agent, bounded manual dispatch reconciliation, storage-check and CI workflows exist in `.github/workflows/`.
+- [ ] Verify Neon schema **2** and runtime grants for `repository_setups`, then take a fresh encrypted backup. The saved Neon report establishes schema 1, not the current schema-2 rollout.
+- [ ] Inspect the existing Render API account configuration: database region, deployed revision, runtime storage and server-only settings. Basic health and proxy boundaries passed; account configuration and worker readiness remain unverified.
+- [ ] Inspect/provision the protected `torque-production` Actions environment and its secret/variable names; verify targeted worker execution and acceptance workflow access.
+- [ ] Enable bounded dispatch reconciliation scheduling after provisioning and usage review. The existing reconciliation workflow is manual only.
+- [ ] Complete real production OAuth/session, second-user isolation, repository onboarding, persisted run, cancellation, worker interruption, artifact retrieval/retention and explicit idempotent publication checks.
+- [ ] Complete successful unseeded recovery, actual paid-provider graceful shutdown and actual publication/disconnect fencing trials within existing budgets.
+- [ ] Confirm account quotas, off-machine encrypted backup custody, deployed logs/trace credential exclusion, billing and compatible rollback.
+
+The initial share-link fetch was blocked by Vercel Authentication. A subsequent
+authenticated CLI request reached Torque and returned `GitHub login required`.
+This establishes signed-out frontend-to-API connectivity, not full OAuth acceptance.
+Protection has not been disabled; cookies, state and redirect query values were
+excluded from verification output.
+Render and GitHub account reads are confirmed; Neon tools and GitHub environment
+administration/dispatch remain unavailable in this session. Hosted worker
+provisioning and credential-bearing trials cannot be marked complete.
+See [current verification](evidence/deployment/current-verification.json).
 
 ## Hosting layout
 
@@ -95,22 +148,23 @@ local disks are temporary staging space only.
 ## 4. Deploy the API to Render
 
 Configuration is prepared in [render.yaml](render.yaml); follow the
-[Render deployment steps](backend/RENDER_DEPLOYMENT.md). The service has not yet
-been created. Confirm the database region before using the Blueprint.
+[Render deployment steps](backend/RENDER_DEPLOYMENT.md). The configured existing
+service is https://torque-sxqr.onrender.com and its health route passed. Inspect
+the existing service before making changes; do not create a duplicate service.
 
 - [ ] Connect `davre001/Torque` to Render and create a **Web Service**.
 - [ ] Use the repository root as the service root so `backend` imports and reviewed test files resolve correctly.
 - [ ] Choose a Python version compatible with the project's tested environment.
 - [ ] Build with `pip install -r requirements.txt`, after adding the PostgreSQL/storage dependencies to that manifest.
 - [ ] Start with `python -m uvicorn backend.api:app --host 0.0.0.0 --port $PORT`.
-- [ ] Set the health-check path to the actual route verified in the API code.
+- [x] Verify the live API `/health` route returns HTTP 200 and `status: ok`; the Render dashboard health-check setting still needs account inspection.
 - [ ] Add shared database/storage configuration through Render's secret environment settings.
 - [ ] Add GitHub App client configuration, session encryption key and webhook secret as required by the implemented routes.
 - [ ] Add a narrowly scoped server-side workflow dispatch credential; never use a visitor's token for deployment orchestration.
 - [ ] Leave `TORQUE_OPERATOR_TOKEN` empty in production and enable `TORQUE_PUBLIC_MODE=1` only once production HTTPS/origin settings are valid.
 - [ ] Preserve repository allowlists, reviewed recipes, request limits and daily spending limits.
 - [ ] Confirm no SQLite or local artifact path remains authoritative in production.
-- [ ] Record the generated Render HTTPS URL for the frontend proxy configuration.
+- [x] Record the configured Render HTTPS origin: https://torque-sxqr.onrender.com; the deployed Vercel proxy reaches its authentication route.
 
 The API must not execute long agent runs inside a request. It accepts a job,
 dispatches its worker and returns a run ID. Expect cold starts on Render free;
@@ -118,12 +172,12 @@ the worker must continue independently while the API sleeps.
 
 ## 5. Deploy the agent worker to GitHub Actions
 
-- [ ] Add a new manually/API-dispatched agent workflow on the default branch, with an assigned run ID input.
-- [ ] Check out trusted Torque code at a controlled revision; disable persisted checkout credentials.
-- [ ] Install the tested Python dependencies and run the new targeted worker command.
+- [x] Add the manually/API-dispatched `torque-agent-worker.yml` with assigned run ID and request ID inputs; hosted activation remains pending.
+- [x] Configure checkout with persisted credentials disabled; production branch protection and revision policy still require account verification.
+- [x] Configure Python dependency installation and `python -m backend worker --run-id`; live cloud execution remains pending.
 - [ ] Store database, provider, Neatlogs and required encryption secrets in protected Actions settings.
-- [ ] Limit workflow permissions and concurrency; enforce database leases even when workflow concurrency is configured.
-- [ ] Set an overall timeout with room for graceful finalization inside the existing execution cap.
+- [x] Configure read-only workflow contents permission, concurrency one and authoritative database leases.
+- [x] Configure a 25-minute worker job timeout; verify graceful finalization in the hosted trial.
 - [ ] Keep target repository code out of credential-bearing execution. Continue using the isolated acceptance-test workflow for untrusted code.
 - [ ] Confirm the acceptance workflow can be dispatched and polled from the agent job with appropriately scoped credentials.
 - [ ] Upload durable artifacts before finalizing a verified run; flush Neatlogs before process exit.
@@ -136,13 +190,13 @@ Keep worker secrets separate from the credential-free test workflow.
 
 ## 6. Deploy the frontend to Vercel
 
-- [ ] Import `davre001/Torque` into Vercel.
-- [ ] Set **Root Directory** to `frontend/ui` and select Next.js.
-- [ ] Use the frontend lockfile for installation and `npm run build` for the build.
-- [ ] Set server-only `TORQUE_BACKEND_ORIGIN`, `TORQUE_FRONTEND_ORIGIN` and `TORQUE_PROXY_SECRET` for the implemented API proxy.
-- [ ] Make browser API calls and login entry points use the same Vercel origin.
+- [x] Connect `davre001/Torque` to the existing Vercel project `torque`.
+- [x] Set **Root Directory** to `frontend/ui` and select Next.js.
+- [x] Build the committed frontend successfully on Vercel; local production build also passes.
+- [x] Confirm server-only production proxy setting names are present; verify their values against the API during hosted acceptance.
+- [x] Implement relative same-origin browser calls and login entry points; production browser verification remains pending.
 - [ ] Never put database URLs, provider keys, App secrets or encryption keys in `NEXT_PUBLIC_*` variables or client code.
-- [ ] Deploy and record the stable production URL; do not use a temporary preview URL as the permanent OAuth callback.
+- [x] Deploy and record the stable production URL: https://torque-pied.vercel.app. Configure the App callback against this origin during hosted acceptance.
 - [ ] Verify landing page, workspace, history and error states on the deployed frontend.
 
 External proxying is supported through
@@ -204,11 +258,11 @@ Do not disable state or CSRF validation to make login succeed.
 
 ## Deployment completion
 
-- [ ] PostgreSQL migration complete and verified.
-- [ ] Private durable artifacts available.
-- [ ] Render API live.
+- [ ] Current schema-2 PostgreSQL migration and runtime grants verified; saved schema-1 checks passed.
+- [x] Private database artifact implementation and isolated Neon verification passed; deployed retrieval remains pending.
+- [x] Render API live with passing public health and trusted proxy entry checks; deployed revision/runtime configuration and full acceptance remain pending.
 - [ ] Targeted Actions worker live.
-- [ ] Vercel frontend live.
+- [x] Vercel frontend deployed and READY; production browser/API acceptance remains pending.
 - [ ] Production GitHub login and per-user permissions verified.
 - [ ] End-to-end authorized run and explicit publication verified.
 - [ ] Backup, interruption and rollback checks passed.

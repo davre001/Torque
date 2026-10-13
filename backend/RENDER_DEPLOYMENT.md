@@ -1,7 +1,12 @@
 # Render API deployment
 
-Prepared configuration: [`render.yaml`](../render.yaml). No Render service has
-been created yet. The API uses Neon; the worker runs separately on GitHub Actions.
+Prepared configuration: [`render.yaml`](../render.yaml). The configured existing
+API is https://torque-sxqr.onrender.com; live `/health` returned HTTP 200 with
+`status: ok` on October 12, 2026. Proxied signed-out authentication and GitHub OAuth
+entry passed; direct OAuth without the proxy secret returned 403. Account settings,
+deployed revision, database schema and hosted worker execution remain unverified.
+Inspect this service before creating anything; do not provision a duplicate.
+The intended cloud layout uses Neon and a separate GitHub Actions worker.
 
 ## Prerequisites
 

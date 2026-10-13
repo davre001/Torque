@@ -3,6 +3,14 @@
 Torque remains a controlled prototype. The credential audit and admission controls
 do not constitute public deployment acceptance.
 
+October 12, 2026 update: the Vercel frontend and configured Render API are live.
+Render health, proxied signed-out session, GitHub OAuth redirect and untrusted
+direct OAuth rejection pass. Local checks now report 192 Python tests passed,
+five skipped, plus TypeScript, proxy contracts, production build and Edge browser
+fixture contracts. Full production browser/worker acceptance, current schema-2
+verification, paid-provider shutdown and deployed audits remain pending.
+See [current deployment status](../deployment.md).
+
 ## Implemented controls
 
 - [x] GitHub App identity, encrypted server-side user credentials, expiring sessions, HTTPS cookies, exact-origin CORS and CSRF checks.
@@ -66,7 +74,7 @@ sites will not support credentialed cross-site fetch with that cookie policy.
 - [ ] Actual paid-provider graceful shutdown; fixture HTTP and earlier hard process kill do not establish this.
 - [x] Scan common secret patterns alongside current credentials in valid local Git history and artifacts.
 - [x] Read-only current-credential audit of three actual finalized Neatlogs traces (63 spans), without exporting raw payloads; `evidence/security/neatlogs-credential-audit.json`.
-- [ ] Review deployment logs and unknown secrets outside recognizable patterns; no production backend host yet.
+- [ ] Review the existing Render/Vercel deployment logs and unknown secrets outside recognizable patterns through connected accounts.
 - [ ] Second-user isolation and shared-database admission behavior verified on the actual deployment.
 - [ ] Restore/retention and rollback procedure exercised on the production host.
 

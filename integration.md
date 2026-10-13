@@ -1,5 +1,53 @@
 # Torque integration plan
 
+## Database verification update — October 13, 2026
+
+User-provided Neon SQL results confirm schema version 2 and runtime role
+`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
+SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
+no CREATE on public schema, and USAGE on the events sequence. These are user-reported
+checks, not an independent agent query. Fresh schema-2 encrypted backup and
+production worker/end-to-end verification remain pending.
+
+
+## Current integration acceptance — October 12, 2026
+
+Connected-account update: Render and GitHub repository reads are verified. The
+Render service is in Oregon with automatic `main` deployments, live on `e582fb9`;
+its configured health-check path is empty. No error-level logs were returned
+since that deploy finished. GitHub CI `38296501216` passed, but no agent-worker
+execution exists among all 47 repository runs. Neon is reported connected but
+its tools are not exposed; GitHub secret administration/dispatch is also absent.
+
+Current local validation: **192 Python tests passed, 5 skipped**; TypeScript,
+same-origin proxy contracts and the production frontend build passed. Tests
+disabled dotenv loading; `.env` and account credentials were not inspected.
+Older counts below are historical evidence.
+
+GitHub App, provider, Neatlogs and Entire integrations have controlled/local live
+evidence as recorded below. The current cloud path additionally implements
+PostgreSQL/private artifacts, targeted Actions dispatch and schema-2 per-user
+repository onboarding. Saved schema-1 Neon checks must be supplemented by current
+schema-2 migration, runtime grants and a new encrypted backup.
+
+Vercel production is READY at https://torque-pied.vercel.app from `e582fb9` and
+automatic `main` deployments are enabled. The three required production proxy
+setting names are present. Render API https://torque-sxqr.onrender.com returned
+200/ok; authenticated CLI probing reached the session route and received
+`GitHub login required`. OAuth entry redirected to GitHub and direct Render OAuth
+without the proxy secret returned 403. Matching proxy connectivity is established;
+full production browser login and configuration auditing remain unverified.
+
+Remaining: connect/inspect Render, GitHub and Neon accounts; provision and verify
+the hosted API/worker; configure the production App callback; verify real browser
+cookies/origins, second-user isolation, onboarding, issue-to-PR, interruption and
+artifact retention. Successful unseeded recovery, real-provider graceful shutdown,
+disconnect during publication, deployed log/trace audits, billing, quotas,
+off-machine backups and rollback remain pending. Hosted Entire authentication
+is unverified and `TORQUE_ENTIRE_CONTEXT=0` remains correct for the worker.
+See [deployment status](deployment.md) and
+[current verification](evidence/deployment/current-verification.json).
+
 Frontend API wiring is now implemented in `/workspace`: credentialed requests, CSRF,
 persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
 The labeled landing preview remains separate. Live connected-user issue-to-PR and user-confirmed disconnect/history evidence are saved under `evidence/github-app/`.
@@ -8,7 +56,7 @@ Status: live operator/provider/browser/PR evidence, finalized trace readback, an
 
 ## Integration progress checklist
 
-Current validation: 158 automated tests passed, one skipped. Current credential
+Current validation: 192 automated tests passed, five skipped (October 12, 2026). Current credential
 and common-pattern audit passed (401 files, 160 stored response records, 788 valid
 local Git blobs). Isolated Windows blocked-I/O shutdown is verified; hosted Linux
 verification passed (Actions `38225586443`). Remaining non-submission gates are successful unseeded
@@ -149,7 +197,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
 2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
 3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
-4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+4. Inspect the existing Render API and complete hosted worker provisioning, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. Render is now live with basic health/proxy checks; full hosted acceptance remains pending.
 5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
 Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.

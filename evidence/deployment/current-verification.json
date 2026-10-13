@@ -1,0 +1,102 @@
+{
+    "checked_date":  "2026-10-12",
+    "timezone":  "Africa/Lagos",
+    "scope":  "local verification, Vercel settings presence, existing deployment and recorded evidence review",
+    "python":  {
+                   "passed":  192,
+                   "skipped":  5,
+                   "failed":  0,
+                   "dotenv_loading_disabled":  true
+               },
+    "typescript":  "passed",
+    "proxy_contracts":  "passed",
+    "frontend_production_build":  "passed with network access; initial restricted build could not download Google Fonts",
+    "render":  {
+                   "backend_origin":  "https://torque-sxqr.onrender.com",
+                   "health_http_status":  200,
+                   "health_status":  "ok",
+                   "direct_oauth_without_proxy_secret":  403,
+                   "deployed_revision_and_runtime_settings":  "live commit e582fb90260bca3b5edeb88300ab277026facd9d; service settings inspected, secret settings not inspected",
+                   "region":  "oregon",
+                   "configured_health_check_path":  "",
+                   "automatic_deployment_trigger":  "commit on main",
+                   "error_logs_since_latest_deploy":  0
+               },
+    "vercel":  {
+                   "project":  "torque",
+                   "repository":  "davre001/Torque",
+                   "root_directory":  "frontend/ui",
+                   "production_branch":  "main",
+                   "automatic_git_deployments":  "enabled in previously verified live project settings and tracked frontend configuration",
+                   "production_url":  "https://torque-pied.vercel.app",
+                   "deployed_commit":  "e582fb90260bca3b5edeb88300ab277026facd9d",
+                   "deployment_id":  "dpl_A9Teim4ZBr7WmS7gawY76aqnCyKB",
+                   "deployment_state":  "READY in earlier live deployment verification",
+                   "production_proxy_setting_names_present":  [
+                                                                  "TORQUE_FRONTEND_ORIGIN",
+                                                                  "TORQUE_BACKEND_ORIGIN",
+                                                                  "TORQUE_PROXY_SECRET"
+                                                              ],
+                   "setting_values_disclosed":  false,
+                   "initial_share_link_session_probe":  {
+                                                            "status":  401,
+                                                            "code":  "deployment_authentication_required",
+                                                            "stage":  "fetch_deployment"
+                                                        },
+                   "authenticated_cli_session_probe":  {
+                                                           "detail":  "GitHub login required",
+                                                           "signed_out_frontend_to_api_connectivity":  "passed"
+                                                       },
+                   "oauth_entry":  {
+                                       "status":  302,
+                                       "redirect_host":  "github.com",
+                                       "redirect_path":  "/login/oauth/authorize",
+                                       "state_cookies_and_query_not_exported":  true
+                                   },
+                   "production_browser_acceptance":  "pending"
+               },
+    "schema":  {
+                   "code_requires":  2,
+                   "saved_neon_report_verified":  1,
+                   "current_cloud_version":  "2; user-reported SQL result on 2026-10-13",
+                   "runtime_permission_verification":  {
+                                                           "source":  "user-provided Neon SQL results",
+                                                           "date":  "2026-10-13",
+                                                           "role":  "torque_runtime_4833357e53e3",
+                                                           "elevated_role_flags_all_false":  true,
+                                                           "tables_with_select_insert_update_delete":  15,
+                                                           "repository_setups_included":  true,
+                                                           "public_schema_create":  false,
+                                                           "event_sequence_usage":  true,
+                                                           "independently_queried":  false
+                                                       }
+               },
+    "agent_worker_workflow":  "implemented; hosted runtime provisioning and execution not verified",
+    "dispatch_reconciliation":  "implemented; manual workflow only",
+    "account_connections":  {
+                                "render":  "verified; Aaron workspace confirmed by user",
+                                "github":  "verified repository and workflow reads; environment administration and dispatch tools unavailable",
+                                "neon":  "user reports connected; tools not exposed in this IDE session"
+                            },
+    "credential_bearing_live_trials_performed":  false,
+    "env_file_accessed":  false,
+    "limitations":  [
+                        "Local tests do not establish production browser, API or worker acceptance",
+                        "Saved schema-1 database evidence does not verify schema-2 rollout",
+                        "Successful unseeded recovery remains pending",
+                        "Actual paid-provider graceful shutdown remains pending",
+                        "Actual in-flight publication/disconnect fencing remains pending",
+                        "Account quotas, off-machine backups, deployed log audits and rollback remain pending"
+                    ],
+    "workspace_browser_contract":  "passed in Edge; API requests intercepted, no live jobs/provider calls/PR writes",
+    "github_ci":  {
+                      "run_id":  38296501216,
+                      "commit":  "e582fb90260bca3b5edeb88300ab277026facd9d",
+                      "conclusion":  "success",
+                      "url":  "https://github.com/davre001/Torque/actions/runs/38296501216"
+                  },
+    "agent_workflow_history":  {
+                                   "repository_runs_inspected":  47,
+                                   "agent_worker_runs":  0
+                               }
+}

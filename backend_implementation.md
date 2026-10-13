@@ -1,5 +1,51 @@
 # Torque backend implementation plan
 
+## Database verification update — October 13, 2026
+
+User-provided Neon SQL results confirm schema version 2 and runtime role
+`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
+SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
+no CREATE on public schema, and USAGE on the events sequence. These are user-reported
+checks, not an independent agent query. Fresh schema-2 encrypted backup and
+production worker/end-to-end verification remain pending.
+
+
+## Current implementation and acceptance — October 12, 2026
+
+Connected-account update: the Render deployment matches `e582fb9`, with automatic
+`main` deployments in Oregon. GitHub CI run `38296501216` passed. None of the 47
+repository workflow runs is an agent-worker run. The deployed service has no
+configured health-check path; set `/health` on the existing service. Neon schema
+verification and Actions secret provisioning/dispatch still need account tools
+not currently exposed here.
+
+Current local checks passed: **192 Python tests, 5 skipped**, TypeScript, proxy
+contracts and production Next.js build. Python tests disabled dotenv loading;
+no `.env` inspection or credential-bearing live trial was performed. Historical
+counts and proposed structures below are retained as design history.
+
+The implemented API is `backend.api:app`; Next.js lives in `frontend/ui` and is
+already wired to persisted run/session/repository endpoints. Execution stays in a
+separate worker. Storage supports SQLite locally and PostgreSQL in cloud mode;
+the current migration version is **2** for per-user repository setups. Targeted
+Actions execution, dispatch reconciliation and private database artifacts exist.
+
+The frontend is deployed at https://torque-pied.vercel.app (`e582fb9`, READY),
+with automatic deployments from `main`. This does not complete production API,
+worker or full OAuth acceptance. Render API https://torque-sxqr.onrender.com
+returned health 200/ok. Authenticated CLI probing reached the signed-out session
+route, OAuth entry redirected to GitHub and untrusted direct OAuth returned 403.
+These establish basic API connectivity and boundaries, not a completed login/run.
+
+Still required: verify schema-2 migration and restricted grants; inspect/provision
+Render and protected Actions settings; complete production browser and second-user
+checks, hosted onboarding and issue-to-PR run, artifact persistence/retention,
+cancellation/reconciliation and rollback. Successful unseeded recovery,
+paid-provider graceful shutdown and live publication/disconnect fencing remain
+separate evidence gates. Automatic GitHub token refresh is not implemented.
+See [deployment status](deployment.md) and
+[current verification](evidence/deployment/current-verification.json).
+
 Workspace milestone: real session-based `/workspace` and landing OAuth buttons are
 implemented. User runs are polled from the API; the controlled connected-user run and publication are verified.
 
@@ -49,7 +95,7 @@ Live demo run `6634790aa28943629348e02914d9b56c` reproduced the baseline bug, pa
 all three independent browser criteria after the first patch, and published
 [davre001/kokon #1](https://github.com/davre001/kokon/pull/1). Saved
 [evidence](evidence/runs/6634790aa28943629348e02914d9b56c/README.md) records source,
-verified content, published commit, model usage, and original artifacts. Current automated validation: 158 passed, one skipped.
+verified content, published commit, model usage, and original artifacts. Current automated validation: 192 passed, five skipped (October 12, 2026).
 
 Recovery uses authenticated finalized failure traces alongside local artifacts and passed a controlled seeded drill. Runtime Entire context and connected-user execution are verified. Unseeded slider attempts have not recovered successfully. See `backend/NEATLOGS_RECOVERY.md` and `backend/LIFECYCLE_VERIFICATION.md` for evidence and limits.
 
@@ -67,7 +113,9 @@ First candidate: https://github.com/GabrieleLozupone/kokon/issues/4. Reproduce t
 
 ## Existing state and proposed structure
 
-`frontend/app.py` exposes the backend FastAPI app. The legacy `suture` import and task stub have been replaced. The Next.js UI still needs connection to persisted backend run records. Torque remains the product name.
+The implemented entry point is `backend.api:app`; the Next.js UI is connected to
+persisted backend run records. The following proposed layout is historical and
+must not be used as deployment instructions. Torque remains the product name.
 
 ```text
 backend/                   # Python package; design documents are at root
@@ -155,7 +203,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
 2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
 3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
-4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+4. Inspect the existing Render API and complete hosted worker provisioning, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. Render is now live with basic health/proxy checks; full hosted acceptance remains pending.
 5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
 Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.

@@ -1,7 +1,54 @@
 # Torque background worker plan
 
-The new `/workspace` submits and polls real SQLite-backed runs. It does not launch the
-worker; keep the separate worker process running for queued jobs to execute.
+## Database verification update — October 13, 2026
+
+User-provided Neon SQL results confirm schema version 2 and runtime role
+`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
+SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
+no CREATE on public schema, and USAGE on the events sequence. These are user-reported
+checks, not an independent agent query. Fresh schema-2 encrypted backup and
+production worker/end-to-end verification remain pending.
+
+
+## Current worker status — October 12, 2026
+
+Connected-account update: the worker workflow was fetched from GitHub `main` and
+its configuration matches this plan. All 47 repository Actions runs were checked;
+none executed `torque-agent-worker.yml`. Hosted worker activation therefore
+remains pending. GitHub repository/Actions reads work, but secret administration
+and workflow dispatch are not available through this connection. Neon tools are
+not yet exposed despite the user's reported connection.
+
+The local separate worker and its recorded lifecycle checks are implemented.
+Cloud mode adds shared PostgreSQL leases, private durable database artifacts,
+`worker --run-id`, stable dispatch IDs and bounded reconciliation. The existing
+`torque-agent-worker.yml` checks out without persisted credentials, runs Python
+3.11, uses the protected `torque-production` environment, read-only contents
+permission, concurrency one and a 25-minute timeout. The dispatch reconciler
+exists but has no automatic schedule yet.
+
+Current local checks: **192 Python tests passed, 5 skipped**, TypeScript, proxy
+contracts and production frontend build passed. Dotenv was disabled for Python
+tests; no `.env` or production credential-bearing worker was accessed. Older
+SQLite-only descriptions below describe the local prototype and historical trials.
+
+Still required: connected GitHub/Neon account access; provision/verify protected
+worker secrets and variables; confirm schema **2** and `repository_setups` grants;
+dispatch a real assigned job; prove artifacts survive runner deletion/API restart;
+test cancellation, expiry, reconciliation and explicit idempotent publication;
+enable bounded reconciliation scheduling after usage review. Paid-provider graceful
+shutdown and successful unseeded recovery remain unverified. Hosted Entire context
+remains disabled until runtime authentication is established.
+
+The frontend is deployed at https://torque-pied.vercel.app, but a Vercel READY
+deployment does not establish worker readiness. Render API
+https://torque-sxqr.onrender.com passed health and basic proxied authentication
+entry checks, but no hosted worker trial was performed. See [deployment status](deployment.md)
+and [current verification](evidence/deployment/current-verification.json).
+
+The `/workspace` submits and polls persisted runs. Local mode requires a separate
+worker process. Cloud mode dispatches a targeted Actions worker through the API;
+that path must be provisioned and verified before accepting production runs.
 
 Frontend progress now reads persisted run events, including recovery and terminal
 outcomes. History status refreshes during polling; completed results expose actual
@@ -12,7 +59,7 @@ Status: implemented separate SQLite-backed worker; live remote browser execution
 
 ## Worker progress checklist
 
-Current validation: 158 automated tests passed, one skipped. Windows signal
+Current validation: 192 automated tests passed, five skipped (October 12, 2026). Windows signal
 delivery during blocked localhost HTTP I/O is verified without transport retry;
 the Linux workflow passed (Actions `38225586443`). This does not establish remote provider cancellation
 or actual paid-provider graceful shutdown. Successful live recovery remains pending.
@@ -108,7 +155,7 @@ Publication runs as a bounded explicit API/CLI operation; the agent pipeline rem
 1. Demonstrate successful unseeded recovery on fork issue #7 after the daily admission reset; the latest real attempts failed and remain unchecked.
 2. Finish actual paid-provider graceful shutdown verification. Windows blocked-localhost I/O and real provider hard interruption are separate evidence; Linux reports are tracked in backend/LIFECYCLE_VERIFICATION.md.
 3. Verify disconnect fencing during a real in-flight publication; normal connected-user publication, browser disconnect/history and controlled publication-crash reconciliation are already verified separately.
-4. Choose/provision a backend host, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. No backend host is available yet.
+4. Inspect the existing Render API and complete hosted worker provisioning, then verify HTTPS cookies/origins, trusted proxy and edge timeouts, private storage/backups, second-user isolation, restore and external logs/traces. Render is now live with basic health/proxy checks; full hosted acceptance remains pending.
 5. Reconcile actual provider/Actions/storage billing against the observed model-cost samples. Original cfo.ai forecasting assumptions remain labelled.
 
 Entire target context, reviewed gallery/slider revisions, local credential/pattern auditing and queue/HTTP limits are implemented and verified within their recorded scopes. Graph/Brain, arbitrary repository support and upstream contributions are optional extensions. Submission screenshots/video/packaging are deferred at the user's request.
