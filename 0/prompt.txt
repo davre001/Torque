@@ -1306,3 +1306,13 @@ Repositories connected through your GitHub App installation.
 - davre-tech/EncoreSetup needed
 
   Tests failed; fix the test setup and retry
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+fix
