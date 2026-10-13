@@ -101,12 +101,14 @@ try {
   await send('Page.navigate',{url:'http://localhost:3000/workspace'});
   await wait("document.body.innerText.includes('Hello, fixture-user')",'Session greeting absent');
   await wait("document.body.innerText.includes('davre001/kokon')",'Connected repository absent');
+  await wait("document.body.innerText.includes('Not ready')",'Repository readiness absent');
   assert.ok(await evaluate("!document.body.innerText.includes('Set up tests') && !document.body.innerText.includes('No reviewed test recipe')"),'Repository setup controls should be hidden');
   assert.ok(await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque').disabled"));
   assert.ok(!requests.some(request=>request.method==='POST' && new URL(request.url).pathname==='/api/runs'));
   supported=true;
   await evaluate("document.querySelector('[aria-label=\"Refresh repository access\"]').click()");
   await wait("!Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque').disabled",'Supported repository did not enable submission');
+  await wait("document.body.innerText.includes('Ready to run')",'Ready repository label absent');
   await evaluate(`(()=>{const input=document.querySelector('#issue');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(fixture.issue_url)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await evaluate("document.querySelector('form').requestSubmit()");
   await wait("document.body.innerText.includes('Recovery is analyzing')",'Recovery status absent');
