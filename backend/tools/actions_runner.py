@@ -165,7 +165,14 @@ class ActionsRunner:
         if record["request_id"] != request_id or record["source_sha"] != self.source:
             raise PipelineError("Remote result identity does not match request")
         if self.profile in {'gallery-keyboard','slider-keyboard','repository-tests'} and (record.get('acceptance_profile')!=self.profile or record.get('source_repository')!=self.source_repository):
-            raise PipelineError('Remote gallery profile/source does not match request')
+            raise PipelineError('Remote test profile/source does not match request')
+        remote_result = TestResult.model_validate(record['result'])
+        if remote_result.failure_kind == 'infrastructure' and not record.get('suite_sha256'):
+            # A failed preparation cannot certify a suite or a passing result.
+            # Request, repository, profile and workflow identity still apply.
+            if remote_result.exit_code == 0 or remote_result.assertions_passed:
+                raise PipelineError('Invalid infrastructure failure result')
+            return remote_result
         signature = record["suite_sha256"]
         if self.profile == 'repository-tests' and (record.get('suite_revision') != self.suite_sha or not re.fullmatch('[a-f0-9]{64}', signature or '')):
             raise PipelineError('Frozen repository tests do not match setup')

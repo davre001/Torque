@@ -36,6 +36,7 @@ def main():
         profile=os.getenv('TORQUE_ACCEPTANCE_PROFILE','reduced-motion') or 'reduced-motion'
         repository=os.getenv('TORQUE_SOURCE_REPOSITORY','gabrielelozupone/kokon').lower() or 'gabrielelozupone/kokon'
         if profile == 'repository-tests':
+            record.update(acceptance_profile=profile, source_repository=repository)
             from backend.repository_test_job import execute
             record.update(execute(repository, sha, os.environ['TORQUE_REPOSITORY_SETUP'], os.environ['TORQUE_FILES_BUNDLE']))
             Path('remote-result').mkdir(exist_ok=True)
