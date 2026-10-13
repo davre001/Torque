@@ -1260,3 +1260,13 @@ how do i validate it
 
 ## My request:
 what if i dont know where the edit needs to be fixed.... i should not need all this stress
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+remove it now
