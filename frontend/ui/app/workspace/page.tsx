@@ -27,6 +27,8 @@ export default function Workspace() {
   const [history,setHistory] = useState<Run[]>([]);
   const [repositories,setRepositories] = useState<Repository[]>([]);
   const [testRepository,setTestRepository] = useState('');
+  const [accessChecking,setAccessChecking] = useState(false);
+  const [accessMessage,setAccessMessage] = useState('');
   const [issue,setIssue] = useState('');
   const [runId,setRunId] = useState('');
   const [run,setRun] = useState<Run | null>(null);
@@ -117,6 +119,18 @@ export default function Workspace() {
       setError(e instanceof Error ? e.message : 'Action failed.');
     } finally { setBusy(false); }
   }
+  async function reconfirmAccess() {
+    setAccessChecking(true); setAccessMessage('');
+    try {
+      await perform(async () => {
+        const saved = await api<{repositories:Repository[]}>('/api/auth/github/repositories');
+        setRepositories(saved.repositories);
+        setAccessMessage(saved.repositories.length
+          ? `Access rechecked. Torque can access ${saved.repositories.length} ${saved.repositories.length === 1 ? 'repository' : 'repositories'}.`
+          : 'No accessible repositories found. Check your Torque GitHub App installation.');
+      });
+    } finally { setAccessChecking(false); }
+  }
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const value=issue.trim();
@@ -187,7 +201,7 @@ export default function Workspace() {
               </>}
             </section>
           </section>
-          <aside className="space-y-6"><section className="rounded-3xl border border-zinc-200 bg-white p-6"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold">Repository access</h2><button aria-label="Refresh repository access" disabled={busy} onClick={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}><RefreshCw size={16}/></button></div><p className="mt-3 text-sm text-zinc-500">{repositories.length ? 'Repositories connected through your GitHub App installation.' : 'Install the Torque App on a public repository, then refresh access.'}</p><ul className="mt-4 space-y-2">{repositories.map(repo=><li className="break-all text-sm" key={repo.full_name}>{repo.full_name}<span className={`ml-2 text-xs ${repo.run_supported ? 'text-emerald-700' : 'text-zinc-500'}`}>{repo.run_supported ? 'Ready to run' : 'Not ready'}</span></li>)}</ul></section>
+          <aside className="space-y-6"><section className="rounded-3xl border border-zinc-200 bg-white p-6"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold">Repository access</h2><button aria-label="Refresh repository access" disabled={busy} onClick={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}><RefreshCw size={16}/></button></div><p className="mt-3 text-sm text-zinc-500">{repositories.length ? 'Repositories connected through your GitHub App installation.' : 'Install the Torque App on a public repository, then refresh access.'}</p><ul className="mt-4 space-y-2">{repositories.map(repo=><li className="break-all text-sm" key={repo.full_name}>{repo.full_name}<span className={`ml-2 text-xs ${repo.run_supported ? 'text-emerald-700' : 'text-zinc-500'}`}>{repo.run_supported ? 'Ready to run' : 'Not ready'}</span></li>)}</ul><button type="button" disabled={busy || accessChecking} onClick={()=>void reconfirmAccess()} className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 px-4 py-3 text-sm font-semibold hover:bg-zinc-50 disabled:opacity-40"><RefreshCw size={16} className={accessChecking ? 'animate-spin' : ''}/>{accessChecking ? 'Checking access?' : 'Reconfirm Torque access'}</button><p role="status" className="mt-3 text-sm text-zinc-600">{accessMessage}</p></section>
             {!!repositories.length && <section className="rounded-3xl border border-zinc-200 bg-white p-6"><h2 className="text-lg font-semibold">Repository tests</h2><p className="mt-3 text-sm text-zinc-500">Enable a connected public repository by validating its npm or pytest tests. New source commits use those frozen tests.</p><label htmlFor="test-repository" className="mt-4 block text-sm font-medium">Repository</label><select id="test-repository" value={testRepository} onChange={e=>setTestRepository(e.target.value)} className="mt-2 w-full rounded-xl border border-zinc-200 bg-white p-3 text-sm"><option value="">Choose a repository</option>{repositories.map(repo=><option key={repo.full_name} value={repo.full_name}>{repo.full_name}</option>)}</select>{testRepository && repositories.some(repo=>repo.full_name===testRepository) && <RepositorySetupForm key={testRepository} repository={testRepository} csrf={session.csrf_token} initial={repositories.find(repo=>repo.full_name===testRepository)?.setup} onReady={()=>void perform(async()=>{const saved=await api<{repositories:Repository[]}>('/api/auth/github/repositories');setRepositories(saved.repositories);})}/>}</section>}
             <section className="rounded-3xl border border-zinc-200 bg-white p-6"><h2 className="text-lg font-semibold">Run history</h2>{!history.length ? <p className="mt-4 text-sm text-zinc-500">Your first run starts here.</p> : <ul className="mt-4 space-y-2">{history.map(item=><li key={item.run_id}><button disabled={busy} onClick={()=>{if(item.run_id!==runId) {setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');setRunId(item.run_id);}setError('');}} className={`w-full rounded-xl p-3 text-left hover:bg-zinc-100 ${item.run_id===runId ? 'bg-zinc-100' : ''}`}><span className="block truncate text-sm font-medium">{item.issue_url.split('/').slice(3).join('/')}</span><span className="mt-1 block text-xs text-zinc-500">{label(item.status)} · {new Date(item.created_at*1000).toLocaleDateString()}</span></button></li>)}</ul>}</section>
           </aside>
