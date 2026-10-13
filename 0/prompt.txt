@@ -1368,3 +1368,13 @@ how do i fix it
 
 ## My request:
 fix that and raise the budget too
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+YEA, IT WORKS, UPDATE THE README TO GET STARTED...
