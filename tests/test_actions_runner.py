@@ -12,6 +12,13 @@ def recipe(tmp_path):
 def client(handler):
     return httpx.Client(base_url="https://api.github.com",transport=httpx.MockTransport(handler))
 
+
+def test_default_runner_uses_versioned_reference(tmp_path, monkeypatch):
+    monkeypatch.delenv('TORQUE_ACTIONS_REF', raising=False)
+    runner = ActionsRunner(recipe(tmp_path), client=client(lambda r: None))
+    assert runner.ref == 'torque-runner-v1'
+    runner.close()
+
 def test_preflight_requires_actions_token_without_local_docker(tmp_path,monkeypatch):
     monkeypatch.delenv("TORQUE_ACTIONS_TOKEN",raising=False)
     runner = ActionsRunner(recipe(tmp_path),client=client(lambda r:None))

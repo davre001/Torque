@@ -17,7 +17,7 @@ class ActionsRunner:
     def __init__(self, recipe, client=None, clock=time.monotonic, pause=time.sleep):
         self.recipe = recipe
         self.repository = os.getenv("TORQUE_ACTIONS_REPOSITORY","davre001/Torque")
-        self.ref = os.getenv("TORQUE_ACTIONS_REF","main")
+        self.ref = os.getenv("TORQUE_ACTIONS_REF","torque-runner-v1")
         if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+",self.repository):
             raise PipelineError("Invalid Actions repository")
         self.token = os.getenv("TORQUE_ACTIONS_TOKEN","")

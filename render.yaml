@@ -29,7 +29,7 @@ services:
       - key: TORQUE_ACTIONS_REPOSITORY
         value: davre001/Torque
       - key: TORQUE_ACTIONS_REF
-        value: main
+        value: torque-runner-v1
       - key: TORQUE_DATABASE_URL
         sync: false
       - key: TORQUE_ACTIONS_TOKEN

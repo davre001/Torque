@@ -195,6 +195,11 @@ Current limits include explicit file scope, supported npm test commands and a
 lockfile, or pytest without third-party project dependencies. Repository access
 continues to show names and readiness without per-repository setup forms.
 
+Remote acceptance jobs default to the versioned `torque-runner-v1` Git tag.
+Keep this tag fixed: publishing application commits to `main` must not change
+the runner during active runs. If `TORQUE_ACTIONS_REF` is configured, use a
+versioned runner tag rather than `main`. Runner upgrades require a new tag.
+
 Run these commands in separate terminals:
 
 ```powershell

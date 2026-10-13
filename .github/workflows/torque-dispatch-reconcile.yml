@@ -25,4 +25,4 @@ jobs:
           TORQUE_DATABASE_URL: ${{ secrets.TORQUE_DATABASE_URL }}
           TORQUE_ACTIONS_TOKEN: ${{ secrets.TORQUE_ACTIONS_TOKEN }}
           TORQUE_ACTIONS_REPOSITORY: davre001/Torque
-          TORQUE_ACTIONS_REF: main
+          TORQUE_ACTIONS_REF: torque-runner-v1
