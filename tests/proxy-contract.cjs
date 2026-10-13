@@ -36,5 +36,14 @@ global.fetch = async (url, options) => {
   const oversized = new NextRequest('https://frontend.example.test/api/runs', { method: 'POST', headers: { origin: 'https://frontend.example.test' }, body: 'x'.repeat(65537) });
   assert.equal((await compiled.exports.POST(oversized)).status, 413);
   assert.equal(upstreamCalls, 1);
+  for (const suffix of ['setup', 'setup/automatic']) {
+    const setup = new NextRequest(`https://frontend.example.test/api/repositories/owner/repo/${suffix}`, {
+      method: 'POST', headers: { origin: 'https://frontend.example.test', 'x-csrf-token': 'fixture-csrf' }
+    });
+    assert.equal((await compiled.exports.POST(setup)).status, 302);
+  }
+  const unknown = new NextRequest('https://frontend.example.test/api/repositories/owner/repo/setup/automatic/extra');
+  assert.equal((await compiled.exports.GET(unknown)).status, 404);
+  assert.equal(upstreamCalls, 3);
   console.log('Proxy cookie, redirect, origin, body-limit and secret-isolation checks passed');
 })().catch(error => { console.error(error); process.exitCode = 1; });
