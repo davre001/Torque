@@ -65,7 +65,10 @@ def snapshot(owner, repository, sha, root, checkpoint):
         response.raise_for_status()
         for chunk in response.iter_bytes(chunk_size=65536):
             now = time.monotonic()
-            if now - last_check >= 0.5:
+            # Cloud checkpoints perform authorization and database round trips.
+            # Keep cancellation responsive without throttling every few chunks;
+            # lease renewal runs independently in the worker heartbeat thread.
+            if now - last_check >= 10:
                 checkpoint()
                 last_check = now
             content.extend(chunk)
