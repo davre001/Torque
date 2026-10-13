@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4TQQYS6N8RT895330CR8KG7",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".github/workflows/torque-repository-smoke.yml",
+    "backend/repository_test_job.py",
+    "backend/tools/repository_runner.py",
+    "tests/test_python_dependencies.py",
+    "tests/test_remote_preparation.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 831120,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 58594048,
+    "output_tokens": 101103,
+    "api_call_count": 469
+  }
+}
