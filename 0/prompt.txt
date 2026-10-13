@@ -564,3 +564,19 @@ Repositories connected through your GitHub App installation.
 
 
 and the run torque is not clicking
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+do it
