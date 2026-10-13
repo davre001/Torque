@@ -10,9 +10,9 @@ import time
 import xml.etree.ElementTree as ET
 
 config = json.loads(Path('/acceptance/config.json').read_text())
-shutil.copytree('/workspace', '/tmp/project')
+shutil.copytree('/workspace', '/tmp/project', ignore=shutil.ignore_patterns('torque-python-deps'))
 os.chdir('/tmp/project')
-roots = {'/tmp/project', '/tmp/project/torque-python-deps'}
+roots = {'/tmp/project', '/workspace/torque-python-deps'}
 for file in config['test_files']:
     parts = Path(file).parts
     if 'tests' in parts:

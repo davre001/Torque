@@ -1,4 +1,4 @@
-name: Managed Python repository smoke (ownership regression)
+name: Managed Python repository smoke (native wheel regression)
 on:
   push:
     branches: [main]

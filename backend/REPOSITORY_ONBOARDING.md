@@ -88,6 +88,8 @@ Each managed run inventories supported source files from its pinned checkout, ex
 
 ## Python dependency preparation
 
-Python detection includes requirements.txt alongside Python tests and excludes JavaScript tests. Managed repository jobs use the fixed torque-repository-runner-v3 tag (separate from reviewed demo runners). Frozen public requirements are installed as binary wheels in a credential-free, unprivileged container with bounded time and memory; build scripts, local paths, alternative indexes and URL dependencies are rejected. Tests run separately with networking disabled, project roots on PYTHONPATH and dotenv loading disabled. A failed setup can be retried explicitly through Reconfirm Torque access; existing validation capacity and daily attempt limits still apply.
+Python detection includes requirements.txt alongside Python tests and excludes JavaScript tests. Managed repository jobs use the fixed torque-repository-runner-v4 tag (separate from reviewed demo runners). Frozen public requirements are installed as binary wheels in a credential-free, unprivileged container with bounded time and memory; build scripts, local paths, alternative indexes and URL dependencies are rejected. Tests run separately with networking disabled, project roots on PYTHONPATH and dotenv loading disabled. A failed setup can be retried explicitly through Reconfirm Torque access; existing validation capacity and daily attempt limits still apply.
 
-The v3 managed runner preserves repository identity even if preparation fails and installs wheels with the coordinator UID so permission normalization and cleanup work. The credential-free hosted Encore smoke workflow exercises this Linux ownership path.
+The v4 managed runner preserves repository identity even if preparation fails and installs wheels with the coordinator UID so permission normalization and cleanup work. The credential-free hosted Encore smoke workflow exercises this Linux ownership path.
+
+Native Python wheel extensions load from the read-only dependency bind mount rather than the no-exec temporary filesystem; dependencies are excluded from the temporary project copy.
