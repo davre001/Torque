@@ -202,6 +202,10 @@ versioned runner tag rather than `main`. Runner upgrades require a new tag.
 Agent worker dispatch uses the separate `TORQUE_WORKER_REF` setting (default
 `main`), matching the production environment's branch protection. The test
 runner reference does not control the worker's deployment branch.
+Queued-run progress checks reconcile worker dispatch in the background. A
+rejected or lost worker launch can be retried without submitting another run;
+dispatch leases, backoff, and targeted job claims prevent duplicate execution.
+Cancelled runs and other users' runs are excluded from this recovery path.
 
 Run these commands in separate terminals:
 

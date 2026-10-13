@@ -2,7 +2,7 @@
 from contextlib import asynccontextmanager
 import secrets
 from typing import Annotated
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Query, Request
 from backend.config import Settings
 from backend.models import Conflict, AdmissionDenied, SubmitRun, parse_issue
 from backend.store import Store
@@ -138,8 +138,16 @@ def create_app(settings=None):
         return {"runs":store.history(user,limit)}
 
     @app.get("/api/runs/{run_id}")
-    def status(run_id: str, user=Depends(operator)):
-        return existing(run_id,user)
+    def status(run_id: str, background_tasks: BackgroundTasks, user=Depends(operator)):
+        current = existing(run_id,user)
+        if current['status'] == 'queued' and not current.get('cancel_requested') and __import__('os').getenv('TORQUE_WORKER_DISPATCH','local') == 'github-actions':
+            def retry_dispatch():
+                from backend.dispatch import Dispatcher
+                dispatcher = Dispatcher(store)
+                try: dispatcher.dispatch(run_id)
+                finally: dispatcher.close()
+            background_tasks.add_task(retry_dispatch)
+        return current
 
     @app.get("/api/runs/{run_id}/events")
     def events(run_id: str, user=Depends(operator), after: int = Query(0,ge=0)):
