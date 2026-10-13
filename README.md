@@ -6,7 +6,21 @@ Torque is a multi-agent development assistant built for neatHack. It combines a 
 
 [Open Torque](https://torque-pied.vercel.app) · [Verification evidence](evidence/README.md) · [Deployment status](deployment.md) · [Financial plan](cfo.ai/README.md)
 
-> Working prototype with verified controlled-repository results. The frontend and API are deployed; complete production worker and browser acceptance remains pending. Status below reflects saved evidence through October 13, 2026.
+> Working prototype with deployed frontend and API, automatic repository test validation, and verified hosted Encore Python validation. Read the evidence below for the scope of each result; a passing setup is separate from a completed issue repair or published PR.
+
+## Get started
+
+1. Open [Torque](https://torque-pied.vercel.app/workspace) and choose **Connect GitHub**. Authorize Torque using the account that owns your repository or fork.
+2. [Install the Torque GitHub App](https://github.com/apps/torque-by-suture/installations/new) on that account. Choose **Only select repositories** and select your repository, or choose **All repositories**. Sign-in authorization and repository installation are separate steps.
+3. Return to the workspace and click **Reconfirm Torque access**. If installation redirects to a callback error, open the workspace again and start **Connect GitHub** there.
+4. Keep the workspace open while Torque detects supported tests and runs hosted validation. Wait for **Ready to run**. You do not need to identify the files that require fixing; Torque selects relevant source files from the issue.
+5. Paste an **open GitHub issue URL** from that repository, such as `https://github.com/your-account/your-repository/issues/7`, then click **Run Torque**.
+6. Follow the saved progress, tests, review and usage in the workspace. You can leave and return to the run. Use **Refresh progress** to check its latest state or **Request cancellation** to stop it.
+7. When the run reaches **Ready to publish**, review the result, choose an authorized destination, and publish the **draft pull request** explicitly.
+
+If a new fork is missing, add it to the app's selected repositories in [GitHub installation settings](https://github.com/settings/installations), then reconfirm access. If validation shows **Setup needed**, inspect **Repository tests → Validation output**. Reconfirm access retries a failed setup; unsupported test commands or missing tests may still need test configuration. No manual source-file selection is required.
+
+Current hosted limits are **20 model calls, 250,000 tokens and $5 estimated cost per run**. Admission allows **five runs per user per UTC day**, with daily spending reservation limits of **$25 per user and $50 shared**. Reservations are allowances, not automatic charges. The UTC day resets at **1:00 AM Lagos time**. A failed run preserves its result; submit a new run to retry after resolving the cause.
 
 ## The problem
 
@@ -197,13 +211,17 @@ run while the signed-in workspace is open. Users no longer select editable sourc
 paths: the investigator chooses relevant files for each issue. Automatic validation
 uses a bounded frozen test subset; it does not claim complete repository coverage.
 
-Remote acceptance jobs default to the versioned `torque-runner-v1` Git tag.
+Reviewed demo acceptance jobs default to the versioned `torque-runner-v1` Git tag.
 Keep this tag fixed: publishing application commits to `main` must not change
 the runner during active runs. If `TORQUE_ACTIONS_REF` is configured, use a
 versioned runner tag rather than `main`. Runner upgrades require a new tag.
 Agent worker dispatch uses the separate `TORQUE_WORKER_REF` setting (default
 `main`), matching the production environment's branch protection. The test
 runner reference does not control the worker's deployment branch.
+Managed repository tests use `TORQUE_REPOSITORY_ACTIONS_REF`, defaulting to the
+separate immutable `torque-repository-runner-v4` tag. This runner installs public
+Python wheel dependencies from frozen requirements manifests and keeps Python
+and JavaScript test selection separate.
 Queued-run progress checks reconcile worker dispatch in the background. A
 rejected or lost worker launch can be retried without submitting another run;
 dispatch leases, backoff, and targeted job claims prevent duplicate execution.
