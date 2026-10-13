@@ -1,0 +1,739 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4S95X8YMB9MBJB2KYBE6TE7",
+  "session_id": "01a1319f-ef3a-7fe1-a41e-33c0a15060cf",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-13T00:04:30.5188846Z",
+  "branch": "main",
+  "checkpoints_count": 24,
+  "save_step_count": 23,
+  "files_touched": [
+    "frontend/ui/app/workspace/page.tsx",
+    "tests/workspace-browser.mjs"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "16cb00de68b3",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 290736,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 19888896,
+    "output_tokens": 35542,
+    "api_call_count": 158,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 24
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-13T00:04:30.3497269Z",
+    "agent_lines": 0,
+    "agent_removed": 5,
+    "human_added": 0,
+    "human_modified": 334,
+    "human_removed": 0,
+    "total_committed": 334,
+    "total_lines_changed": 339,
+    "agent_percentage": 1.4749262536873156,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 770,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "SKILL (1).md": 148,
+        "SKILL (2).md": 114,
+        "SKILL (3).md": 229,
+        "videoSKILL.md": 279
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 883,
+      "user_lines_removed": 671,
+      "agent_lines_added": 929,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".gitignore": 2,
+        "backend.md": 133,
+        "backend_implementation.md": 205,
+        "background_worker.md": 159,
+        "demovideo.md": 16,
+        "deployment.md": 51,
+        "evidence/deployment/current-verification.json": 47,
+        "integration.md": 270
+      },
+      "user_removed_per_file": {
+        "backend.md": 105,
+        "backend_implementation.md": 174,
+        "background_worker.md": 129,
+        "demovideo.md": 1,
+        "deployment.md": 23,
+        "integration.md": 239
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 150,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1837,
+      "agent_lines_removed": 673,
+      "user_added_per_file": {
+        "demo/motion/launch-v2.html": 50,
+        "demo/motion/narration-v2.txt": 23,
+        "evidence/deployment/current-verification.json": 77
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 153739,
+      "user_lines_removed": 249,
+      "agent_lines_added": 4401,
+      "agent_lines_removed": 1443,
+      "user_added_per_file": {
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 14,
+        "demo/motion/render_browser.py": 5,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 177
+      },
+      "user_removed_per_file": {
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 3,
+        "demovideo.md": 174
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 153762,
+      "user_lines_removed": 259,
+      "agent_lines_added": 4456,
+      "agent_lines_removed": 1473,
+      "user_added_per_file": {
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 14,
+        "demo/motion/render_browser.py": 9,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 177,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 8,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 153762,
+      "user_lines_removed": 259,
+      "agent_lines_added": 4456,
+      "agent_lines_removed": 1473,
+      "user_added_per_file": {
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 14,
+        "demo/motion/render_browser.py": 9,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 177,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 8,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 153762,
+      "user_lines_removed": 259,
+      "agent_lines_added": 4456,
+      "agent_lines_removed": 1473,
+      "user_added_per_file": {
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 14,
+        "demo/motion/render_browser.py": 9,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 177,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 8,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 153820,
+      "user_lines_removed": 301,
+      "agent_lines_added": 4456,
+      "agent_lines_removed": 1473,
+      "user_added_per_file": {
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 153892,
+      "user_lines_removed": 325,
+      "agent_lines_added": 4456,
+      "agent_lines_removed": 1473,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/README.md": 24,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/README.md": 22,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 153870,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4469,
+      "agent_lines_removed": 1484,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/README.md": 2,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4515,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 153823,
+      "user_lines_removed": 303,
+      "agent_lines_added": 4516,
+      "agent_lines_removed": 1483,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 19
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 5
+      }
+    },
+    {
+      "checkpoint_number": 21,
+      "user_lines_added": 153835,
+      "user_lines_removed": 304,
+      "agent_lines_added": 4554,
+      "agent_lines_removed": 1471,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 31
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 22,
+      "user_lines_added": 153835,
+      "user_lines_removed": 304,
+      "agent_lines_added": 4554,
+      "agent_lines_removed": 1471,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 31
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 23,
+      "user_lines_added": 153835,
+      "user_lines_removed": 304,
+      "agent_lines_added": 4554,
+      "agent_lines_removed": 1471,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 31
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 24,
+      "user_lines_added": 153835,
+      "user_lines_removed": 304,
+      "agent_lines_added": 4888,
+      "agent_lines_removed": 1805,
+      "user_added_per_file": {
+        "demo/motion/.gitignore": 3,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 33,
+        "demo/motion/launch-v2.html": 25,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demovideo.md": 179,
+        "evidence/deployment/current-verification.json": 31
+      },
+      "user_removed_per_file": {
+        "demo/motion/.gitignore": 2,
+        "demo/motion/build_timing.py": 44,
+        "demo/motion/edit-timing.json": 15,
+        "demo/motion/launch-v2.html": 13,
+        "demo/motion/render_browser.py": 50,
+        "demovideo.md": 174,
+        "evidence/deployment/current-verification.json": 6
+      }
+    }
+  ]
+}
