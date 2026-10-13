@@ -54,8 +54,13 @@ def prepare_python_dependencies(workspace, image, test_files):
     target.mkdir()
     target.chmod(0o777)
     name = 'torque-python-install-' + uuid.uuid4().hex
+    uid = getattr(os, 'getuid', lambda: 65534)()
+    gid = getattr(os, 'getgid', lambda: 65534)()
+    # The coordinator must retain ownership to normalize permissions and clean
+    # up installed wheels. The installer still runs as an unprivileged user.
+    installer_user = f'{uid}:{gid}' if uid else '65534:65534'
     args = ['docker', 'run', '--rm', '--init', '--name', name, '--read-only',
-            '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', '65534:65534',
+            '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', installer_user,
             '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128',
             '--tmpfs', '/tmp:rw,nosuid,nodev,size=512m',
             '--mount', f'type=bind,src={target},dst=/dependencies', image,

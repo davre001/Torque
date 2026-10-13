@@ -21,6 +21,8 @@ def test_installer_uses_wheels_in_a_container_without_source_or_secrets(tmp_path
         def __init__(self, args, **kwargs): calls.append(args)
         def poll(self): return 0
     monkeypatch.setattr('backend.repository_test_job.subprocess.Popen', Process)
+    monkeypatch.setattr('backend.repository_test_job.os.getuid', lambda: 1001, raising=False)
+    monkeypatch.setattr('backend.repository_test_job.os.getgid', lambda: 1001, raising=False)
     prepare_python_dependencies(tmp_path, 'sha256:fixture', ['requirements.txt'])
     args = calls[0]
     assert '--only-binary=:all:' in args
@@ -28,3 +30,4 @@ def test_installer_uses_wheels_in_a_container_without_source_or_secrets(tmp_path
     assert args[-2:] == ['fastapi', 'httpx']
     assert not any('dst=/workspace' in arg for arg in args)
     assert '--read-only' in args and '--cap-drop=ALL' in args
+    assert args[args.index('--user') + 1] == '1001:1001'
