@@ -36,6 +36,7 @@ export default function Workspace() {
   const [refreshRun,setRefreshRun] = useState(0);
   const [destination,setDestination] = useState('');
   const [busy,setBusy] = useState(false);
+  const [submitting,setSubmitting] = useState(false);
   const [retry,setRetry] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
   const key = useRef<{ issue: string; value: string } | null>(null);
@@ -125,10 +126,15 @@ export default function Workspace() {
     if (!source) { setError('Install the Torque GitHub App on this source repository, then refresh access.'); return; }
     if (!source.run_supported) { setError(source.run_reason || 'This repository is not supported yet.'); return; }
     if (!key.current || key.current.issue!==value) key.current={issue:value,value:crypto.randomUUID()};
+    setSubmitting(true);setRunId('');setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');
     void perform(async () => {
-      const saved=await action('/api/runs',{issue_url:value},key.current!.value);
-      setRunId(saved.run_id);setRun(null);setEvents([]);setLastSynced(null);setProgressError('');setDestination('');
-      const list=await api<{runs:Run[]}>('/api/runs');setHistory(list.runs);key.current=null;
+      try {
+        const saved=await action('/api/runs',{issue_url:value},key.current!.value);
+        key.current=null;
+        setRun({run_id:saved.run_id,issue_url:value,status:saved.status,created_at:Date.now()/1000});
+        setRunId(saved.run_id);
+        const list=await api<{runs:Run[]}>('/api/runs');setHistory(list.runs);
+      } finally { setSubmitting(false); }
     });
   }
   const active=!!run && !terminal.has(run.status);
@@ -153,6 +159,8 @@ export default function Workspace() {
             <form onSubmit={submit} className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8">
               <label htmlFor="issue" className="text-xl font-semibold">What should we fix?</label><input id="issue" type="url" required value={issue} onChange={e=>setIssue(e.target.value)} placeholder="https://github.com/owner/repo/issues/4" className="mt-5 w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-4 text-base outline-none focus:ring-2 focus:ring-black"/>
               <p className="mt-3 text-sm text-zinc-500">Choose an issue in an installed repository with a supported test recipe.</p>
+              {submitting && <p role="status" className="mt-3 text-sm">Submitting your issue…</p>}
+              {error && <p role="alert" className="mt-3 text-sm text-red-700">{error}</p>}
               <button disabled={busy || hasActive || !repositories.some(repo=>repo.run_supported)} className="mt-6 flex items-center gap-2 rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-zinc-800 disabled:opacity-40"><Play size={17}/>{busy ? 'Working…' : hasActive ? 'Run in progress' : 'Run Torque'}</button>
             </form>
             <section className="glass-panel relative overflow-hidden rounded-3xl p-6 sm:p-8" aria-label="Workflow progress">
