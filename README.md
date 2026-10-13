@@ -189,11 +189,13 @@ Follow [backend setup](backend/README.md), [GitHub App setup](backend/GITHUB_APP
 Connected public repositories now use automatic npm/pytest test detection in the
 workspace. Torque starts hosted validation and shows **Checking tests**, then
 **Ready to run** only when the frozen test suite passes. Unsupported commands,
-missing tests, or oversized file scopes show **Setup needed** and reveal the
+missing tests, or unsupported test configuration show **Setup needed** and reveal the
 manual **Repository tests** panel. Existing reviewed recipes remain available.
 Later source commits use the frozen test revision. Supported commands, lockfiles,
 public-repository restrictions and validation limits still apply. Automatic checks
-run while the signed-in workspace is open.
+run while the signed-in workspace is open. Users no longer select editable source
+paths: the investigator chooses relevant files for each issue. Automatic validation
+uses a bounded frozen test subset; it does not claim complete repository coverage.
 
 Remote acceptance jobs default to the versioned `torque-runner-v1` Git tag.
 Keep this tag fixed: publishing application commits to `main` must not change

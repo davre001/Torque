@@ -44,7 +44,7 @@ class RepositoryRunner(ActionsRunner):
                       json={'ref': self.ref, 'inputs': {'request_id': request_id,
                             'source_sha': self.source, 'source_repository': self.source_repository,
                             'acceptance_profile': self.profile, 'files_bundle': bundle,
-                            'repository_setup': json.dumps({**self.config.model_dump(), 'suite_sha': self.suite_sha})}})
+                            'repository_setup': json.dumps({**self.config.model_dump(), 'editable_files': self.recipe.editable_files, 'suite_sha': self.suite_sha})}})
 
     def run(self, workspace, checkpoint):
         self.preflight()

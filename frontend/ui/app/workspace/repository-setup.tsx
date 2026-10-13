@@ -13,7 +13,6 @@ export default function RepositorySetupForm({ repository, csrf, initial, onReady
   const [setup, setSetup] = useState<RepositorySetup>(initial || {status:'not_configured'});
   const [framework, setFramework] = useState<'npm' | 'pytest'>(initial?.configuration?.framework || 'npm');
   const [tests, setTests] = useState(initial?.configuration?.test_files.join('\n') || 'package.json\npackage-lock.json\n');
-  const [files, setFiles] = useState(initial?.configuration?.editable_files.join('\n') || '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const endpoint = `/api/repositories/${repository}/setup`;
@@ -41,7 +40,7 @@ export default function RepositorySetupForm({ repository, csrf, initial, onReady
     e.preventDefault(); setBusy(true); setError('');
     const lines = (value: string) => value.split('\n').map(p=>p.trim()).filter(Boolean);
     try {
-      setSetup(await api<RepositorySetup>(endpoint, {method:'POST', headers:{'Content-Type':'application/json','X-CSRF-Token':csrf}, body:JSON.stringify({framework,test_files:lines(tests),editable_files:lines(files)})}));
+      setSetup(await api<RepositorySetup>(endpoint, {method:'POST', headers:{'Content-Type':'application/json','X-CSRF-Token':csrf}, body:JSON.stringify({framework,test_files:lines(tests)})}));
     } catch (e) { setError(e instanceof Error ? e.message : 'Could not start validation.'); }
     finally { setBusy(false); }
   }
@@ -60,9 +59,7 @@ export default function RepositorySetupForm({ repository, csrf, initial, onReady
         <textarea required value={tests} onChange={e=>setTests(e.target.value)} disabled={setup.status==='validating'} rows={4} placeholder={framework==='npm'?'package.json\npackage-lock.json\ntests/example.test.ts\nvitest.config.ts':'tests/test_example.py\nconftest.py'} className="mt-1 w-full rounded border bg-white p-2 font-mono text-xs"/>
       </label>
       <p className="text-xs text-zinc-500">Include test helpers and configuration. Up to 10 files, frozen at the validation commit.</p>
-      <label className="block text-xs font-medium">Source files TORQUE may edit (one path per line)
-        <textarea required value={files} onChange={e=>setFiles(e.target.value)} disabled={setup.status==='validating'} rows={3} placeholder="src/example.ts" className="mt-1 w-full rounded border bg-white p-2 font-mono text-xs"/>
-      </label>
+      <p className="text-xs text-zinc-500">Torque investigates the issue and selects source files automatically. You do not need to know where the fix belongs.</p>
       <button disabled={busy || setup.status==='validating'} className="rounded-lg bg-black px-3 py-2 text-xs font-medium text-white disabled:opacity-40">{busy ? 'Starting…' : setup.status==='validating' ? 'Validating tests…' : 'Validate and enable'}</button>
       <p role="status" className="text-xs">{setup.result?.message || (setup.status==='validating' ? 'Tests are running. This panel refreshes automatically.' : '')}</p>
       {setup.source_sha && <p className="text-xs text-zinc-500">Test revision: {setup.source_sha.slice(0,7)}</p>}

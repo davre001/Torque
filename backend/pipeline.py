@@ -66,6 +66,11 @@ class Pipeline:
                 workspace = self.workspaces/run_id
                 with self.span("prepare-pinned-source"):
                     self.prepare(source_owner,repo,sha,workspace,check)
+                if self.recipe.repository_setup:
+                    from backend.repository_scope import select_source
+                    with self.span('select-repository-source'):
+                        result['repository_scope'] = select_source(workspace, issue, self.recipe, self.investigator_provider, check)
+                    save('repository-scope', {'files': result['repository_scope']})
                 context = read_files(workspace,self.recipe.context_files)
                 # Editable files must be present in context; test suite is outside workspace.
                 if any(path not in context for path in self.recipe.editable_files):

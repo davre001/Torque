@@ -14,6 +14,12 @@ from backend.tools.files import read_files
 
 def verified_files(run,recipe,workspaces=None,artifacts=None,store=None):
     result=run['result']
+    if getattr(recipe, 'repository_setup', None) and 'repository_scope' in result:
+        from backend.repository_scope import source_allowed
+        scope = result['repository_scope']
+        if not isinstance(scope, list) or not 1 <= len(scope) <= 10 or any(not isinstance(p, str) or not source_allowed(p, recipe.repository_setup) for p in scope) or len(set(scope)) != len(scope):
+            raise Conflict('Invalid investigated repository scope')
+        recipe = recipe.model_copy(update={'editable_files':scope, 'context_files':scope})
     if not result.get('verified') or not run['attempts']:
         raise Conflict('Publication requires a verified attempt')
     attempt=run['attempts'][-1]
@@ -44,6 +50,8 @@ def verified_files(run,recipe,workspaces=None,artifacts=None,store=None):
             raise Conflict('Verification artifact changed')
         records[name]=json.loads(data)
     number=attempt['number']
+    if getattr(recipe, 'repository_setup', None) and 'repository_scope' in result and records.get('repository-scope.json', {}).get('files') != result['repository_scope']:
+        raise Conflict('Investigated source scope does not match saved evidence')
     tests=records.get(f'tests-{number}.json',{})
     if tests.get('exit_code') != 0 or tests.get('failure_kind') is not None or tests.get('timed_out') or tests.get('assertions_passed') != len(recipe.acceptance_criteria):
         raise Conflict('Saved acceptance results did not pass')

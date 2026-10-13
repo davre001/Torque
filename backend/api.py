@@ -7,6 +7,13 @@ from backend.config import Settings
 from backend.models import Conflict, AdmissionDenied, SubmitRun, parse_issue
 from backend.store import Store
 from backend.repository_setup import SetupConfig
+from pydantic import BaseModel, ConfigDict
+
+class SetupRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    framework: str
+    test_files: list[str]
+    editable_files: list[str] | None = None
 
 def create_app(settings=None):
     settings = settings or Settings.load()
@@ -60,12 +67,21 @@ def create_app(settings=None):
     auth.routes(app)
 
     @app.post('/api/repositories/{owner}/{repo}/setup', status_code=202)
-    def configure_repository(owner: str, repo: str, body: SetupConfig, request: Request):
+    def configure_repository(owner: str, repo: str, body: SetupRequest, request: Request):
         from backend.repository_setup import start_setup
         from backend.models import PipelineError
         user = auth.authenticate(request)
         try:
-            return start_setup(store, auth, user, f'{owner}/{repo}', body)
+            values = body.model_dump()
+            if body.editable_files is None:
+                from backend.repository_detection import validation_source
+                values['editable_files'] = validation_source(auth, user, f'{owner}/{repo}', values)
+            from pydantic import ValidationError
+            try:
+                config = SetupConfig.model_validate(values)
+            except ValidationError:
+                raise HTTPException(422, 'Invalid supported test configuration') from None
+            return start_setup(store, auth, user, f'{owner}/{repo}', config)
         except PipelineError as exc:
             raise HTTPException(502, str(exc)) from None
 

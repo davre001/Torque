@@ -2,7 +2,7 @@
 
 The workspace automatically requests test detection for newly connected repositories without a reviewed recipe or saved setup. The CSRF-protected `POST /api/repositories/{owner}/{repo}/setup/automatic` endpoint detects root npm manifests or pytest test files and starts the existing hosted validator. Repeated requests reuse saved validation instead of dispatching another workflow. Detection never executes a command on the API host.
 
-Repositories show **Connected — detecting tests**, **Checking tests**, then **Ready to run** only after successful validation. Unsupported commands, missing tests, or scopes exceeding 10 frozen test/configuration files and 10 editable source files require manual setup. Validation capacity is retried while the workspace remains open; failed validation is not automatically resubmitted. Manual Repository tests controls appear only when detection or validation needs help. Existing public-repository, authorization, spending, file-size, and validation-rate limits remain in force.
+Repositories show **Connected — detecting tests**, **Checking tests**, then **Ready to run** only after successful validation. Unsupported commands, missing tests, or unrecognized test configurations require manual setup. Detection automatically freezes a bounded subset of up to 10 test/configuration files; validation covers that subset, not every test in a large repository. Validation capacity is retried while the workspace remains open; failed validation is not automatically resubmitted. Manual Repository tests controls appear only when detection or validation needs help. Existing public-repository, authorization, spending, file-size, and validation-rate limits remain in force.
 
 Each signed-in user can enable an installed **public** GitHub repository through
 **Workspace → Repository access → Set up tests**. Existing reviewed Kokon demo
@@ -10,7 +10,7 @@ recipes continue to work. User setups do not require deployment-wide allowlist e
 
 1. Choose the managed test environment.
 2. List explicit test files, test helpers and configuration to freeze.
-3. List the source files TORQUE may edit (up to ten).
+3. Torque discovers source files automatically; no edit paths are required.
 4. Select **Validate and enable**. A separate hosted job runs the test suite.
 5. The panel polls for the result. A passing, nonempty suite enables this repository
    for this user. Failures expose bounded diagnostics and leave it disabled.
@@ -81,3 +81,7 @@ Local verification covers authenticated activation/failure/ownership/revision
 checks, schema-1 migration preservation and actual Python/Node reporter processes.
 Container execution and the deployed end-to-end flow must also be verified in
 the hosted environment before describing this feature as production-verified.
+
+## Source discovery per issue
+
+Each managed run inventories supported source files from its pinned checkout, excluding secrets, hidden paths, dependency/build directories, tests, configuration and symlinks. The investigator selects up to ten relevant files from that inventory before reading bounded source content. These paths may differ from the bootstrap paths used during onboarding validation. The worker records the selected scope in a hashed artifact; publication checks that evidence and the verified content before allowing edits. The runtime still bounds each investigation to 100 KB of source content and 2,000 candidate paths. This removes user file selection, not execution resource limits.

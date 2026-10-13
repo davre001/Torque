@@ -8,6 +8,23 @@ from pydantic import ValidationError
 from backend.repository_configuration import SetupConfig
 
 
+def validation_source(auth, user, repository, configuration):
+    from backend.repository_scope import source_allowed
+    token = auth.authorize(user, repository)
+    root = '/repos/' + repository
+    repo = auth.api(token, root)
+    if repo.get('private') or repo.get('archived'):
+        raise HTTPException(422, 'Choose an active public repository')
+    sha = auth.api(token, root + '/commits/' + quote(repo['default_branch'], safe=''))['sha']
+    tree = auth.api(token, root + '/git/trees/' + sha + '?recursive=1')
+    if tree.get('truncated'):
+        raise HTTPException(422, 'Repository tree exceeds supported investigation scope')
+    source = sorted(p['path'] for p in tree.get('tree', []) if p.get('type') == 'blob' and p.get('mode') in {'100644', '100755'} and p.get('size', 0) <= 100000 and source_allowed(p['path'], configuration))
+    if not source:
+        raise HTTPException(422, 'No supported source files detected')
+    return source[:10]
+
+
 def detect_configuration(paths, package=None):
     paths = sorted(paths)
     npm = package is not None
@@ -29,9 +46,16 @@ def detect_configuration(paths, package=None):
     if not any(p.endswith(('.py', '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs')) and ('test' in p.lower() or 'spec' in p.lower()) for p in tests):
         raise HTTPException(422, 'No supported tests detected; configure tests manually')
     try:
-        return SetupConfig(framework='npm' if npm else 'pytest', test_files=tests, editable_files=source)
-    except ValidationError:
-        raise HTTPException(422, 'Detected file scope needs manual setup (up to 10 test files and 10 source files)') from None
+        # Choose a bounded frozen test subset automatically. Source paths here
+        # only bootstrap validation; each issue gets its own investigated scope.
+        configuration = [p for p in tests if p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'conftest.py', 'pytest.ini', 'pyproject.toml'} or p.rsplit('/', 1)[-1].startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig'))]
+        cases = [p for p in tests if p not in configuration]
+        if len(configuration) >= 10:
+            raise ValueError('Configuration exceeds scope')
+        selected_tests = configuration + cases[:10-len(configuration)]
+        return SetupConfig(framework='npm' if npm else 'pytest', test_files=selected_tests, editable_files=source[:10])
+    except (ValidationError, ValueError):
+        raise HTTPException(422, 'Test configuration could not be detected automatically') from None
 
 
 def detect_repository(auth, user, repository):
