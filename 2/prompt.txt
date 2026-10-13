@@ -1,0 +1,113 @@
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+I WAS TRYING TO LOG IN TORQUE USING ANOTHER GITHUB, BUT IT SAYS ERROR 404 ON GITHUB
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+404 " DID NOT FIND ANYTHING HERE "
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_G0q9Kcg80waKH8YILcCagxRp\",0]","question":"What is the URL of the GitHub 404 page? Paste just the part before any “?” so it excludes login tokens.","answer":"I FOUND THIS IMAGE; C:\\Users\\USER\\OneDrive\\Documents\\Torque\\1000453497.jpg"}]
+</send_user_message_question_reply>
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+[https://github.com/login/oauth/authorize?client_id=Iv23liYX91FHH3hctmnz&redirect_uri=https%3A%2F%2Ftorque-pied.vercel.app%2Fapi%2Fauth%2Fgithub%2Fcallback&REDACTED&REDACTED&code_challenge_method=S256](https://github.com/login/oauth/authorize?client_id=Iv23liYX91FHH3hctmnz\&redirect_uri=https%3A%2F%2Ftorque-pied.vercel.app%2Fapi%2Fauth%2Fgithub%2Fcallback\&REDACTED\&REDACTED\&code_challenge_method=S256)
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+yea i just made it public
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+yea, it worked
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+but why is it showing my name, i mean TORQUE by davies .......
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+how do i do that

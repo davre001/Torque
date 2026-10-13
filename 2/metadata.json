@@ -1,0 +1,177 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4SE2FKCRGJ39A5YBTS0HE5K",
+  "session_id": "01a132d2-44ee-7b13-a4bc-26794555c6ac",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-13T01:30:16.3877304Z",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "save_step_count": 7,
+  "files_touched": [
+    "README.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "d2c6ede1494e",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 37764,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 494080,
+    "output_tokens": 1775,
+    "api_call_count": 15,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 7
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-13T01:30:16.3176066Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 1,
+    "human_removed": 79,
+    "total_committed": 0,
+    "total_lines_changed": 80,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 157081,
+      "user_lines_removed": 849,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".gitignore": 2,
+        "README.md": 219,
+        "SKILL (1).md": 148,
+        "SKILL (2).md": 114,
+        "SKILL (3).md": 229,
+        "SKILL.md": 279,
+        "demo/motion/.gitignore": 4,
+        "demo/motion/align_narration.py": 15,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 176,
+        "demo/motion/elevenlabs_voice.py": 57,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 64,
+        "demo/motion/narration-alignment.json": 1341,
+        "demo/motion/narration-v2.txt": 23,
+        "demo/motion/refine_preview.py": 20,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/skills/beat-sync-editing/SKILL.md": 230,
+        "demo/motion/skills/logo-animation/SKILL.md": 149,
+        "demo/motion/skills/motion-art-direction/SKILL.md": 115,
+        "demo/motion/skills/motion-background/SKILL.md": 281,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demo/motion/voice-selection.json": 6
+      },
+      "user_removed_per_file": {
+        "README.md": 79,
+        "demo/motion/skills/beat-sync-editing/SKILL.md": 229,
+        "demo/motion/skills/logo-animation/SKILL.md": 148,
+        "demo/motion/skills/motion-art-direction/SKILL.md": 114,
+        "demo/motion/skills/motion-background/SKILL.md": 279
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3618,
+      "agent_lines_removed": 849,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3618,
+      "agent_lines_removed": 849,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3399,
+      "agent_lines_removed": 770,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3400,
+      "agent_lines_removed": 771,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3618,
+      "agent_lines_removed": 849,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 153463,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3618,
+      "agent_lines_removed": 849,
+      "user_added_per_file": {
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32
+      }
+    }
+  ]
+}
