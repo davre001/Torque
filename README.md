@@ -199,6 +199,9 @@ Remote acceptance jobs default to the versioned `torque-runner-v1` Git tag.
 Keep this tag fixed: publishing application commits to `main` must not change
 the runner during active runs. If `TORQUE_ACTIONS_REF` is configured, use a
 versioned runner tag rather than `main`. Runner upgrades require a new tag.
+Agent worker dispatch uses the separate `TORQUE_WORKER_REF` setting (default
+`main`), matching the production environment's branch protection. The test
+runner reference does not control the worker's deployment branch.
 
 Run these commands in separate terminals:
 

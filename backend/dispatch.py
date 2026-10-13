@@ -10,7 +10,7 @@ class Dispatcher:
     def __init__(self, store, client=None):
         self.store = store
         self.repository = os.getenv('TORQUE_ACTIONS_REPOSITORY','davre001/Torque')
-        self.ref = os.getenv('TORQUE_ACTIONS_REF','main')
+        self.ref = os.getenv('TORQUE_WORKER_REF','main')
         self.token = os.getenv('TORQUE_ACTIONS_TOKEN','')
         self.workflow = 'torque-agent-worker.yml'
         if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', self.repository):

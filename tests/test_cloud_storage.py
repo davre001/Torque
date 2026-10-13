@@ -13,6 +13,22 @@ from backend.dispatch import Dispatcher
 URL = 'https://github.com/source/demo/issues/1'
 
 
+def test_worker_dispatch_reference_is_independent_of_test_runner(monkeypatch):
+    monkeypatch.setenv('TORQUE_ACTIONS_REF', 'torque-runner-v1')
+    monkeypatch.delenv('TORQUE_WORKER_REF', raising=False)
+    dispatcher = Dispatcher(None, httpx.Client())
+    try:
+        assert dispatcher.ref == 'main'
+    finally:
+        dispatcher.close()
+    monkeypatch.setenv('TORQUE_WORKER_REF', 'worker-release')
+    dispatcher = Dispatcher(None, httpx.Client())
+    try:
+        assert dispatcher.ref == 'worker-release'
+    finally:
+        dispatcher.close()
+
+
 def test_database_dsn_validation_and_row_compatibility():
     with pytest.raises(ValueError,match='TLS|sslmode'):
         Database('postgresql://user:private@remote.example/db')
