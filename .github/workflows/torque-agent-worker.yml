@@ -52,6 +52,9 @@ jobs:
           TORQUE_PROVIDER_MODE: claude-only
           TORQUE_RUNNER: github-actions
           TORQUE_ENTIRE_CONTEXT: '0'
+          TORQUE_MAX_COST_USD: '5'
+          TORQUE_MAX_TOKENS: '250000'
+          TORQUE_MAX_CALLS: '20'
         run: |
           python -c 'import os; from backend.database import Database; d = Database(os.environ["TORQUE_DATABASE_URL"]); assert d.postgres, "Cloud worker requires PostgreSQL"'
           python -m backend worker --run-id "$ASSIGNED_RUN_ID"

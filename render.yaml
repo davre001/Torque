@@ -24,6 +24,16 @@ services:
         value: github-actions
       - key: TORQUE_ENTIRE_CONTEXT
         value: "0"
+      - key: TORQUE_MAX_COST_USD
+        value: "5"
+      - key: TORQUE_MAX_TOKENS
+        value: "250000"
+      - key: TORQUE_MAX_CALLS
+        value: "20"
+      - key: TORQUE_USER_DAILY_USD
+        value: "25"
+      - key: TORQUE_DEPLOYMENT_DAILY_USD
+        value: "50"
       - key: TORQUE_PROVIDER_MODE
         value: claude-only
       - key: TORQUE_ACTIONS_REPOSITORY

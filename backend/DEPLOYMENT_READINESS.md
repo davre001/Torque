@@ -81,3 +81,7 @@ sites will not support credentialed cross-site fetch with that cookie policy.
 Arbitrary repositories and horizontally scaled independent SQLite databases remain
 unsupported. Keep recovery acceptance separate: a failed live attempt must be
 repaired and pass every criterion before claiming genuine live recovery.
+
+## October 13 model budget update
+
+Managed investigation and implementation use issue-relevant source excerpts capped at 12 KB of content; full source hashes, patch validation and complete review diffs remain mandatory. Model request data uses UTF-8 JSON without unnecessary ASCII escaping. Denials now identify call, projected token, or projected dollar limits and include the remaining allowance without exposing source text. Hosted API and GitHub worker limits are 20 calls, 250,000 tokens and $5 per run. Daily spending reservations are $25 per user and $50 shared; the five-run daily admission limit is unchanged. These are reservation ceilings, not automatic charges.

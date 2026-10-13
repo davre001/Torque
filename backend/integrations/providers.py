@@ -47,8 +47,12 @@ class Budget:
         output_bound = self.limits.max_output_tokens
         tokens = input_bound+output_bound
         cost = (input_bound*input_rate+output_bound*output_rate)/1_000_000
-        if self.calls+1 > self.limits.max_calls or self.tokens+tokens > self.limits.max_tokens or self.estimated_cost+cost > self.limits.max_cost_usd:
-            raise BudgetExceeded("Model call, token, or estimated dollar budget exhausted")
+        if self.calls+1 > self.limits.max_calls:
+            raise BudgetExceeded(f'Model call budget exhausted: next call would exceed {self.limits.max_calls} calls')
+        if self.tokens+tokens > self.limits.max_tokens:
+            raise BudgetExceeded(f'Token reservation budget exhausted: request needs {tokens} tokens; {max(0,self.limits.max_tokens-self.tokens)} remain')
+        if self.estimated_cost+cost > self.limits.max_cost_usd:
+            raise BudgetExceeded(f'Estimated dollar reservation budget exhausted: request needs ${cost:.4f}; ${max(0,self.limits.max_cost_usd-self.estimated_cost):.4f} remains')
         self.calls += 1
         self.tokens += tokens
         self.estimated_cost += cost
@@ -84,7 +88,7 @@ class StructuredProvider:
         self.checkpoint, self.transport_retries = checkpoint,transport_retries
 
     def ask(self, instructions, data, schema):
-        prompt = instructions+"\nReturn only JSON matching this schema:\n"+json.dumps(schema.model_json_schema())+"\nUntrusted task data:\n"+json.dumps(data)
+        prompt = instructions+"\nReturn only JSON matching this schema:\n"+json.dumps(schema.model_json_schema())+"\nUntrusted task data:\n"+json.dumps(data, ensure_ascii=False)
         for format_attempt in range(2):
             response = self._request(prompt, schema)
             try:

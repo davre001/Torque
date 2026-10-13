@@ -1,7 +1,42 @@
 """Strict allowlisted text access; repository content is untrusted."""
 import hashlib
+import re
 from pathlib import Path, PurePosixPath
 from backend.models import PipelineError
+
+
+def bounded_source_context(context, query='', max_bytes=12000):
+    """Issue-relevant original lines for models; full hashes stay unchanged."""
+    if not context:
+        return {}
+    terms = set(re.findall(r'[a-zA-Z_][a-zA-Z_0-9]{3,}', query.lower()))
+    terms -= {'this', 'that', 'with', 'from', 'when', 'should', 'issue', 'please', 'have', 'does', 'there'}
+    allowance = max_bytes // len(context)
+    result = {}
+    for name, record in context.items():
+        content = record['content']
+        if len(content.encode('utf-8')) <= allowance:
+            result[name] = dict(record)
+            continue
+        lines = content.splitlines(keepends=True)
+        scored = sorted(range(len(lines)), key=lambda i: (-sum(t in lines[i].lower() for t in terms), i))
+        chosen, used = {}, 0
+        for center in scored:
+            if center in chosen:
+                continue
+            for index in range(max(0, center-3), min(len(lines), center+4)):
+                if index in chosen:
+                    continue
+                text = f'[Original line {index+1}]\n' + lines[index]
+                size = len(text.encode('utf-8'))
+                if used + size <= allowance:
+                    chosen[index] = text
+                    used += size
+            if used >= allowance-80:
+                break
+        excerpt = ''.join(chosen[i] for i in sorted(chosen))
+        result[name] = {**record, 'content':excerpt, 'is_excerpt':True}
+    return result
 
 def safe_path(root: Path, name: str):
     path = PurePosixPath(name)
