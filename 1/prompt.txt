@@ -181,3 +181,19 @@ REWRITE THE README TO SHOW ALL WHAT WE'VE DONE., ADD PROBLEM WE ARE SOLVING., SO
 
 ## My request:
 COMMIT AND PUSH WITH CHECKPOINT ADDED
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+update the mds, backend, integratiionn, worker, implementation and deployment, including changes.md, to the recent development
