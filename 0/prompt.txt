@@ -1316,3 +1316,15 @@ Repositories connected through your GitHub App installation.
 
 ## My request:
 fix
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+davre-tech/EncoreSetup needed
+
+Remote gallery profile/source does not match request
