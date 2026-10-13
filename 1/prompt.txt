@@ -211,3 +211,19 @@ update the mds, backend, integratiionn, worker, implementation and deployment, i
 
 ## My request:
 update the readme too it talks about the just updated mds
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+commit nd push, with checkpoints added
