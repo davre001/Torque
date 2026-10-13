@@ -764,3 +764,40 @@ failed:
 [torque-runner-v1](https://github.com/davre001/Torque/tree/refs/tags/torque-runner-v1)
 
 now
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+not still woking;   Queued
+
+Run active
+
+[https://github.com/davre001/kokon/issues/7](https://github.com/davre001/kokon/issues/7)
+
+1. 1Queued
+2. 2Investigating
+3. 3Implementing
+4. 4Recovering (if needed)
+5. 5Verifying
+6. 6Ready to publish
+7. 7Publishing
+8. 8Completed
+
+Waiting for the separate worker to pick up this run.
+
+Last checked 3:46:45 AMRefresh progress
+
+Activity (1)
+
+1.
+
+Request cancellation
