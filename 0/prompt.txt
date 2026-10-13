@@ -486,3 +486,19 @@ Repositories connected through your GitHub App installation.
 
 ## My request:
 COMMIT & PUSH , WITH CHECKPOINTS
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+SOME ARE LEFT UNCOMMITED, COMMIT AND PUSH ALL THE mds and verification json except the skill.,md , dont forget to add checkpoint
