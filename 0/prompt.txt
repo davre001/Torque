@@ -1270,3 +1270,23 @@ what if i dont know where the edit needs to be fixed.... i should not need all t
 
 ## My request:
 remove it now
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+## epository access
+
+Repositories connected through your GitHub App installation.
+
+- davre-tech/EncoreSetup needed
+
+  Detected file scope needs manual setup (up to 10 test files and 10 source files)
+
+Reconfirm Torque access
+
+Access rechecked. Torque can access 1 repository.
