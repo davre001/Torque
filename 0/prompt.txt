@@ -736,3 +736,31 @@ Progress is temporarily unavailable. Showing the last saved result. Cannot reach
 
 ## My request:
 i sub,itted another run, stop all running processes'
+
+---
+
+# Context from my IDE setup:
+
+## Active file: backend/PUBLICATION.md
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+the worker fails from github; 59 workflow runs
+
+-
+
+#### [Torque agent c85a1114e7414cdf89b75d2c9d028962 5358d76ccd424278905684894076f20b](https://github.com/davre001/Torque/actions/runs/38337433191)
+
+failed:
+
+**Torque agent worker**#4:Manually runby[davre001](https://github.com/davre001)
+
+[torque-runner-v1](https://github.com/davre001/Torque/tree/refs/tags/torque-runner-v1)
+
+now
