@@ -1,61 +1,35 @@
-# Torque background worker plan
+# Torque background worker status
 
-## Database verification update — October 13, 2026
+## Current development status - October 13, 2026
 
-User-provided Neon SQL results confirm schema version 2 and runtime role
-`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
-SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
-no CREATE on public schema, and USAGE on the events sequence. These are user-reported
-checks, not an independent agent query. Fresh schema-2 encrypted backup and
-production worker/end-to-end verification remain pending.
+This update reflects repository code through `b6bff472404af9daf670b362b8cebb94b9fb7164` and saved evidence. It does not establish a new deployed revision or a new production acceptance result.
 
+- The issue-to-PR pipeline, GitHub App sessions, owner-scoped run APIs, independent tests, explicit publication, and durable queue are implemented.
+- Controlled reduced-motion and gallery runs published verified PRs: [connected-user PR #3](https://github.com/davre001/kokon/pull/3) and [gallery PR #5](https://github.com/davre001/kokon/pull/5). Both are recorded as merged; Torque's verification did not perform those merges.
+- The current `davre001/kokon` remote recipe selects **slider-keyboard**, replacing the completed gallery task. Approved slider revisions are `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`. The newer revision changes only a Gallery comment; slider HTML/CSS are unchanged.
+- The October 13 local Edge baseline passed **1/5** groups: pointer/selection/media regressions passed, while semantics, keyboard bounds, sweep/focus, and descriptions failed. This reproduces the outstanding issue; it is not a successful agent fix. See [slider acceptance](tests/acceptance/slider/README.md).
+- Earlier real slider trials exhausted three attempts without publishing. Successful unseeded recovery remains unverified. The separate [controlled recovery drill](evidence/recovery/ce1d5d570a144e608d98d49031579dd2/README.md) did pass after a deliberately seeded failure.
+- Local SQLite and optional shared PostgreSQL are implemented, including private database artifacts and targeted Actions dispatch. User-provided SQL confirms schema 2 and restricted runtime grants; that is user-reported evidence. A fresh schema-2 encrypted backup and deployed worker acceptance remain pending.
+- The last saved deployment inspection found a live Vercel frontend and Render API at `e582fb9`, with health/proxy/OAuth-entry boundaries passing. Later repository commits do not prove later deployment acceptance.
+- The last saved broad validation reports **192 Python tests passed, five skipped**, TypeScript/proxy contracts, a production build, and Edge workspace fixtures. These are historical recorded results, not tests rerun for this documentation update.
 
-## Current worker status — October 12, 2026
+[Product overview](README.md) ? [Saved deployment verification](evidence/deployment/current-verification.json) ? [Connected-user evidence](evidence/github-app/README.md) ? [Gallery publication](evidence/gallery/completed-publication.json)
 
-Connected-account update: the worker workflow was fetched from GitHub `main` and
-its configuration matches this plan. All 47 repository Actions runs were checked;
-none executed `torque-agent-worker.yml`. Hosted worker activation therefore
-remains pending. GitHub repository/Actions reads work, but secret administration
-and workflow dispatch are not available through this connection. Neon tools are
-not yet exposed despite the user's reported connection.
+## Worker and dispatch behavior
 
-The local separate worker and its recorded lifecycle checks are implemented.
-Cloud mode adds shared PostgreSQL leases, private durable database artifacts,
-`worker --run-id`, stable dispatch IDs and bounded reconciliation. The existing
-`torque-agent-worker.yml` checks out without persisted credentials, runs Python
-3.11, uses the protected `torque-production` environment, read-only contents
-permission, concurrency one and a 25-minute timeout. The dispatch reconciler
-exists but has no automatic schedule yet.
+Local execution uses `python -m backend worker`; `worker --once` processes at most one job. Cloud execution uses `worker --run-id RUN_ID` to claim only the assigned job against shared PostgreSQL.
 
-Current local checks: **192 Python tests passed, 5 skipped**, TypeScript, proxy
-contracts and production frontend build passed. Dotenv was disabled for Python
-tests; no `.env` or production credential-bearing worker was accessed. Older
-SQLite-only descriptions below describe the local prototype and historical trials.
+The targeted [worker workflow](.github/workflows/torque-agent-worker.yml) uses Python 3.11, a protected `torque-production` environment, read-only checkout permissions, no persisted Git credentials, serialized workflow concurrency, and a 25-minute job timeout. It is separate from the independent acceptance workflow.
 
-Still required: connected GitHub/Neon account access; provision/verify protected
-worker secrets and variables; confirm schema **2** and `repository_setups` grants;
-dispatch a real assigned job; prove artifacts survive runner deletion/API restart;
-test cancellation, expiry, reconciliation and explicit idempotent publication;
-enable bounded reconciliation scheduling after usage review. Paid-provider graceful
-shutdown and successful unseeded recovery remain unverified. Hosted Entire context
-remains disabled until runtime authentication is established.
+Dispatch records stable request IDs and reconciles uncertain outcomes through bounded checks. The [reconciliation workflow](.github/workflows/torque-dispatch-reconcile.yml) is manual; no automatic schedule is enabled. Private database artifacts preserve verified patch/context after ephemeral runners disappear.
 
-The frontend is deployed at https://torque-pied.vercel.app, but a Vercel READY
-deployment does not establish worker readiness. Render API
-https://torque-sxqr.onrender.com passed health and basic proxied authentication
-entry checks, but no hosted worker trial was performed. See [deployment status](deployment.md)
-and [current verification](evidence/deployment/current-verification.json).
+Leases fence stale workers. Cancellation and shutdown are cooperative; expired work becomes interrupted rather than being blindly replayed. Actual Windows and Linux signals, restart/cancellation, and blocked localhost provider I/O are verified within fixture scope. Graceful shutdown during an actual paid-provider request remains pending.
 
-The `/workspace` submits and polls persisted runs. Local mode requires a separate
-worker process. Cloud mode dispatches a targeted Actions worker through the API;
-that path must be provisioned and verified before accepting production runs.
+[Lifecycle evidence](backend/LIFECYCLE_VERIFICATION.md) ? [Deployment checklist](deployment.md)
 
-Frontend progress now reads persisted run events, including recovery and terminal
-outcomes. History status refreshes during polling; completed results expose actual
-acceptance/review records and PR links. Fixture browser tests cover the contract;
-live connected-user execution/publication and user-confirmed browser history/disconnect are saved in `evidence/github-app/`.
+## Earlier implementation milestones and design history
 
-Status: implemented separate SQLite-backed worker; live remote browser execution verified. [Backend overview](backend_implementation.md) defines the API and agent behavior; [integrations](integration.md) defines external access.
+The material below preserves earlier milestones and design decisions. Its old counts, proposed structures, and pending checks describe their original scope; the current status above takes precedence.
 
 ## Worker progress checklist
 
@@ -148,7 +122,7 @@ Deployment gate: GitHub App identity, user-scoped history/authentication, queue 
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [x] GitHub App authentication and publication verified for the controlled connected-user trial; broader users/repositories remain unverified.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate worker backed by SQLite locally or shared PostgreSQL in cloud mode. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
 
 ## Next work in order
 

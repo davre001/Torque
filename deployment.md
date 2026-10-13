@@ -1,63 +1,40 @@
-# Torque deployment plan
+# Torque deployment status and procedure
 
-## Database verification update — October 13, 2026
+## Current development status - October 13, 2026
 
-User-provided Neon SQL results confirm schema version 2 and runtime role
-`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
-SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
-no CREATE on public schema, and USAGE on the events sequence. These are user-reported
-checks, not an independent agent query. Fresh schema-2 encrypted backup and
-production worker/end-to-end verification remain pending.
+This update reflects repository code through `b6bff472404af9daf670b362b8cebb94b9fb7164` and saved evidence. It does not establish a new deployed revision or a new production acceptance result.
 
+- The issue-to-PR pipeline, GitHub App sessions, owner-scoped run APIs, independent tests, explicit publication, and durable queue are implemented.
+- Controlled reduced-motion and gallery runs published verified PRs: [connected-user PR #3](https://github.com/davre001/kokon/pull/3) and [gallery PR #5](https://github.com/davre001/kokon/pull/5). Both are recorded as merged; Torque's verification did not perform those merges.
+- The current `davre001/kokon` remote recipe selects **slider-keyboard**, replacing the completed gallery task. Approved slider revisions are `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`. The newer revision changes only a Gallery comment; slider HTML/CSS are unchanged.
+- The October 13 local Edge baseline passed **1/5** groups: pointer/selection/media regressions passed, while semantics, keyboard bounds, sweep/focus, and descriptions failed. This reproduces the outstanding issue; it is not a successful agent fix. See [slider acceptance](tests/acceptance/slider/README.md).
+- Earlier real slider trials exhausted three attempts without publishing. Successful unseeded recovery remains unverified. The separate [controlled recovery drill](evidence/recovery/ce1d5d570a144e608d98d49031579dd2/README.md) did pass after a deliberately seeded failure.
+- Local SQLite and optional shared PostgreSQL are implemented, including private database artifacts and targeted Actions dispatch. User-provided SQL confirms schema 2 and restricted runtime grants; that is user-reported evidence. A fresh schema-2 encrypted backup and deployed worker acceptance remain pending.
+- The last saved deployment inspection found a live Vercel frontend and Render API at `e582fb9`, with health/proxy/OAuth-entry boundaries passing. Later repository commits do not prove later deployment acceptance.
+- The last saved broad validation reports **192 Python tests passed, five skipped**, TypeScript/proxy contracts, a production build, and Edge workspace fixtures. These are historical recorded results, not tests rerun for this documentation update.
 
-Status updated October 12, 2026: cloud preparation is implemented and the Vercel
-frontend is deployed. Saved Neon database, encrypted restore and private artifact
-checks passed in isolated schemas. Production API/worker and browser acceptance
-are partly verified: the configured Render API is healthy and OAuth entry/proxy
-boundaries pass. Worker execution and full browser acceptance remain unverified.
-SQLite remains the local default; PostgreSQL is opt-in.
-This plan excludes hackathon submission preparation.
+[Product overview](README.md) ? [Saved deployment verification](evidence/deployment/current-verification.json) ? [Connected-user evidence](evidence/github-app/README.md) ? [Gallery publication](evidence/gallery/completed-publication.json)
 
-## Current verified state and remaining gates
+## Saved hosting inspection and remaining gates
 
-Connected-account verification: Render and GitHub are now accessible. The user
-confirmed **Aaron's workspace** for Render. Service `srv-db6e8op42hec73bu7nd0`
-is live on `e582fb9`, Python/free, repository root, branch `main`, region **Oregon**,
-with automatic commit deployments. Its configured health-check path is empty;
-set `/health` in the existing service dashboard. `render.yaml` remains a proposed
-Frankfurt/manual-deploy configuration, not a description of the deployed service.
-Verify Neon region before any regional migration; do not recreate the service.
-No Render error-level logs were returned after the latest deployment finished.
-GitHub CI [38296501216](https://github.com/davre001/Torque/actions/runs/38296501216)
-passed for the same commit. All 47 repository workflow runs were inspected;
-none used `torque-agent-worker.yml`, so hosted agent execution is not verified.
-The available GitHub tools support reads but not secret provisioning or dispatch.
-Neon is reported connected by the user but its tools are not exposed here yet.
+The saved Render inspection identifies the existing Oregon/free Python service, automatic `main` deployments, and an empty dashboard health-check path despite a responding `/health`. `render.yaml` remains a proposed configuration rather than the deployed service description. The last saved GitHub review inspected 47 workflow runs and found no targeted agent-worker execution. These are dated observations, not fresh account queries.
 
-- [x] Vercel project `torque` is connected to `davre001/Torque`, root `frontend/ui`, Next.js, production branch `main`, with automatic Git deployments enabled.
-- [x] Production commit `e582fb90260bca3b5edeb88300ab277026facd9d` reached READY in deployment `dpl_A9Teim4ZBr7WmS7gawY76aqnCyKB`; stable URL: https://torque-pied.vercel.app. The earlier landing check returned HTTP 200 and Torque's title.
-- [x] Required production Vercel settings are present: `TORQUE_BACKEND_ORIGIN`, `TORQUE_FRONTEND_ORIGIN`, `TORQUE_PROXY_SECRET`. Presence was checked without printing values; correctness and matching API settings remain unverified.
-- [x] Configured Render API https://torque-sxqr.onrender.com returned HTTP 200 with `status: ok`. Authenticated Vercel session probing reached Torque and returned `GitHub login required`; OAuth entry returned 302 to GitHub; direct Render OAuth without the proxy secret returned 403.
-- [x] Current local verification: 192 Python tests passed, 5 skipped; TypeScript and proxy cookie/redirect/origin/body-limit/secret-isolation checks passed; production Next.js build passed with network access for Google Fonts. Local tests disabled dotenv loading and did not access `.env`.
-- [x] Edge workspace browser contract passed: simulated session, CSRF submission, recovery/progress, acceptance results, terminal polling, explicit publication result, persisted failure display, confirmed disconnect and expired-session gate. API responses were intercepted; this is not production login or worker evidence.
-- [x] Targeted agent, bounded manual dispatch reconciliation, storage-check and CI workflows exist in `.github/workflows/`.
-- [ ] Verify Neon schema **2** and runtime grants for `repository_setups`, then take a fresh encrypted backup. The saved Neon report establishes schema 1, not the current schema-2 rollout.
-- [ ] Inspect the existing Render API account configuration: database region, deployed revision, runtime storage and server-only settings. Basic health and proxy boundaries passed; account configuration and worker readiness remain unverified.
-- [ ] Inspect/provision the protected `torque-production` Actions environment and its secret/variable names; verify targeted worker execution and acceptance workflow access.
-- [ ] Enable bounded dispatch reconciliation scheduling after provisioning and usage review. The existing reconciliation workflow is manual only.
-- [ ] Complete real production OAuth/session, second-user isolation, repository onboarding, persisted run, cancellation, worker interruption, artifact retrieval/retention and explicit idempotent publication checks.
-- [ ] Complete successful unseeded recovery, actual paid-provider graceful shutdown and actual publication/disconnect fencing trials within existing budgets.
-- [ ] Confirm account quotas, off-machine encrypted backup custody, deployed logs/trace credential exclusion, billing and compatible rollback.
+Neon tools are now available in this session, superseding older notes that the connector was absent. No database query, account mutation, credential inspection, dispatch, or deployment was performed for this documentation update.
 
-The initial share-link fetch was blocked by Vercel Authentication. A subsequent
-authenticated CLI request reached Torque and returned `GitHub login required`.
-This establishes signed-out frontend-to-API connectivity, not full OAuth acceptance.
-Protection has not been disabled; cookies, state and redirect query values were
-excluded from verification output.
-Render and GitHub account reads are confirmed; Neon tools and GitHub environment
-administration/dispatch remain unavailable in this session. Hosted worker
-provisioning and credential-bearing trials cannot be marked complete.
-See [current verification](evidence/deployment/current-verification.json).
+- [x] Implement the same-origin proxy, shared PostgreSQL storage, schema-2 migration, private artifacts, targeted worker and bounded manual reconciliation.
+- [x] Record basic deployed frontend/API connectivity and isolated Neon concurrency/storage/restore verification.
+- [x] Record user-reported schema-2/runtime-grant SQL results; independent current verification remains separate.
+- [ ] Take and verify a fresh schema-2 encrypted backup; confirm off-machine custody.
+- [ ] Provision/verify the protected Actions environment and run one real assigned hosted job.
+- [ ] Verify production login, second-user isolation, supported repository execution, artifact retrieval/retention, cancellation and explicit idempotent publication.
+- [ ] Exercise compatible restore/rollback, host/proxy limits, deployed credential/log checks, quotas and billing.
+- [ ] Verify successful unseeded recovery, paid-provider graceful shutdown and publication/disconnect fencing.
+
+The [README](README.md) is now rewritten and published with workflow/integration diagrams and evidence links at commit [4317988](https://github.com/davre001/Torque/commit/43179880579ef3d646b33fe38b5dee00c8cf9574), with Entire checkpoint `01M4SE2FKCRGJ39A5YBTS0HE5K`. Documentation publication does not verify runtime deployment.
+
+## Detailed deployment procedure
+
+The following procedure retains individual implementation and acceptance checks. Historical provider/account observations are not refreshed by this documentation edit.
 
 ## Hosting layout
 
@@ -85,7 +62,7 @@ Sources: [Render free limits](https://render.com/docs/free),
 
 - [x] Implement PostgreSQL configuration (`TORQUE_DATABASE_URL`) and transactional schema migrations; preserve local SQLite.
 - [x] Route storage, OAuth/session persistence, publication, queue claims, daily reservations and HTTP counters through the database boundary.
-- [x] Implement atomic admission and exclusive leases with a PostgreSQL transaction advisory lock; actual PostgreSQL concurrency verification is pending below.
+- [x] Implement atomic admission and exclusive leases with a PostgreSQL transaction advisory lock; isolated Neon concurrency verification passed; production worker acceptance remains pending.
 - [x] Add `worker --run-id` that claims only the assigned job.
 - [x] Implement durable dispatch bookkeeping, stable request IDs and bounded manual reconciliation.
 - [x] Preserve shared-database cancellation checks, lease expiry and signal handling in targeted workers.
@@ -258,7 +235,7 @@ Do not disable state or CSRF validation to make login succeed.
 
 ## Deployment completion
 
-- [ ] Current schema-2 PostgreSQL migration and runtime grants verified; saved schema-1 checks passed.
+- [ ] Independently verify current schema-2 PostgreSQL migration/runtime grants; user-reported checks passed, and saved automated checks cover schema 1.
 - [x] Private database artifact implementation and isolated Neon verification passed; deployed retrieval remains pending.
 - [x] Render API live with passing public health and trusted proxy entry checks; deployed revision/runtime configuration and full acceptance remain pending.
 - [ ] Targeted Actions worker live.

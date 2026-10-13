@@ -118,6 +118,8 @@ The saved deployment checklist reports **192 Python tests passed, five skipped**
 
 ### Honest failure evidence
 
+The current `davre001/kokon` remote recipe selects **slider-keyboard** for issue #7, replacing the completed gallery task. It admits reviewed revisions `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`; the newer revision changes only a Gallery comment, leaving slider HTML/CSS unchanged. The October 13 Edge baseline passed **1/5** groups and reproduced four assertion failures. This is evidence of the outstanding bug, not a completed repair. See [current slider acceptance setup](tests/acceptance/slider/README.md).
+
 The unseeded slider trial used real providers, Entire context, hosted tests, and failed-attempt readback, but exhausted three attempts with four of five test groups passing each time. **No PR was published.** Successful unseeded recovery remains unverified.
 
 [Slider trial and diagnosis](evidence/slider/2aa4615e4cbf48deadd99a009b8da11b/README.md)
@@ -247,6 +249,23 @@ Before claiming full production readiness, complete:
 - Production credential/log exclusion, host/proxy limits, quotas, and billing review.
 
 [Deployment checklist](deployment.md) records verified scope and outstanding gates. Onboarding remains policy-controlled; arbitrary repositories and unreviewed test commands are not automatically supported.
+
+## Project documentation
+
+The implementation and operations documents were refreshed on October 13 against repository code through `b6bff47` and saved evidence. They distinguish implemented behavior, recorded verification, and pending production acceptance. Earlier design milestones are retained as labeled history where relevant.
+
+| Document | What it covers |
+| --- | --- |
+| [Backend progress](backend.md) | API capabilities, completed agent runs, current task policy, and verification scope |
+| [Backend runtime guide](backend/README.md) | Dependencies, configuration, API/worker commands, and runner setup |
+| [Backend implementation](backend_implementation.md) | Source map, durable storage, agent gates, and publication boundaries |
+| [Frontend implementation](implementation.md) | Real workspace/session flow, polling, repository readiness, proxy, and browser checks |
+| [Integrations](integration.md) | GitHub, models, Neatlogs, Entire, Neon, hosting, Actions, and cfo.ai boundaries |
+| [Background worker](background_worker.md) | Leases, cancellation, targeted jobs, dispatch reconciliation, artifacts, and lifecycle evidence |
+| [Deployment](deployment.md) | Saved hosting checks, database evidence, provisioning procedure, backups, and remaining acceptance gates |
+| [Development changes](changes.md) | Recent recipe review, README/checkpoint publication, frontend/backend milestones, and outstanding work |
+
+The workspace currently shows repository readiness labels rather than onboarding forms. Backend schema-2 setup storage remains implemented. Documentation updates do not establish a new deployed revision or a successful hosted worker run.
 
 ## Repository map
 

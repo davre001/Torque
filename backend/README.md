@@ -1,5 +1,14 @@
 # Running the backend
 
+## Current runtime note - October 13, 2026
+
+The default remote fork recipe now selects slider-keyboard, admitting reviewed revisions `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`. Older reduced-motion/gallery issue URLs below are historical examples; do not submit them against an incompatible current recipe.
+
+Next.js is connected to the API through a same-origin proxy. Storage supports local SQLite or PostgreSQL; cloud execution has targeted `worker --run-id` dispatch and private durable artifacts. Full hosted worker acceptance remains pending. User-reported schema-2 grants do not establish a fresh backup or end-to-end deployment acceptance.
+
+[Current implementation](../backend_implementation.md) ? [Worker](../background_worker.md) ? [Deployment](../deployment.md) ? [Slider setup](../tests/acceptance/slider/README.md)
+
+
 Implemented: SQLite history/queue, separate worker, cancellation/leases, pinned source
 snapshots, bounded file edits, Claude/LiteLLM and Gemini adapters, agent roles, verification
 gates, bounded recovery, atomic artifacts, and worker-owned Neatlogs tracing.
@@ -62,9 +71,9 @@ The operator token is a development mechanism; it does not authenticate GitHub v
 
 `run` only enqueues; it requires a worker to process the job.
 `worker --once` processes at most one queued job.
-SQLite lives in ignored `var/torque.sqlite3`. Expired jobs become interrupted and
+Local SQLite lives in ignored `var/torque.sqlite3`; cloud mode supports shared PostgreSQL and private database artifacts. Expired jobs become interrupted and
 are never automatically replayed. History and events survive API restarts.
-Events currently return paginated JSON, not SSE; Next.js is not yet connected.
+Events return paginated JSON rather than SSE. The Next.js workspace is connected through a same-origin proxy and polls persisted run/history state.
 The worker performs investigation with Gemini, implementation with Claude via LiteLLM,
 independent Docker tests, Gemini review, and up to two Claude recovery diagnoses.
 A passing run stops at `ready_to_publish`. See [PR publication](PUBLICATION.md) for explicit publication to a controlled destination.

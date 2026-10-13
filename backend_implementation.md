@@ -1,57 +1,40 @@
-# Torque backend implementation plan
+# Torque backend implementation
 
-## Database verification update — October 13, 2026
+## Current development status - October 13, 2026
 
-User-provided Neon SQL results confirm schema version 2 and runtime role
-`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
-SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
-no CREATE on public schema, and USAGE on the events sequence. These are user-reported
-checks, not an independent agent query. Fresh schema-2 encrypted backup and
-production worker/end-to-end verification remain pending.
+This update reflects repository code through `b6bff472404af9daf670b362b8cebb94b9fb7164` and saved evidence. It does not establish a new deployed revision or a new production acceptance result.
 
+- The issue-to-PR pipeline, GitHub App sessions, owner-scoped run APIs, independent tests, explicit publication, and durable queue are implemented.
+- Controlled reduced-motion and gallery runs published verified PRs: [connected-user PR #3](https://github.com/davre001/kokon/pull/3) and [gallery PR #5](https://github.com/davre001/kokon/pull/5). Both are recorded as merged; Torque's verification did not perform those merges.
+- The current `davre001/kokon` remote recipe selects **slider-keyboard**, replacing the completed gallery task. Approved slider revisions are `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`. The newer revision changes only a Gallery comment; slider HTML/CSS are unchanged.
+- The October 13 local Edge baseline passed **1/5** groups: pointer/selection/media regressions passed, while semantics, keyboard bounds, sweep/focus, and descriptions failed. This reproduces the outstanding issue; it is not a successful agent fix. See [slider acceptance](tests/acceptance/slider/README.md).
+- Earlier real slider trials exhausted three attempts without publishing. Successful unseeded recovery remains unverified. The separate [controlled recovery drill](evidence/recovery/ce1d5d570a144e608d98d49031579dd2/README.md) did pass after a deliberately seeded failure.
+- Local SQLite and optional shared PostgreSQL are implemented, including private database artifacts and targeted Actions dispatch. User-provided SQL confirms schema 2 and restricted runtime grants; that is user-reported evidence. A fresh schema-2 encrypted backup and deployed worker acceptance remain pending.
+- The last saved deployment inspection found a live Vercel frontend and Render API at `e582fb9`, with health/proxy/OAuth-entry boundaries passing. Later repository commits do not prove later deployment acceptance.
+- The last saved broad validation reports **192 Python tests passed, five skipped**, TypeScript/proxy contracts, a production build, and Edge workspace fixtures. These are historical recorded results, not tests rerun for this documentation update.
 
-## Current implementation and acceptance — October 12, 2026
+[Product overview](README.md) ? [Saved deployment verification](evidence/deployment/current-verification.json) ? [Connected-user evidence](evidence/github-app/README.md) ? [Gallery publication](evidence/gallery/completed-publication.json)
 
-Connected-account update: the Render deployment matches `e582fb9`, with automatic
-`main` deployments in Oregon. GitHub CI run `38296501216` passed. None of the 47
-repository workflow runs is an agent-worker run. The deployed service has no
-configured health-check path; set `/health` on the existing service. Neon schema
-verification and Actions secret provisioning/dispatch still need account tools
-not currently exposed here.
+## Current implementation map
 
-Current local checks passed: **192 Python tests, 5 skipped**, TypeScript, proxy
-contracts and production Next.js build. Python tests disabled dotenv loading;
-no `.env` inspection or credential-bearing live trial was performed. Historical
-counts and proposed structures below are retained as design history.
+| Area | Source |
+| --- | --- |
+| HTTP and authentication | `backend/api.py`, `backend/github_auth.py` |
+| Durable state and migrations | `backend/store.py`, `backend/database.py` |
+| Agent orchestration and gates | `backend/pipeline.py`, `backend/runtime.py`, `backend/agents/` |
+| Worker leases and dispatch | `backend/worker.py`, `backend/dispatch.py` |
+| Reviewed source and tests | `backend/recipes.remote.json`, `backend/acceptance_profiles.py`, `backend/tools/` |
+| Trace diagnostics/readback | `backend/integrations/test_diagnostics.py`, `backend/integrations/neatlogs_read.py` |
+| Explicit publication | `backend/publication.py` |
+| Browser workspace/proxy | `frontend/ui/app/workspace/page.tsx`, `frontend/ui/lib/api.ts`, `frontend/ui/app/api/` |
 
-The implemented API is `backend.api:app`; Next.js lives in `frontend/ui` and is
-already wired to persisted run/session/repository endpoints. Execution stays in a
-separate worker. Storage supports SQLite locally and PostgreSQL in cloud mode;
-the current migration version is **2** for per-user repository setups. Targeted
-Actions execution, dispatch reconciliation and private database artifacts exist.
+Storage is SQLite by default and PostgreSQL when configured. Schema 2 includes repository setups, while the workspace currently exposes readiness labels rather than setup forms. Tests, verified artifacts, source identity, and destination authorization remain authoritative publication gates.
 
-The frontend is deployed at https://torque-pied.vercel.app (`e582fb9`, READY),
-with automatic deployments from `main`. This does not complete production API,
-worker or full OAuth acceptance. Render API https://torque-sxqr.onrender.com
-returned health 200/ok. Authenticated CLI probing reached the signed-out session
-route, OAuth entry redirected to GitHub and untrusted direct OAuth returned 403.
-These establish basic API connectivity and boundaries, not a completed login/run.
+[Frontend implementation](implementation.md) ? [Worker](background_worker.md) ? [Integrations](integration.md)
 
-Still required: verify schema-2 migration and restricted grants; inspect/provision
-Render and protected Actions settings; complete production browser and second-user
-checks, hosted onboarding and issue-to-PR run, artifact persistence/retention,
-cancellation/reconciliation and rollback. Successful unseeded recovery,
-paid-provider graceful shutdown and live publication/disconnect fencing remain
-separate evidence gates. Automatic GitHub token refresh is not implemented.
-See [deployment status](deployment.md) and
-[current verification](evidence/deployment/current-verification.json).
+## Earlier implementation milestones and design history
 
-Workspace milestone: real session-based `/workspace` and landing OAuth buttons are
-implemented. User runs are polled from the API; the controlled connected-user run and publication are verified.
-
-Status: implementation and verification progress, October 12, 2026. Checklists distinguish tested code from
-pending live acceptance. Related plans: [worker](background_worker.md), [integrations](integration.md).
-The existing root `implementation.md` remains the historical frontend plan.
+The material below preserves earlier milestones and design decisions. Its old counts, proposed structures, and pending checks describe their original scope; the current status above takes precedence.
 
 ## Implementation progress checklist
 
@@ -196,7 +179,7 @@ Before demo: verify an actual finalized neatlogs trace, inspect Entire context/c
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [x] GitHub App authentication and controlled connected-user publication; broader public-host acceptance remains separate.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and controlled connected-user flows are live-verified; acceptance on an actual public multi-user deployment remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate worker backed by SQLite locally or shared PostgreSQL in cloud mode. See [publication instructions](backend/PUBLICATION.md). The operator and controlled connected-user flows are live-verified; acceptance on an actual public multi-user deployment remains pending.
 
 ## Next work in order
 

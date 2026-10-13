@@ -1,58 +1,40 @@
-# Torque integration plan
+# Torque integration status
 
-## Database verification update — October 13, 2026
+## Current development status - October 13, 2026
 
-User-provided Neon SQL results confirm schema version 2 and runtime role
-`torque_runtime_4833357e53e3` with all four elevated role flags disabled,
-SELECT/INSERT/UPDATE/DELETE on all 15 Torque tables (including repository_setups),
-no CREATE on public schema, and USAGE on the events sequence. These are user-reported
-checks, not an independent agent query. Fresh schema-2 encrypted backup and
-production worker/end-to-end verification remain pending.
+This update reflects repository code through `b6bff472404af9daf670b362b8cebb94b9fb7164` and saved evidence. It does not establish a new deployed revision or a new production acceptance result.
 
+- The issue-to-PR pipeline, GitHub App sessions, owner-scoped run APIs, independent tests, explicit publication, and durable queue are implemented.
+- Controlled reduced-motion and gallery runs published verified PRs: [connected-user PR #3](https://github.com/davre001/kokon/pull/3) and [gallery PR #5](https://github.com/davre001/kokon/pull/5). Both are recorded as merged; Torque's verification did not perform those merges.
+- The current `davre001/kokon` remote recipe selects **slider-keyboard**, replacing the completed gallery task. Approved slider revisions are `218143b523252ee95c2368adc83fef95b324b156` and `513883a43ea33474431c933018b6267d08acb8f5`. The newer revision changes only a Gallery comment; slider HTML/CSS are unchanged.
+- The October 13 local Edge baseline passed **1/5** groups: pointer/selection/media regressions passed, while semantics, keyboard bounds, sweep/focus, and descriptions failed. This reproduces the outstanding issue; it is not a successful agent fix. See [slider acceptance](tests/acceptance/slider/README.md).
+- Earlier real slider trials exhausted three attempts without publishing. Successful unseeded recovery remains unverified. The separate [controlled recovery drill](evidence/recovery/ce1d5d570a144e608d98d49031579dd2/README.md) did pass after a deliberately seeded failure.
+- Local SQLite and optional shared PostgreSQL are implemented, including private database artifacts and targeted Actions dispatch. User-provided SQL confirms schema 2 and restricted runtime grants; that is user-reported evidence. A fresh schema-2 encrypted backup and deployed worker acceptance remain pending.
+- The last saved deployment inspection found a live Vercel frontend and Render API at `e582fb9`, with health/proxy/OAuth-entry boundaries passing. Later repository commits do not prove later deployment acceptance.
+- The last saved broad validation reports **192 Python tests passed, five skipped**, TypeScript/proxy contracts, a production build, and Edge workspace fixtures. These are historical recorded results, not tests rerun for this documentation update.
 
-## Current integration acceptance — October 12, 2026
+[Product overview](README.md) ? [Saved deployment verification](evidence/deployment/current-verification.json) ? [Connected-user evidence](evidence/github-app/README.md) ? [Gallery publication](evidence/gallery/completed-publication.json)
 
-Connected-account update: Render and GitHub repository reads are verified. The
-Render service is in Oregon with automatic `main` deployments, live on `e582fb9`;
-its configured health-check path is empty. No error-level logs were returned
-since that deploy finished. GitHub CI `38296501216` passed, but no agent-worker
-execution exists among all 47 repository runs. Neon is reported connected but
-its tools are not exposed; GitHub secret administration/dispatch is also absent.
+## Implemented integration boundaries
 
-Current local validation: **192 Python tests passed, 5 skipped**; TypeScript,
-same-origin proxy contracts and the production frontend build passed. Tests
-disabled dotenv loading; `.env` and account credentials were not inspected.
-Older counts below are historical evidence.
+| Integration | Current use | Verification boundary |
+| --- | --- | --- |
+| GitHub App/API | Login, installation repositories, source/issue reads, destination authorization, explicit PR publication | Controlled connected-user run verified; production second-user isolation pending |
+| Claude/LiteLLM and Gemini | Investigation, validated edits, review, bounded recovery; configurable mixed or Claude-only mode | Real calls and saved usage exist; costs are configured-rate estimates |
+| Neatlogs | Workflow/attempt/model spans, per-check diagnostics, finalized failure readback | Controlled hosted diagnostics verified; unavailable readback is labeled local fallback |
+| Entire | Codex checkpoints and opt-in target-repository CLI context | Local/runtime search evidence exists; cloud worker sets `TORQUE_ENTIRE_CONTEXT=0` |
+| Neon PostgreSQL | Shared sessions, queue, leases, budgets, dispatch, private artifacts | Isolated integration checks passed; current schema/grants are user-reported |
+| Vercel/Render | Same-origin frontend proxy and FastAPI hosting | Saved health and entry checks passed; full hosted worker flow pending |
+| GitHub Actions | Independent acceptance jobs, targeted agent jobs, manual dispatch reconciliation | Acceptance/lifecycle runs exist; targeted agent-worker execution not established |
+| cfo.ai | Pricing, costs, retries, cash-flow and sensitivity planning | Exported workbook/screenshots plus selected measured run-cost samples |
 
-GitHub App, provider, Neatlogs and Entire integrations have controlled/local live
-evidence as recorded below. The current cloud path additionally implements
-PostgreSQL/private artifacts, targeted Actions dispatch and schema-2 per-user
-repository onboarding. Saved schema-1 Neon checks must be supplemented by current
-schema-2 migration, runtime grants and a new encrypted backup.
+The SDK ingestion key and separate trace-read credential serve different purposes. Neither belongs in browser requests or isolated acceptance containers. A test failure cannot be overridden by model approval, and infrastructure failure cannot count as baseline reproduction.
 
-Vercel production is READY at https://torque-pied.vercel.app from `e582fb9` and
-automatic `main` deployments are enabled. The three required production proxy
-setting names are present. Render API https://torque-sxqr.onrender.com returned
-200/ok; authenticated CLI probing reached the session route and received
-`GitHub login required`. OAuth entry redirected to GitHub and direct Render OAuth
-without the proxy secret returned 403. Matching proxy connectivity is established;
-full production browser login and configuration auditing remain unverified.
+[Financial evidence](cfo.ai/README.md) ? [Entire search evidence](evidence/entire-runtime/target-context.json) ? [Neatlogs diagnostics](evidence/acceptance-telemetry/c654b3eda3644bcf934215a577de51eb/README.md)
 
-Remaining: connect/inspect Render, GitHub and Neon accounts; provision and verify
-the hosted API/worker; configure the production App callback; verify real browser
-cookies/origins, second-user isolation, onboarding, issue-to-PR, interruption and
-artifact retention. Successful unseeded recovery, real-provider graceful shutdown,
-disconnect during publication, deployed log/trace audits, billing, quotas,
-off-machine backups and rollback remain pending. Hosted Entire authentication
-is unverified and `TORQUE_ENTIRE_CONTEXT=0` remains correct for the worker.
-See [deployment status](deployment.md) and
-[current verification](evidence/deployment/current-verification.json).
+## Earlier implementation milestones and design history
 
-Frontend API wiring is now implemented in `/workspace`: credentialed requests, CSRF,
-persisted run polling/history, cancel, explicit publication, and confirmed disconnect.
-The labeled landing preview remains separate. Live connected-user issue-to-PR and user-confirmed disconnect/history evidence are saved under `evidence/github-app/`.
-
-Status: live operator/provider/browser/PR evidence, finalized trace readback, and controlled live hosted recovery are saved. Live connected-user execution and publication are verified in the saved Claude-only trial. Read current official SDK references during implementation; exact gateway model aliases and supported features must be discovered rather than guessed.
+The material below preserves earlier milestones and design decisions. Its old counts, proposed structures, and pending checks describe their original scope; the current status above takes precedence.
 
 ## Integration progress checklist
 
@@ -190,7 +172,7 @@ Check actual gateway and Gemini model access with small operator-authorized call
 - [x] Live controlled-fork draft PR published and saved: [davre001/kokon #1](https://github.com/davre001/kokon/pull/1).
 - [x] GitHub App authentication and publication for the controlled connected-user trial; broader users/repositories remain unverified.
 
-Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate SQLite-backed worker. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
+Publication runs as a bounded explicit API/CLI operation; the agent pipeline remains in the separate worker backed by SQLite locally or shared PostgreSQL in cloud mode. See [publication instructions](backend/PUBLICATION.md). The operator and one controlled connected-user flow are live-verified; broader multi-user/public-deployment acceptance remains pending.
 
 ## Next work in order
 
