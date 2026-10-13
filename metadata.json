@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4S9FQB090GP1D44QF8RSDDA",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "backend.md",
+    "backend/DEPLOYMENT_READINESS.md",
+    "backend/RENDER_DEPLOYMENT.md",
+    "backend_implementation.md",
+    "background_worker.md",
+    "demo/motion/README.md",
+    "deployment.md",
+    "evidence/deployment/current-verification.json",
+    "integration.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 302248,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 20563840,
+    "output_tokens": 37302,
+    "api_call_count": 168,
+    "subagent_tokens_complete": true
+  }
+}
