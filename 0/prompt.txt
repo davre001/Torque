@@ -1358,3 +1358,13 @@ Trace ID: `b239f42e51a112a54ca09267ce82ad7c`
 
 ## My request:
 how do i fix it
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+
+## My request:
+fix that and raise the budget too
