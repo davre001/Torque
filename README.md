@@ -184,6 +184,15 @@ Use [.env.example](.env.example) as the configuration reference. Create `.env` o
 
 Follow [backend setup](backend/README.md), [GitHub App setup](backend/GITHUB_APP.md), and [remote runner setup](backend/REMOTE_RUNNER.md) for credentials, conservative cost rates, recipes, and runner preparation. Example recipes contain placeholders and require review.
 
+Connected users can enable their public repositories in the workspace's
+**Repository tests** panel. Choose a repository, select npm or pytest, provide
+the test/configuration files and editable source files, then validate. A passing
+hosted validation enables that repository for that user. Later source commits
+use the frozen test revision rather than the demo's hard-coded source pins.
+Current limits include explicit file scope, supported npm test commands and a
+lockfile, or pytest without third-party project dependencies. Repository access
+continues to show names and readiness without per-repository setup forms.
+
 Run these commands in separate terminals:
 
 ```powershell

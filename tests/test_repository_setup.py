@@ -14,6 +14,20 @@ CONFIG = {'framework': 'pytest', 'test_files': ['tests/test_math.py'], 'editable
 HEADERS = {'Origin': 'http://localhost:3000', 'X-CSRF-Token': 'csrf'}
 
 
+def test_general_runner_accepts_new_source_revision_with_frozen_tests():
+    from backend.repository_setup import setup_recipe
+    from backend.tools.repository_runner import RepositoryRunner
+    recipe = setup_recipe({'config': json.dumps(CONFIG), 'source_sha': SHA})
+    runner = RepositoryRunner(recipe)
+    try:
+        runner.bind_source('another-user', 'another-repository', 'c' * 40)
+        assert runner.source_repository == 'another-user/another-repository'
+        assert runner.source == 'c' * 40
+        assert runner.suite_sha == SHA
+    finally:
+        runner.close()
+
+
 class Runner:
     passed = True
     head = WORKFLOW_SHA
