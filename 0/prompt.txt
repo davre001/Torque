@@ -944,3 +944,17 @@ oh ok
 
 ## My request:
 one last thing, add a =button under the repository that enables users reconfirm TOrque access to to their repository
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+commit and push
