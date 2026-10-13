@@ -42,6 +42,43 @@ def prepare_dependencies(workspace, image):
                 process.wait(timeout=10)
 
 
+def prepare_python_dependencies(workspace, image, test_files):
+    from backend.python_dependencies import requirements
+    packages = []
+    for file in test_files:
+        if Path(file).name == 'requirements.txt':
+            packages.extend(requirements(safe_path(workspace, file).read_text(encoding='utf-8')))
+    if not packages:
+        return
+    target = workspace/'torque-python-deps'
+    target.mkdir()
+    target.chmod(0o777)
+    name = 'torque-python-install-' + uuid.uuid4().hex
+    args = ['docker', 'run', '--rm', '--init', '--name', name, '--read-only',
+            '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', '65534:65534',
+            '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128',
+            '--tmpfs', '/tmp:rw,nosuid,nodev,size=512m',
+            '--mount', f'type=bind,src={target},dst=/dependencies', image,
+            'python', '-m', 'pip', '--isolated', 'install', '--only-binary=:all:',
+            '--no-cache-dir', '--disable-pip-version-check', '--index-url', 'https://pypi.org/simple',
+            '--target', '/dependencies', *list(dict.fromkeys(packages))]
+    with tempfile.TemporaryFile() as log:
+        process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT)
+        deadline = time.monotonic() + 180
+        try:
+            while process.poll() is None:
+                if time.monotonic() > deadline or os.fstat(log.fileno()).st_size > 100000:
+                    raise ValueError('Python dependency installation exceeded limits')
+                time.sleep(.1)
+            if process.returncode:
+                raise ValueError('Python wheel dependency installation failed')
+        finally:
+            if process.poll() is None:
+                subprocess.run(['docker', 'rm', '-f', name], timeout=15, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                process.kill()
+                process.wait(timeout=10)
+
+
 def execute(repository, sha, encoded_config, encoded_files):
     if not re.fullmatch('[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+', repository) or len(encoded_config) > 12000:
         raise ValueError('Invalid repository test input')
@@ -100,6 +137,7 @@ def execute(repository, sha, encoded_config, encoded_files):
             shutil.copyfile(template/'run.cjs', suite/'run.cjs')
         else:
             config_data = config.model_dump()
+            prepare_python_dependencies(workspace, image, config.test_files)
             command = ['python', '/acceptance/run.py']
             shutil.copyfile(template/'run.py', suite/'run.py')
         (suite/'config.json').write_text(json.dumps(config_data))

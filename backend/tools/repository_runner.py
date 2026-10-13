@@ -1,6 +1,7 @@
 """Managed repository tests; callers supply file scope, never host commands."""
 import base64
 import json
+import os
 import re
 import uuid
 import zlib
@@ -14,6 +15,7 @@ from backend.repository_configuration import SetupConfig
 class RepositoryRunner(ActionsRunner):
     def __init__(self, recipe, **kwargs):
         super().__init__(recipe, **kwargs)
+        self.ref = os.getenv('TORQUE_REPOSITORY_ACTIONS_REF', 'torque-repository-runner-v2')
         self.profile = 'repository-tests'
         settings = dict(recipe.repository_setup or {})
         self.suite_sha = settings.pop('suite_sha', '')

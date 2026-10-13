@@ -54,9 +54,9 @@ export default function RepositorySetupForm({ repository, csrf, initial, onReady
           <option value="npm">Node.js — Vitest, Jest or node:test</option><option value="pytest">Python — pytest</option>
         </select>
       </label>
-      <p className="text-xs text-zinc-500">{framework==='npm' ? 'Requires a lockfile and test script exactly “vitest run”, “jest --runInBand” or “node --test”. Dependency install hooks are disabled.' : 'Python 3.11 with pytest. Third-party project dependencies are not supported yet.'}</p>
+      <p className="text-xs text-zinc-500">{framework==='npm' ? 'Requires a lockfile and test script exactly “vitest run”, “jest --runInBand” or “node --test”. Dependency install hooks are disabled.' : 'Python 3.11 with pytest. Include requirements.txt for public wheel dependencies.'}</p>
       <label className="block text-xs font-medium">Test files and configuration (one path per line)
-        <textarea required value={tests} onChange={e=>setTests(e.target.value)} disabled={setup.status==='validating'} rows={4} placeholder={framework==='npm'?'package.json\npackage-lock.json\ntests/example.test.ts\nvitest.config.ts':'tests/test_example.py\nconftest.py'} className="mt-1 w-full rounded border bg-white p-2 font-mono text-xs"/>
+        <textarea required value={tests} onChange={e=>setTests(e.target.value)} disabled={setup.status==='validating'} rows={4} placeholder={framework==='npm'?'package.json\npackage-lock.json\ntests/example.test.ts\nvitest.config.ts':'backend/requirements.txt\nbackend/tests/test_example.py\nconftest.py'} className="mt-1 w-full rounded border bg-white p-2 font-mono text-xs"/>
       </label>
       <p className="text-xs text-zinc-500">Include test helpers and configuration. Up to 10 files, frozen at the validation commit.</p>
       <p className="text-xs text-zinc-500">Torque investigates the issue and selects source files automatically. You do not need to know where the fix belongs.</p>

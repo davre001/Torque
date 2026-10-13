@@ -37,9 +37,9 @@ def detect_configuration(paths, package=None):
         if any(p.startswith('.') or p in {'node_modules', 'venv', '__pycache__', 'dist', 'build', 'coverage'} for p in parts):
             continue
         is_test = any(p.lower() in {'test', 'tests', '__tests__'} for p in parts) or bool(re.search(r'\.(test|spec)\.', name)) or name.startswith('test_') or name.endswith('_test.py')
-        config = name in {'package.json', 'package-lock.json'} or name.startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig')) if npm else name in {'conftest.py', 'pytest.ini', 'pyproject.toml'}
+        config = name in {'package.json', 'package-lock.json'} or name.startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig')) if npm else name in {'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'}
         supported = path.endswith(('.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs')) if npm else path.endswith('.py')
-        if is_test or config:
+        if (is_test and supported) or config:
             tests.append(path)
         elif supported:
             source.append(path)
@@ -48,7 +48,7 @@ def detect_configuration(paths, package=None):
     try:
         # Choose a bounded frozen test subset automatically. Source paths here
         # only bootstrap validation; each issue gets its own investigated scope.
-        configuration = [p for p in tests if p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'conftest.py', 'pytest.ini', 'pyproject.toml'} or p.rsplit('/', 1)[-1].startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig'))]
+        configuration = [p for p in tests if p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'} or p.rsplit('/', 1)[-1].startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig'))]
         cases = [p for p in tests if p not in configuration]
         if len(configuration) >= 10:
             raise ValueError('Configuration exceeds scope')

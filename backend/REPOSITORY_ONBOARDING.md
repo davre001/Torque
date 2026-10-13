@@ -85,3 +85,7 @@ the hosted environment before describing this feature as production-verified.
 ## Source discovery per issue
 
 Each managed run inventories supported source files from its pinned checkout, excluding secrets, hidden paths, dependency/build directories, tests, configuration and symlinks. The investigator selects up to ten relevant files from that inventory before reading bounded source content. These paths may differ from the bootstrap paths used during onboarding validation. The worker records the selected scope in a hashed artifact; publication checks that evidence and the verified content before allowing edits. The runtime still bounds each investigation to 100 KB of source content and 2,000 candidate paths. This removes user file selection, not execution resource limits.
+
+## Python dependency preparation
+
+Python detection includes requirements.txt alongside Python tests and excludes JavaScript tests. Managed repository jobs use the fixed torque-repository-runner-v2 tag (separate from reviewed demo runners). Frozen public requirements are installed as binary wheels in a credential-free, unprivileged container with bounded time and memory; build scripts, local paths, alternative indexes and URL dependencies are rejected. Tests run separately with networking disabled, project roots on PYTHONPATH and dotenv loading disabled. A failed setup can be retried explicitly through Reconfirm Torque access; existing validation capacity and daily attempt limits still apply.

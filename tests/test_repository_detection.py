@@ -48,6 +48,13 @@ def test_large_source_inventory_no_longer_requires_user_file_selection():
     assert len(config.editable_files) == 10
 
 
+def test_python_monorepo_freezes_requirements_and_excludes_javascript_tests():
+    config = detect_configuration(['backend/requirements.txt', 'backend/tests/test_api.py',
+                                  'backend/app/main.py', 'frontend/tests/upload.test.mjs'])
+    assert config.test_files == ['backend/requirements.txt', 'backend/tests/test_api.py']
+    assert config.editable_files == ['backend/app/main.py']
+
+
 def test_manual_test_setup_does_not_require_edit_paths(tmp_path, monkeypatch):
     app = configured(tmp_path, monkeypatch)
     with TestClient(app) as client:
@@ -57,3 +64,24 @@ def test_manual_test_setup_does_not_require_edit_paths(tmp_path, monkeypatch):
                                json={'framework':'pytest', 'test_files':['tests/test_math.py']})
         assert response.status_code == 202
         assert response.json()['configuration']['editable_files'] == ['src/math.py']
+
+
+def test_explicit_retry_redetects_failed_setup_without_automatic_retry_loop(tmp_path, monkeypatch):
+    import time
+    app = configured(tmp_path, monkeypatch)
+    with TestClient(app) as client:
+        seed(app, 'github:1', 'session1')
+        client.cookies.set('torque_session', 'session1')
+        endpoint = '/api/repositories/source/demo/setup/automatic'
+        assert client.post(endpoint, headers=HEADERS).status_code == 202
+        original = Runner.request_id
+        monkeypatch.setattr(Runner, 'passed', False)
+        assert client.get('/api/repositories/source/demo/setup').json()['status'] == 'failed'
+        assert client.post(endpoint, headers=HEADERS).json()['status'] == 'failed'
+        assert Runner.request_id == original
+        later = time.time() + 70
+        monkeypatch.setattr('backend.repository_setup.time.time', lambda: later)
+        monkeypatch.setattr(Runner, 'passed', True)
+        assert client.post(endpoint+'?retry=true', headers=HEADERS).json()['status'] == 'validating'
+        assert Runner.request_id != original
+        assert client.get('/api/repositories/source/demo/setup').json()['status'] == 'ready'

@@ -9,6 +9,23 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_pytest_wrapper_imports_monorepo_app_and_installed_dependencies(tmp_path):
+    workspace, acceptance, output = tmp_path/'workspace', tmp_path/'acceptance', tmp_path/'tmp'
+    (workspace/'backend/tests').mkdir(parents=True)
+    (workspace/'backend/app').mkdir()
+    (workspace/'torque-python-deps').mkdir()
+    acceptance.mkdir(); output.mkdir()
+    (workspace/'backend/app/__init__.py').write_text('VALUE = 42')
+    (workspace/'torque-python-deps/public_dependency.py').write_text('VALUE = 42')
+    (workspace/'backend/tests/test_imports.py').write_text('import os\nimport app\nimport public_dependency\ndef test_imports():\n    assert app.VALUE == public_dependency.VALUE\n    assert os.environ["PYTHON_DOTENV_DISABLED"] == "1"\n')
+    (acceptance/'config.json').write_text(json.dumps({'test_files':['backend/tests/test_imports.py']}))
+    script = (ROOT/'tests/acceptance/repository/run.py').read_text()
+    script = script.replace('/tmp', output.as_posix()).replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix())
+    wrapper = tmp_path/'run.py'; wrapper.write_text(script)
+    process = subprocess.run([sys.executable, str(wrapper)], capture_output=True, text=True, timeout=30)
+    assert result(process)['assertions_passed'] == 1
+
+
 def result(process):
     lines = [line for line in process.stdout.splitlines() if line.startswith('TORQUE_TEST_RESULT=')]
     assert len(lines) == 1

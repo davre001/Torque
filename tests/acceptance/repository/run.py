@@ -12,6 +12,13 @@ import xml.etree.ElementTree as ET
 config = json.loads(Path('/acceptance/config.json').read_text())
 shutil.copytree('/workspace', '/tmp/project')
 os.chdir('/tmp/project')
+roots = {'/tmp/project', '/tmp/project/torque-python-deps'}
+for file in config['test_files']:
+    parts = Path(file).parts
+    if 'tests' in parts:
+        roots.add(str(Path('/tmp/project').joinpath(*parts[:parts.index('tests')])))
+os.environ['PYTHONPATH'] = os.pathsep.join(sorted(roots))
+os.environ['PYTHON_DOTENV_DISABLED'] = '1'
 tests = [p for p in config['test_files'] if p.endswith('.py') and Path(p).name != 'conftest.py']
 started = time.monotonic()
 with tempfile.TemporaryFile() as output:

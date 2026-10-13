@@ -123,10 +123,11 @@ export default function Workspace() {
         for (const repo of repositorySnapshot.current) {
           if (!alive || repo.run_supported) continue;
           const pending = repo.setup?.status === 'validating';
-          if (!pending && (repo.setup?.status !== 'not_configured' || attempted.has(repo.full_name))) continue;
+          const retryFailed = accessRevision > 0 && repo.setup?.status === 'failed';
+          if (!pending && ((!retryFailed && repo.setup?.status !== 'not_configured') || attempted.has(repo.full_name))) continue;
           const endpoint = `/api/repositories/${repo.full_name}/setup`;
           try {
-            const setup = await api<RepositorySetup>(pending ? endpoint : endpoint+'/automatic', {
+            const setup = await api<RepositorySetup>(pending ? endpoint : endpoint+'/automatic'+(retryFailed ? '?retry=true' : ''), {
               method: pending ? 'GET' : 'POST', signal:controller.signal,
               headers: pending ? {} : {'X-CSRF-Token':session!.csrf_token}
             });
