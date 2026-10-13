@@ -1,0 +1,142 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4T4X9CSQJEAYYX371S91GWM",
+  "session_id": "01a1319f-ef3a-7fe1-a41e-33c0a15060cf",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-13T08:08:57.0214136Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "frontend/ui/app/workspace/page.tsx"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "9d80abd54020",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 653221,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 43141888,
+    "output_tokens": 65124,
+    "api_call_count": 316,
+    "subagent_tokens_complete": true
+  },
+  "session_metrics": {
+    "turn_count": 43
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-13T08:08:56.3282581Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 8,
+    "human_modified": 3,
+    "human_removed": 0,
+    "total_committed": 8,
+    "total_lines_changed": 11,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 155806,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1056,
+      "agent_lines_removed": 770,
+      "user_added_per_file": {
+        "SKILL (1).md": 148,
+        "SKILL (2).md": 114,
+        "SKILL (3).md": 229,
+        "demo/motion/.gitignore": 4,
+        "demo/motion/align_narration.py": 15,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 176,
+        "demo/motion/elevenlabs_voice.py": 57,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 64,
+        "demo/motion/narration-alignment.json": 1341,
+        "demo/motion/narration-v2.txt": 23,
+        "demo/motion/refine_preview.py": 20,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demo/motion/voice-selection.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 155806,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1056,
+      "agent_lines_removed": 770,
+      "user_added_per_file": {
+        "SKILL (1).md": 148,
+        "SKILL (2).md": 114,
+        "SKILL (3).md": 229,
+        "demo/motion/.gitignore": 4,
+        "demo/motion/align_narration.py": 15,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 176,
+        "demo/motion/elevenlabs_voice.py": 57,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 64,
+        "demo/motion/narration-alignment.json": 1341,
+        "demo/motion/narration-v2.txt": 23,
+        "demo/motion/refine_preview.py": 20,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demo/motion/voice-selection.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 155806,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1056,
+      "agent_lines_removed": 770,
+      "user_added_per_file": {
+        "SKILL (1).md": 148,
+        "SKILL (2).md": 114,
+        "SKILL (3).md": 229,
+        "demo/motion/.gitignore": 4,
+        "demo/motion/align_narration.py": 15,
+        "demo/motion/assemble_final.py": 12,
+        "demo/motion/build_timing.py": 47,
+        "demo/motion/edit-timing.json": 176,
+        "demo/motion/elevenlabs_voice.py": 57,
+        "demo/motion/final-v2/export-verification.json": 33,
+        "demo/motion/launch-v2.html": 64,
+        "demo/motion/narration-alignment.json": 1341,
+        "demo/motion/narration-v2.txt": 23,
+        "demo/motion/refine_preview.py": 20,
+        "demo/motion/render_browser.py": 54,
+        "demo/motion/speech-models/CACHEDIR.TAG": 4,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/refs/main": 1,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/config.json": 220,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/tokenizer.json": 101342,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/snapshots/3d3d5dee26484f91867d81cb899cfcf72b96be6c/vocabulary.txt": 51864,
+        "demo/motion/speech-models/models--Systran--faster-whisper-base.en/trees/3d3d5dee26484f91867d81cb899cfcf72b96be6c.json": 32,
+        "demo/motion/voice-selection.json": 6
+      }
+    }
+  ]
+}
