@@ -472,3 +472,17 @@ Repositories connected through your GitHub App installation.
 - davre001/TorqueSet up and validate tests to enable this repository.
 
   Set up tests
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+COMMIT & PUSH , WITH CHECKPOINTS
