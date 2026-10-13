@@ -3,7 +3,7 @@ import json
 import zlib
 import httpx
 import pytest
-from backend.acceptance_profiles import SLIDER_SHA,SLIDER_FILES,SLIDER_CRITERIA,validate_source
+from backend.acceptance_profiles import SLIDER_SHA,SLIDER_CURRENT_SHA,SLIDER_FILES,SLIDER_CRITERIA,validate_source
 from backend.execution import Recipe
 from backend.models import PipelineError,TestResult as RemoteResult
 from backend.remote_job import decode_gallery_bundle
@@ -21,6 +21,15 @@ def policy():
 def bundle(value):return base64.b64encode(zlib.compress(json.dumps(value).encode())).decode()
 
 
+def test_default_remote_recipe_matches_current_slider_task():
+    from backend.execution import load_recipes
+    from backend.config import ROOT
+    from backend.acceptance_profiles import profile_for
+    recipe = load_recipes(ROOT/'backend/recipes.remote.json')['davre001/kokon']
+    assert profile_for(recipe) == 'slider-keyboard'
+    assert recipe.require_baseline_failure
+
+
 @pytest.mark.parametrize('value',[
     {'../../.env':'secret'},
     {SLIDER_FILES[0]:'source'},
@@ -34,11 +43,14 @@ def test_slider_bundle_rejects_scope_types_and_compression_bombs(value):
 
 def test_slider_requires_reviewed_fork_revision_and_exact_criteria():
     assert validate_source('slider-keyboard','davre001/kokon',SLIDER_SHA)
+    assert validate_source('slider-keyboard','davre001/kokon',SLIDER_CURRENT_SHA)
+    assert not validate_source('gallery-keyboard','davre001/kokon',SLIDER_CURRENT_SHA)
     assert not validate_source('slider-keyboard','gabrielelozupone/kokon',SLIDER_SHA)
     runner=ActionsRunner(policy(),client=httpx.Client())
     try:
         with pytest.raises(PipelineError):runner.bind_source('davre001','kokon','a'*40)
         runner.bind_source('davre001','kokon',SLIDER_SHA)
+        runner.bind_source('davre001','kokon',SLIDER_CURRENT_SHA)
         runner.recipe.acceptance_criteria=['weakened']*5
         with pytest.raises(PipelineError,match='scope'):runner.bind_source('davre001','kokon',SLIDER_SHA)
     finally:runner.close()

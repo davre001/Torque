@@ -73,7 +73,7 @@ class ActionsRunner:
         try:self.profile=profile_for(self.recipe)
         except ValueError:raise PipelineError('Remote kokon recipe exceeds reviewed scope') from None
         if not validate_source(self.profile,repository,sha):
-            raise PipelineError('The reviewed demo fork must retain the verified upstream revision or reviewed gallery revision')
+            raise PipelineError(f'The repository revision is not reviewed for the {self.profile} test profile; update the operator-reviewed recipe and source revision')
         self.source = sha
         self.source_repository = repository
 

@@ -40,7 +40,7 @@ def test_remote_scope_is_explicit(tmp_path):
 
 def test_demo_fork_requires_identical_reviewed_source_revision(tmp_path):
     runner = ActionsRunner(recipe(tmp_path),client=client(lambda r:None))
-    with pytest.raises(PipelineError,match="verified upstream revision"):
+    with pytest.raises(PipelineError,match="revision is not reviewed"):
         runner.bind_source("davre001","kokon","a"*40)
     runner.bind_source("davre001","kokon","995b078b79819c0049db3eef96fc6bd91b016b12")
     assert runner.source == "995b078b79819c0049db3eef96fc6bd91b016b12"

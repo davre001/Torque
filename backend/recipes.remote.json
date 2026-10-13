@@ -31,36 +31,36 @@
     "image": "remote-managed",
     "command": [
       "python",
-      "/acceptance/test_gallery.py"
+      "/acceptance/test_slider.py"
     ],
     "context_files": [
-      "src/components/Gallery.tsx",
-      "src/styles.css"
+      "site/index.html",
+      "site/assets/style.css"
     ],
-    "investigation_terms": {
-      "src/components/Gallery.tsx": [
-        "card",
-        "onClick",
-        "reopen",
-        "toggleFav",
-        "remove"
-      ],
-      "src/styles.css": [
-        ".card",
-        ".grid",
-        ":focus"
-      ]
-    },
     "editable_files": [
-      "src/components/Gallery.tsx",
-      "src/styles.css"
+      "site/index.html",
+      "site/assets/style.css"
     ],
     "acceptance_criteria": [
-      "Gallery cards are reachable with Tab and open with Enter or Space.",
-      "Favorite and delete actions are visible on keyboard focus, have aria-labels, and work without opening the card.",
-      "Gallery thumbnails have meaningful nonempty alt text derived from their prompts.",
-      "Mouse opening, favoriting, and confirmed deletion remain functional."
+      "The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.",
+      "ArrowLeft/ArrowRight adjust the split by 5 points within 0..100; Home/End select 0/100.",
+      "Keyboard interaction stops automatic sweep animation and has visible focus styling.",
+      "Before/after descriptions include the selected example mode and prompt and update on selection; background stays decorative.",
+      "Pointer dragging and example selection still work, and reduced-motion/manual/normal video playback behavior is preserved."
     ],
+    "investigation_terms": {
+      "site/index.html": [
+        "id=\"cmp\"",
+        "function show(i, animate)",
+        "const setSplit",
+        "const fromPointer",
+        "const reel ="
+      ],
+      "site/assets/style.css": [
+        ".cmp {",
+        ".cmp .handle"
+      ]
+    },
     "suite_directory": "remote-managed",
     "timeout_seconds": 120,
     "require_baseline_failure": true

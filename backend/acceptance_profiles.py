@@ -9,6 +9,7 @@ GALLERY_CRITERIA = [
 ]
 
 SLIDER_SHA = '218143b523252ee95c2368adc83fef95b324b156'
+SLIDER_CURRENT_SHA = '513883a43ea33474431c933018b6267d08acb8f5'
 SLIDER_FILES = ['site/index.html', 'site/assets/style.css']
 SLIDER_CRITERIA = [
     'The slider is keyboard focusable with a slider role, accessible label, min/max 0/100, and accurate current value.',
@@ -29,7 +30,7 @@ def profile_for(recipe):
 
 def validate_source(profile, repository, sha):
     if profile=='slider-keyboard':
-        return repository=='davre001/kokon' and sha==SLIDER_SHA
+        return repository=='davre001/kokon' and sha in {SLIDER_SHA, SLIDER_CURRENT_SHA}
     if profile=='gallery-keyboard':
         return repository=='davre001/kokon' and sha==GALLERY_SHA
     if profile=='reduced-motion':
