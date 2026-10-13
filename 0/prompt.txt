@@ -801,3 +801,17 @@ Activity (1)
 1.
 
 Request cancellation
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+it has been investigating for the past 5 minutes , the bbackend and worker says OK!
