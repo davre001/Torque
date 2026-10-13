@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4TS2X4S54NKR1V7WRVVRDZQ",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "files_touched": [
+    ".github/workflows/torque-agent-worker.yml",
+    "backend/agents/implementer.py",
+    "backend/agents/investigator.py",
+    "backend/agents/verifier.py",
+    "backend/integrations/providers.py",
+    "backend/tools/files.py",
+    "render.yaml",
+    "tests/test_model_context_budget.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 864699,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 65118976,
+    "output_tokens": 110798,
+    "api_call_count": 507,
+    "subagent_tokens_complete": true
+  }
+}
