@@ -1016,3 +1016,43 @@ yea do that
 
 ## My request:
 commit and push
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+- davre001/CVlySetup needed
+
+  Not Found
+- davre001/KINSHIPSetup needed
+
+  Not Found
+- davre001/AEGISSetup needed
+
+  Not Found
+- davre001/EncoreSetup needed
+
+  Not Found
+- davre001/SomnixSetup needed
+
+  Not Found
+- davre001/swotSetup needed
+
+  Not Found
+- davre001/TacetSetup needed
+
+  Not Found
+- davre001/connectSetup needed
+
+  Not Found
+- davre001/TorqueSetup needed
+
+  Not Found
