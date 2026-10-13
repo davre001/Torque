@@ -1,0 +1,199 @@
+# Context from my IDE setup:
+
+## Open tabs:
+- narration-v2.txt: demo/motion/narration-v2.txt
+- .env: .env
+- SKILL.md: c:\Users\USER\.codex\plugins\cache\openai-curated-remote\plugin-management\0.1.0\skills\plugin-management\SKILL.md
+- launch-v2.html: demo/motion/launch-v2.html
+- .gitignore: .gitignore
+
+## My request:
+# Task
+
+This fix is already marked as resolved. Verify the fix described in the Fix section (and the Resolution note, if present) is actually in place in the code — do not re-apply it from scratch. Use the Neatlogs MCP tools on the trace IDs in References to confirm the failure pattern is no longer occurring (`get_trace_context`, `triage_get_investigation` when thread_id is listed, or `triage_get` to reload this fix).
+
+# Context
+
+## Investigate Independent Acceptance Test Failures
+
+**Severity:** High · **Category:** Config · **Pattern:** Silent degradation · **Workflow:** `github-issue-to-pr` · **Confidence:** 50%
+**Status:** Resolved · **Source:** Auto · **Created:** 2026-10-11 19:12 UTC · **Last updated:** 2026-10-12 14:07 UTC · **Resolved:** 2026-10-12 14:07 UTC
+
+## Root cause
+
+The root cause of the acceptance test failures is not established by the trace evidence alone. Workflows failed with a generic `Independent acceptance tests failed` error, but the traces lack granular sub-spans or logs detailing which specific test cases failed or why.
+
+## Evidence
+
+Traces `[View trace](https://app.neatlogs.com/traces/e6417b8ff867e18db4fe1093548c91c2)` and `[View trace](https://app.neatlogs.com/traces/2c4408f9064658b7d601d298d9d31e5c)` both terminated with the error `Independent acceptance tests failed` in under 200ms. Because these traces contain no child spans or captured stdout/stderr from the test runner, we cannot diagnose the underlying application or test defect. While a spike of 5 negative detections was flagged in the 'Execution Failed' group, the reported error rate metric (1.7 vs 1.8) is outside the valid 0–1 range and must be flagged as unavailable.
+
+## Resolution note
+
+Shipped in davre001/Torque PR #1, merge ad0cf740f8f9166d33ce625618eec31c4ccbfbac. All 15 instrumentation files match the tested branch. 59 targeted local tests passed. Remote browser baseline exposed a named failed check and assertion stack trace (Actions 38259846032); the patched source passed all three checks with the unchanged suite (Actions 38260001074). Separate controlled probes verified hosted Neatlogs failure/passing diagnostic payloads: 3d1061326c1185af4bec2113b7ebe57d and b08c025e327bcaf698b4b1348e57a2e8. Browser-derived logs were not uploaded to Neatlogs. Verification covers reduced-motion; gallery/slider and a deployed end-to-end agent run were not exercised.
+
+## Confidence breakdown
+
+| Signal | Score |
+| --- | --- |
+| Evidence strength | 60% |
+| Pattern consistency | 80% |
+| Detection alignment | 50% |
+| Expected impact | 80% |
+
+# Fix
+
+## Recommended action
+
+## Enhance test runner trace instrumentation and logging
+
+**Steps**
+
+1. Modify the test runner wrapper to emit individual child spans for each executed test case.
+2. Capture stdout, stderr, and failure stack traces as attributes on the failing test spans.
+3. Ensure verbose logging is enabled in the workflow configuration for the test execution step.
+
+**Verification**
+
+- Run a test workflow with a forced test failure and verify that the specific failure details and stack trace are visible in the generated trace.
+
+**Risk assessment**
+
+Low risk. Adding instrumentation and capturing logs does not alter the execution logic of the tests or the application.
+
+**Rollback plan**
+
+Revert the instrumentation changes in the test runner wrapper to restore the previous logging behavior.
+
+# References
+
+This fix is linked to 8 production traces.
+
+## MCP identifiers
+
+Use these with the Neatlogs MCP server (if connected in the IDE):
+
+- **triage_id:** `d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d` → `triage_get`, `triage_list_steps`, `triage_update_status`, `triage_update`, `triage_dismiss`
+- **thread_id:** `28d831a2-8513-4dfb-b5af-c16d2817be66` → `triage_get_investigation` (orchestrator steps + enriched linked traces)
+
+## MCP tools for evidence
+
+Pull ground truth on demand — do not assume this prompt alone has full span payloads:
+
+- `triage_get(triage_id)` — reload this fix's root cause, recommended action, and linked trace IDs from Neatlogs
+- `get_trace_context(trace_id)` — full span tree with inputs/outputs and code locations
+- `triage_get_investigation(thread_id)` — investigation timeline + linked trace summaries (when thread_id is set above)
+- `triage_list_steps(triage_id)` — step-by-step investigation trail for this fix
+- `search_traces(query, mode=keyword|semantic)` — find sibling or regression traces (keyword = text match, semantic = meaning-based)
+- `triage_list(status, severity, category, pattern)` — other open fixes; `category` is fix layer (config|prompt|model|tool|cost), `pattern` is failure pattern (e.g. guardrail_bypass)
+- `list_detections()` then `get_detection_trend(detection_name, period=24h|7d|30d)` — what detectors are firing and whether rates shifted (`detection_name` matches display name from list_detections)
+
+If the Neatlogs MCP server is not connected, ask the user to add it in their IDE's MCP settings (project API key as Bearer token).
+
+## Linked trace IDs
+
+- [`2d3fc2308a1451a809748760f89f36ef`](https://app.neatlogs.com/traces/2d3fc2308a1451a809748760f89f36ef)
+- [`b5cef741d1140f77c5a201c746bebfe8`](https://app.neatlogs.com/traces/b5cef741d1140f77c5a201c746bebfe8)
+- [`37365d1f158230044d86f393de1094fb`](https://app.neatlogs.com/traces/37365d1f158230044d86f393de1094fb)
+- [`e6417b8ff867e18db4fe1093548c91c2`](https://app.neatlogs.com/traces/e6417b8ff867e18db4fe1093548c91c2)
+- [`ff5d1966ea773563a23d1743ec4b3851`](https://app.neatlogs.com/traces/ff5d1966ea773563a23d1743ec4b3851)
+- [`c34ca1cccbd8c0c5952dec8f3a7b36ed`](https://app.neatlogs.com/traces/c34ca1cccbd8c0c5952dec8f3a7b36ed)
+- … and 2 more — call `triage_get(triage_id)` for the full list
+
+# After the fix
+
+Once work on this fix is done, update its status on Neatlogs so the team's board stays accurate. Fix ID: `d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d`.
+
+Recommended status transitions:
+
+- `in_progress` — you have pushed changes / opened a PR but the fix isn't verified in production yet.
+- `resolved` — the fix is shipped and the failure pattern has been confirmed gone (via traces, evals, or user signal).
+- `archived` — the user decided not to act on this fix at all.
+
+If the Neatlogs MCP server is connected, call `triage_update_status` (`triage_id=d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d`, `status=...`, `user_email=<team member email>`) to perform the transition without leaving the IDE. Use `triage_update` to edit title, severity, or resolution note; `triage_dismiss` to archive a false positive. Otherwise, ask the user to update the fix on the Neatlogs board.
+
+---
+*Generated by [Neatlogs](https://neatlogs.com) · Fix `d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d` · [Open in Neatlogs](https://app.neatlogs.com/incidents?id=d5d9ddaa-09d9-4d5f-b73e-16128ecf6e3d)*
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+using the project past checklist and evidence and things completed, i am about to submit the hackathon
+
+
+
+### How you used the tools
+
+A few lines each
+
+[**cfo.ai**](https://neatlogs.com/hackathon/sponsors/cfo.svg)
+
+[**Entire**](https://neatlogs.com/hackathon/sponsors/entire.svg)
+
+**Bonus points**
+
+- **Checkpoints:** show progress and key decisions.
+- **entire-graph:** find code or assess risky changes.
+- **Open-source builds:** working features or integrations on Entire’s CLI, Graph or External Agents.
+
+Add supporting links to your answer.
+
+[**neatlogs**](https://neatlogs.com/brand/neatlogs-wordmark.webp)
+
+---
+
+# Context from my IDE setup:
+
+## Active file: frontend/ui/app/workspace/page.tsx
+
+## Open tabs:
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+- dispatch.py: backend/dispatch.py
+
+## My request:
+REWRITE THE README TO SHOW ALL WHAT WE'VE DONE., ADD PROBLEM WE ARE SOLVING., SOLUTION WE ARE OFFERING, HOW TORQUE WORKS , AND OTHERS........ ALSO ADD MERMAID DIAGRAM THAT SHOWS THE INTEGRATION AND WORKFLOW.
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+COMMIT AND PUSH WITH CHECKPOINT ADDED
+
+---
+
+# Context from my IDE setup:
+
+## Active file: README.md
+
+## Open tabs:
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+- GALLERY_VERIFICATION.md: backend/GALLERY_VERIFICATION.md
+- GITHUB_APP.md: backend/GITHUB_APP.md
+
+## My request:
+update the mds, backend, integratiionn, worker, implementation and deployment, including changes.md, to the recent development
