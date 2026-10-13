@@ -874,3 +874,17 @@ Run wall-time budget exhausted
 0 model calls · 0 tokens · $0.0000 estimated
 
 Trace ID: `305da6c9783cd6379f767b7add4388e3`
+
+---
+
+# Context from my IDE setup:
+
+## Open tabs:
+- PUBLICATION.md: backend/PUBLICATION.md
+- changes.md: changes.md
+- README.md: README.md
+- SKILL.md: demo/motion/skills/motion-background/SKILL.md
+- NEATLOGS_RECOVERY.md: backend/NEATLOGS_RECOVERY.md
+
+## My request:
+WHEN I CLICK RUN TORQUE , IT DIDNT REFRESH THE PAGE; IT STILL SHOWS THE  OLD OUTPUT
