@@ -1,5 +1,9 @@
 # Automatic repository onboarding
 
+The workspace automatically requests test detection for newly connected repositories without a reviewed recipe or saved setup. The CSRF-protected `POST /api/repositories/{owner}/{repo}/setup/automatic` endpoint detects root npm manifests or pytest test files and starts the existing hosted validator. Repeated requests reuse saved validation instead of dispatching another workflow. Detection never executes a command on the API host.
+
+Repositories show **Connected — detecting tests**, **Checking tests**, then **Ready to run** only after successful validation. Unsupported commands, missing tests, or scopes exceeding 10 frozen test/configuration files and 10 editable source files require manual setup. Validation capacity is retried while the workspace remains open; failed validation is not automatically resubmitted. Manual Repository tests controls appear only when detection or validation needs help. Existing public-repository, authorization, spending, file-size, and validation-rate limits remain in force.
+
 Each signed-in user can enable an installed **public** GitHub repository through
 **Workspace → Repository access → Set up tests**. Existing reviewed Kokon demo
 recipes continue to work. User setups do not require deployment-wide allowlist edits.

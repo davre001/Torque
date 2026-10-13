@@ -69,6 +69,23 @@ def create_app(settings=None):
         except PipelineError as exc:
             raise HTTPException(502, str(exc)) from None
 
+    @app.post('/api/repositories/{owner}/{repo}/setup/automatic', status_code=202)
+    def automatic_repository(owner: str, repo: str, request: Request):
+        from backend.repository_detection import detect_repository
+        from backend.repository_setup import setup_record, public_setup, start_setup
+        from backend.models import PipelineError
+        user = auth.authenticate(request)
+        repository = f'{owner}/{repo}'.lower()
+        auth.authorize(user, repository)
+        previous = setup_record(store, user, repository)
+        if previous:
+            return public_setup(previous)
+        try:
+            config = detect_repository(auth, user, repository)
+            return start_setup(store, auth, user, repository, config)
+        except PipelineError as exc:
+            raise HTTPException(502, str(exc)) from None
+
     @app.get('/api/repositories/{owner}/{repo}/setup')
     def repository_setup(owner: str, repo: str, request: Request):
         from backend.repository_setup import refresh_setup

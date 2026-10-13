@@ -186,14 +186,14 @@ Use [.env.example](.env.example) as the configuration reference. Create `.env` o
 
 Follow [backend setup](backend/README.md), [GitHub App setup](backend/GITHUB_APP.md), and [remote runner setup](backend/REMOTE_RUNNER.md) for credentials, conservative cost rates, recipes, and runner preparation. Example recipes contain placeholders and require review.
 
-Connected users can enable their public repositories in the workspace's
-**Repository tests** panel. Choose a repository, select npm or pytest, provide
-the test/configuration files and editable source files, then validate. A passing
-hosted validation enables that repository for that user. Later source commits
-use the frozen test revision rather than the demo's hard-coded source pins.
-Current limits include explicit file scope, supported npm test commands and a
-lockfile, or pytest without third-party project dependencies. Repository access
-continues to show names and readiness without per-repository setup forms.
+Connected public repositories now use automatic npm/pytest test detection in the
+workspace. Torque starts hosted validation and shows **Checking tests**, then
+**Ready to run** only when the frozen test suite passes. Unsupported commands,
+missing tests, or oversized file scopes show **Setup needed** and reveal the
+manual **Repository tests** panel. Existing reviewed recipes remain available.
+Later source commits use the frozen test revision. Supported commands, lockfiles,
+public-repository restrictions and validation limits still apply. Automatic checks
+run while the signed-in workspace is open.
 
 Remote acceptance jobs default to the versioned `torque-runner-v1` Git tag.
 Keep this tag fixed: publishing application commits to `main` must not change
@@ -277,7 +277,7 @@ The implementation and operations documents were refreshed on October 13 against
 | [Deployment](deployment.md) | Saved hosting checks, database evidence, provisioning procedure, backups, and remaining acceptance gates |
 | [Development changes](changes.md) | Recent recipe review, README/checkpoint publication, frontend/backend milestones, and outstanding work |
 
-The workspace currently shows repository readiness labels rather than onboarding forms. Backend schema-2 setup storage remains implemented. Documentation updates do not establish a new deployed revision or a successful hosted worker run.
+The workspace automatically detects and validates supported repository tests, with manual setup shown when assistance is needed. Backend schema-2 setup storage remains implemented. Documentation updates do not establish a new deployed revision or a successful hosted worker run.
 
 ## Repository map
 

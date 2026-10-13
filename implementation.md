@@ -9,7 +9,7 @@ Updated October 13, 2026 against the current source and saved verification. This
 | `/` | Torque landing page, product explanation, GitHub login entry, and labeled illustrative preview |
 | `/workspace` | Session-aware GitHub identity, repository readiness, issue submission, persisted progress/events and run history |
 | Workspace result | Actual acceptance/review records, usage estimates, errors, cancellation and explicit draft-PR publication |
-| Repository access | Installed repository list and refresh; readiness labels, without repository setup forms |
+| Repository access | Installed repository list, access reconfirmation, automatic test detection and validation; manual setup when needed |
 | Disconnect | Confirmed disconnect through the API, with session/authentication handling |
 | `/api/` proxy | Server-side forwarding with cookie, redirect, origin and body boundaries; proxy credential stays server-side |
 
@@ -41,7 +41,7 @@ The CLI and browser share the durable queue. Agent execution is not a FastAPI ba
 
 ## Current task policy
 
-`davre001/kokon` now selects the reviewed slider recipe at revisions `218143b523252ee95c2368adc83fef95b324b156` or `513883a43ea33474431c933018b6267d08acb8f5`. Gallery and reduced-motion PRs remain historical verified results. An installed repository is runnable only when its revision and acceptance recipe are supported; onboarding backend storage does not imply setup controls exist in this UI.
+`davre001/kokon` now selects the reviewed slider recipe at revisions `218143b523252ee95c2368adc83fef95b324b156` or `513883a43ea33474431c933018b6267d08acb8f5`. Gallery and reduced-motion PRs remain historical verified results. An installed repository is runnable only when its revision and acceptance recipe are supported; the workspace automatically detects supported tests and starts hosted validation, with manual setup available when detection or validation needs help.
 
 ## Verification and limits
 
