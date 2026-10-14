@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4X4SHMGD6G9FZJN6XTNVWZD",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".github/workflows/torque-repository-smoke.yml",
+    "backend/REPOSITORY_ONBOARDING.md",
+    "backend/node_repository.py",
+    "backend/repository_configuration.py",
+    "backend/repository_detection.py",
+    "backend/repository_setup.py",
+    "backend/repository_test_job.py",
+    "tests/acceptance/repository/Dockerfile.npm",
+    "tests/acceptance/repository/run.cjs",
+    "tests/test_repository_detection.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1019148,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 72006272,
+    "output_tokens": 129823,
+    "api_call_count": 573,
+    "subagent_tokens_complete": true
+  }
+}
