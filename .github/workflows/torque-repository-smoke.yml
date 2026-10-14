@@ -2,7 +2,11 @@ name: Managed repository smoke (Python wheels and pnpm workspace)
 on:
   push:
     branches: [main]
-    paths: [.github/workflows/torque-repository-smoke.yml]
+    paths:
+      - .github/workflows/torque-repository-smoke.yml
+      - backend/repository_test_job.py
+      - backend/node_repository.py
+      - tests/acceptance/repository/**
   workflow_dispatch:
 permissions:
   contents: read
