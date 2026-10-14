@@ -56,6 +56,25 @@ jobs:
           import base64, json, zlib
           from backend.repository_test_job import execute
           sha = 'cfeea7c659a4e5c5b9300d1ae5cc5e8c9b1ef8fb'
+          # Only this credential-free smoke prints bounded installer diagnostics.
+          import subprocess
+          original_popen = subprocess.Popen
+          def diagnostic_popen(*args, **kwargs):
+              process = original_popen(*args, **kwargs)
+              original_poll = process.poll
+              printed = False
+              def poll():
+                  nonlocal printed
+                  code = original_poll()
+                  if code and not printed:
+                      printed = True
+                      log = kwargs['stdout']
+                      log.seek(0)
+                      print(log.read().decode(errors='replace')[-6000:])
+                  return code
+              process.poll = poll
+              return process
+          subprocess.Popen = diagnostic_popen
           config = {'framework':'npm', 'suite_sha':sha,
                     'test_files':['frontend/package.json','frontend/pnpm-lock.yaml','frontend/tsconfig.json',
                                   'frontend/vitest.config.ts','package.json','pnpm-lock.yaml','pnpm-workspace.yaml',
