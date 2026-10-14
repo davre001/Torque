@@ -200,7 +200,7 @@ Use [.env.example](.env.example) as the configuration reference. Create `.env` o
 
 Follow [backend setup](backend/README.md), [GitHub App setup](backend/GITHUB_APP.md), and [remote runner setup](backend/REMOTE_RUNNER.md) for credentials, conservative cost rates, recipes, and runner preparation. Example recipes contain placeholders and require review.
 
-Connected public repositories now use automatic npm/pytest test detection in the
+Connected public repositories now use automatic npm/pnpm/pytest test detection in the
 workspace. Torque starts hosted validation and shows **Checking tests**, then
 **Ready to run** only when the frozen test suite passes. Unsupported commands,
 missing tests, or unsupported test configuration show **Setup needed** and reveal the

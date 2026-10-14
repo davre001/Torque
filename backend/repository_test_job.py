@@ -18,10 +18,15 @@ from backend.tools.sandbox import DockerRunner
 
 def prepare_dependencies(workspace, image, package_root='', manager='npm'):
     name = 'torque-install-' + uuid.uuid4().hex
+    cache = workspace.parent/'node-install-cache'
+    cache.mkdir()
+    uid, gid = getattr(os, 'getuid', lambda: 65534)(), getattr(os, 'getgid', lambda: 65534)()
+    installer_user = f'{uid}:{gid}' if uid else '65534:65534'
     args = ['docker', 'run', '--rm', '--init', '--name', name, '--read-only',
-            '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', '65534:65534',
-            '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128',
-            '--tmpfs', '/tmp:rw,exec,nosuid,nodev,size=768m',
+            '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', installer_user,
+            '--cpus=1', '--memory=2g', '--memory-swap=2g', '--pids-limit=128',
+            '--tmpfs', '/tmp:rw,exec,nosuid,nodev,size=128m',
+            '--mount', f'type=bind,src={cache},dst=/cache',
             '--mount', f'type=bind,src={workspace},dst=/workspace', '--workdir', '/workspace' + ('/'+package_root if manager == 'npm' and package_root else ''),
             image]
     if manager == 'pnpm':
@@ -29,10 +34,10 @@ def prepare_dependencies(workspace, image, package_root='', manager='npm'):
         pinned = root_package.get('packageManager', '')
         if not re.fullmatch(r'pnpm@\d+\.\d+\.\d+', pinned):
             raise ValueError('pnpm requires a pinned packageManager version')
-        args += ['npx', '--yes', '--ignore-scripts', '--registry=https://registry.npmjs.org', '--cache=/tmp/npm-cache', pinned,
-                 '--filter', './'+(package_root or '.'), 'install', '--frozen-lockfile', '--ignore-scripts', '--store-dir=/tmp/pnpm-store']
+        args += ['npx', '--yes', '--ignore-scripts', '--registry=https://registry.npmjs.org', '--cache=/cache/npm-cache', pinned,
+                 '--filter', './'+(package_root or '.'), 'install', '--frozen-lockfile', '--ignore-scripts', '--store-dir=/cache/pnpm-store', '--network-concurrency=4']
     else:
-        args += ['npm', 'ci', '--ignore-scripts', '--no-audit', '--no-fund', '--cache', '/tmp/npm-cache']
+        args += ['npm', 'ci', '--ignore-scripts', '--no-audit', '--no-fund', '--cache', '/cache/npm-cache']
     # Public registry access is needed only in this credential-free install container.
     with tempfile.TemporaryFile() as log:
         process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT)

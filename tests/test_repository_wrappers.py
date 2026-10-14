@@ -53,14 +53,17 @@ def test_pytest_wrapper_requires_real_executed_tests(tmp_path, mode):
 
 
 @pytest.mark.parametrize('mode', ['pass', 'fail', 'empty'])
-def test_node_wrapper_requires_real_executed_tests(tmp_path, mode):
+@pytest.mark.parametrize('package_root', ['', 'frontend'])
+def test_node_wrapper_requires_real_executed_tests(tmp_path, mode, package_root):
     node = shutil.which('node')
     if not node: pytest.skip('Node.js is not installed')
     workspace, acceptance, output = tmp_path/'workspace', tmp_path/'acceptance', tmp_path/'tmp'
     workspace.mkdir(); acceptance.mkdir(); output.mkdir(); (workspace/'node_modules').mkdir()
     body = '' if mode == 'empty' else "const test=require('node:test');const assert=require('node:assert/strict');test('actual check',()=>assert.equal(1," + ('1' if mode == 'pass' else '2') + '));'
-    (workspace/'actual.test.cjs').write_text(body)
-    (acceptance/'config.json').write_text(json.dumps({'engine': 'node', 'test_files': ['actual.test.cjs']}))
+    package = workspace/package_root
+    package.mkdir(exist_ok=True)
+    (package/'actual.test.cjs').write_text(body)
+    (acceptance/'config.json').write_text(json.dumps({'engine': 'node', 'package_root':package_root, 'test_files': [(package_root+'/' if package_root else '')+'actual.test.cjs']}))
     script = (ROOT/'tests/acceptance/repository/run.cjs').read_text()
     script = script.replace('/tmp', output.as_posix()).replace('/workspace', workspace.as_posix()).replace('/acceptance', acceptance.as_posix())
     wrapper = tmp_path/'run.cjs'; wrapper.write_text(script)
