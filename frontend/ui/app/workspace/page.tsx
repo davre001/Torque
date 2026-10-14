@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Check, ExternalLink, GitPullRequest, LoaderCircle, LogOut, Play, RefreshCw } from 'lucide-react';
+import { ArrowRight, Check, ExternalLink, GitPullRequest, LoaderCircle, LogOut, Play, RefreshCw, X } from 'lucide-react';
 import { api, ApiError, githubLogin } from '@/lib/api';
 import RepositorySetupForm, { type RepositorySetup } from './repository-setup';
 
@@ -45,7 +45,24 @@ export default function Workspace() {
   const [submitting,setSubmitting] = useState(false);
   const [retry,setRetry] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
+  const successDialog = useRef<HTMLDialogElement>(null);
+  const pendingPublication = useRef<string | null>(null);
+  const [publishedPR,setPublishedPR] = useState('');
   const key = useRef<{ issue: string; value: string } | null>(null);
+
+  useEffect(() => {
+    if (!run || pendingPublication.current !== run.run_id) return;
+    if (run.status === 'completed' && safePR(run.pr_url)) {
+      pendingPublication.current = null;
+      setPublishedPR(run.pr_url!);
+    } else if (['failed','cancelled','interrupted'].includes(run.status)) {
+      pendingPublication.current = null;
+    }
+  }, [run]);
+
+  useEffect(() => {
+    if (publishedPR && !successDialog.current?.open) successDialog.current?.showModal();
+  }, [publishedPR]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -204,13 +221,15 @@ export default function Workspace() {
   const active=!!run && !terminal.has(run.status);
   const hasActive=active || history.some(item => !terminal.has(item.status));
   const visited=new Set(events.map(event=>event.status));
+  const stopped = !!run && ['failed','cancelled','interrupted'].includes(run.status);
+  const lastStage = events.toReversed().find(event=>event.status && stages.includes(event.status))?.status || 'queued';
   const review=run?.attempts?.at(-1)?.review;
   const writable=repositories.filter(repo => repo.permissions.push && repo.app_permissions.contents==='write' && repo.app_permissions.pull_requests==='write');
 
   return <div className="min-h-screen bg-[#fafafa]">
     <header className="border-b border-zinc-200 bg-white"><nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
       <Link href="/" className="text-2xl font-bold tracking-tight">torque<span className="text-zinc-400">.</span></Link>
-      {session && <button disabled={busy} onClick={() => dialog.current?.showModal()} className="flex items-center gap-2 rounded-xl border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-100 disabled:opacity-50"><LogOut size={16}/>Disconnect GitHub</button>}
+      {session && <button disabled={busy} onClick={() => dialog.current?.showModal()} className="flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"><LogOut size={16}/>Disconnect</button>}
     </nav></header>
     <main className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
       {loading ? <p role="status" className="flex items-center gap-3"><LoaderCircle className="animate-spin" size={20}/>Loading your workspace…</p> : !session ? <section className="rounded-3xl border border-zinc-200 bg-white p-10">
@@ -231,9 +250,13 @@ export default function Workspace() {
               <div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-semibold">{run ? label(run.status) : 'Ready when you are'}</h2>{active && <LoaderCircle className="animate-spin" aria-label="Run active" size={20}/>}</div>
               {!run ? <p className="mt-4 text-zinc-500">Your workflow will appear here when you start a run.</p> : <>
                 <p className="mt-3 break-all text-sm text-zinc-500">{run.issue_url}</p>
-                <ol className="mt-8 grid gap-3 sm:grid-cols-2">{stages.map((step,index) => <li key={step} aria-current={run.status===step ? 'step' : undefined} className={`flex items-center gap-3 rounded-xl border p-3 ${run.status===step ? 'border-black bg-white' : 'border-zinc-200 bg-white/40'}`}>
-                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs ${visited.has(step) && run.status!==step ? 'bg-black text-white' : 'bg-zinc-100 text-zinc-500'}`}>{visited.has(step) && run.status!==step ? <Check size={14}/> : index+1}</span><span className="text-sm">{label(step)}{step==='recovering' && !visited.has(step) && run.status!==step ? ' (if needed)' : ''}</span>
-                </li>)}</ol>
+                <ol className="mt-8 grid gap-3 sm:grid-cols-2">{stages.map((step,index) => {
+                  const failed = stopped && step === lastStage;
+                  const complete = run.status === 'completed' || (!failed && step !== run.status && visited.has(step) && (!stopped || step !== lastStage));
+                  return <li key={step} aria-current={run.status===step || failed ? 'step' : undefined} className={`flex items-center gap-3 rounded-xl border p-3 ${failed ? 'border-red-200 bg-red-50' : complete ? 'border-emerald-200 bg-emerald-50' : run.status===step ? 'border-zinc-400 bg-white' : 'border-zinc-200 bg-white/40'}`}>
+                    <span aria-label={failed ? (run.status === 'cancelled' ? 'Cancelled' : 'Failed') : complete ? 'Completed' : undefined} className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs ${failed ? 'bg-red-600 text-white' : complete ? 'bg-emerald-600 text-white' : 'bg-zinc-100 text-zinc-500'}`}>{failed ? <X size={14}/> : complete ? <Check size={14}/> : index+1}</span><span className={`text-sm ${failed ? 'text-red-800' : complete ? 'text-emerald-800' : ''}`}>{label(step)}{step==='recovering' && !complete && !visited.has(step) && run.status!==step ? ' (if needed)' : ''}</span>
+                  </li>;
+                })}</ol>
                 <p role="status" className="mt-5 text-sm text-zinc-600">{run.status==='recovering' ? 'Recovery is analyzing the failed attempt before retrying.' : run.status==='queued' ? 'Waiting for the separate worker to pick up this run.' : run.current_agent ? `${label(run.current_agent)} is active.` : label(run.status)}</p>
                 <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-500"><span>{lastSynced ? `Last checked ${new Date(lastSynced).toLocaleTimeString()}` : 'Checking progress…'}</span><button disabled={busy} onClick={()=>{setEvents([]);setProgressError('');setRefreshRun(value=>value+1);}} className="underline">Refresh progress</button></div>
                 {progressError && <p role="alert" className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">Progress is temporarily unavailable. Showing the last saved result. {progressError}</p>}
@@ -245,7 +268,7 @@ export default function Workspace() {
                 {run.result?.trace_id && <p className="mt-5 break-all text-xs text-zinc-500">Trace ID: <code>{run.result.trace_id}</code></p>}
                 {run.result?.published_commit_sha && <p className="mt-2 break-all text-xs text-zinc-500">Published commit: <code>{run.result.published_commit_sha}</code></p>}
                 {!!events.length && <details className="mt-6 border-t border-zinc-200 pt-4"><summary className="cursor-pointer font-medium">Activity ({events.length})</summary><ol className="mt-4 max-h-64 space-y-3 overflow-auto">{events.map(event=><li key={event.id} className="text-sm text-zinc-600"><time className="mr-3 text-xs text-zinc-400">{new Date(event.created_at*1000).toLocaleTimeString()}</time>{event.status ? label(event.status) : 'Run updated'}{event.error && <p className="mt-1 text-red-700">{event.error}</p>}</li>)}</ol></details>}
-                {run.status==='ready_to_publish' && <div className="mt-6 border-t border-zinc-200 pt-6"><label htmlFor="destination" className="font-medium">Publish a draft PR</label><select id="destination" value={destination} onChange={e=>setDestination(e.target.value)} className="mt-3 w-full rounded-xl border border-zinc-300 bg-white p-3"><option value="">Choose your source repository or fork</option>{writable.map(repo=><option key={repo.full_name} value={repo.full_name}>{repo.full_name}</option>)}</select><p className="mt-2 text-sm text-zinc-500">The destination must be your own source or fork at the verified revision.</p><button disabled={busy || !destination} onClick={()=>void perform(async()=>{const published=await action(`/api/runs/${run.run_id}/publish?destination=${encodeURIComponent(destination)}`);setRun(published);setRefreshRun(value=>value+1);const saved=await api<{runs:Run[]}>('/api/runs');setHistory(saved.runs);})} className="mt-4 rounded-xl bg-black px-5 py-3 text-white disabled:opacity-40">Publish draft PR</button></div>}
+                {run.status==='ready_to_publish' && <div className="mt-6 border-t border-zinc-200 pt-6"><label htmlFor="destination" className="font-medium">Publish a draft PR</label><select id="destination" value={destination} onChange={e=>setDestination(e.target.value)} className="mt-3 w-full rounded-xl border border-zinc-300 bg-white p-3"><option value="">Choose your source repository or fork</option>{writable.map(repo=><option key={repo.full_name} value={repo.full_name}>{repo.full_name}</option>)}</select><p className="mt-2 text-sm text-zinc-500">The destination must be your own source or fork at the verified revision.</p><button disabled={busy || !destination} onClick={()=>void perform(async()=>{pendingPublication.current=run.run_id;let published:Run;try {published=await action(`/api/runs/${run.run_id}/publish?destination=${encodeURIComponent(destination)}`);} catch(e) {pendingPublication.current=null;throw e;}setRun(published);setRefreshRun(value=>value+1);const saved=await api<{runs:Run[]}>('/api/runs');setHistory(saved.runs);})} className="mt-4 rounded-xl bg-black px-5 py-3 text-white disabled:opacity-40">Publish draft PR</button></div>}
                 {safePR(run.pr_url) && <a href={run.pr_url!} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-medium text-white"><GitPullRequest size={18}/>View pull request<ExternalLink size={14}/></a>}
                 {active && <button disabled={busy} onClick={()=>void perform(async()=>{setRun(await action('/api/runs/'+run.run_id+'/cancel'));})} className="mt-5 block text-sm text-zinc-600 underline disabled:opacity-40">Request cancellation</button>}
               </>}
@@ -259,7 +282,14 @@ export default function Workspace() {
       </>}
       {error && <div role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>}
     </main>
-    <dialog ref={dialog} className="m-auto max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl backdrop:bg-black/30"><h2 className="text-2xl font-semibold">Disconnect GitHub?</h2><p className="my-4 text-zinc-600">This signs you out and requests cancellation of unfinished runs. Published pull requests remain on GitHub.</p><div className="mt-6 flex justify-end gap-3"><button disabled={busy} onClick={()=>dialog.current?.close()} className="rounded-xl border px-4 py-2">Keep connected</button><button disabled={busy} onClick={()=>void perform(async()=>{await action('/api/auth/disconnect');dialog.current?.close();setSession(null);router.replace('/');})} className="rounded-xl bg-black px-4 py-2 text-white">{busy ? 'Disconnecting…' : 'Disconnect'}</button></div>{error && <p role="alert" className="mt-4 text-sm text-red-700">{error}</p>}</dialog>
+    <dialog ref={dialog} className="m-auto max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl backdrop:bg-black/30"><h2 className="text-2xl font-semibold">Disconnect?</h2><p className="my-4 text-zinc-600">This signs you out and requests cancellation of unfinished runs. Published pull requests remain on GitHub.</p><div className="mt-6 flex justify-end gap-3"><button disabled={busy} onClick={()=>dialog.current?.close()} className="rounded-xl border px-4 py-2">Keep connected</button><button disabled={busy} onClick={()=>void perform(async()=>{await action('/api/auth/disconnect');dialog.current?.close();setSession(null);router.replace('/');})} className="rounded-xl bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50">{busy ? 'Disconnecting…' : 'Disconnect'}</button></div>{error && <p role="alert" className="mt-4 text-sm text-red-700">{error}</p>}</dialog>
+    <dialog ref={successDialog} aria-labelledby="publication-success-title" onClose={()=>setPublishedPR('')} onClick={e=>{if(e.target===e.currentTarget) successDialog.current?.close();}} className="m-auto w-[calc(100%-2rem)] max-w-md rounded-3xl border border-emerald-200 bg-white p-8 text-center shadow-xl backdrop:bg-black/40">
+      <span role="img" aria-label="Celebration" className="text-5xl">{'\u{1F389}'}</span>
+      <h2 id="publication-success-title" className="mt-5 text-2xl font-bold text-emerald-700">DONE! YOUR PR IS NOW PUBLISHED</h2>
+      <p className="mt-3 text-sm text-zinc-600">Your draft pull request is ready to review.</p>
+      {safePR(publishedPR) && <a href={publishedPR} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white hover:bg-emerald-700"><GitPullRequest size={18}/>View draft PR<ExternalLink size={14}/></a>}
+      <button type="button" onClick={()=>successDialog.current?.close()} className="mt-4 block w-full rounded-xl border border-zinc-200 px-5 py-3 text-sm font-medium hover:bg-zinc-50">Close</button>
+    </dialog>
     <footer className="mx-auto max-w-6xl border-t border-zinc-200 px-6 py-6 text-sm text-zinc-500"><Link href="/" className="inline-flex items-center gap-2">Back to Torque<ArrowRight size={14}/></Link></footer>
   </div>;
 }

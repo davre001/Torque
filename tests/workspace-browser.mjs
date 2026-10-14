@@ -70,7 +70,7 @@ try {
     } else if (url.pathname.endsWith('/publish')) {
       assert.equal(request.headers['X-CSRF-Token'] || request.headers['x-csrf-token'],'fixture-csrf');
       assert.equal(url.searchParams.get('destination'),'davre001/kokon');
-      published=true; body=fixture;
+      published=true; body={...fixture,status:'completed'};
     } else if (url.pathname==='/api/auth/disconnect') {
       assert.equal(request.headers['X-CSRF-Token'] || request.headers['x-csrf-token'],'fixture-csrf');
       connected=false;body={disconnected:true};
@@ -101,13 +101,13 @@ try {
   await send('Page.navigate',{url:'http://localhost:3000/workspace'});
   await wait("document.body.innerText.includes('Hello, fixture-user')",'Session greeting absent');
   await wait("document.body.innerText.includes('davre001/kokon')",'Connected repository absent');
-  await wait("document.body.innerText.includes('Not ready')",'Repository readiness absent');
+  await wait("document.body.innerText.includes('Connected ? detecting tests')",'Repository readiness absent');
   assert.ok(await evaluate("!document.body.innerText.includes('Set up tests') && !document.body.innerText.includes('No reviewed test recipe')"),'Repository setup controls should be hidden');
   assert.ok(await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque').disabled"));
   assert.ok(!requests.some(request=>request.method==='POST' && new URL(request.url).pathname==='/api/runs'));
   supported=true;
   await evaluate("document.querySelector('[aria-label=\"Refresh repository access\"]').click()");
-  await wait("!Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque').disabled",'Supported repository did not enable submission');
+  await wait("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Run Torque')?.disabled===false",'Supported repository did not enable submission');
   await wait("document.body.innerText.includes('Ready to run')",'Ready repository label absent');
   await evaluate(`(()=>{const input=document.querySelector('#issue');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(fixture.issue_url)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await evaluate("document.querySelector('form').requestSubmit()");
@@ -119,15 +119,27 @@ try {
   await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Publish draft PR').click()");
   await wait("Array.from(document.querySelectorAll('a')).some(a=>a.textContent.includes('View pull request'))",'Real PR link absent');
   assert.equal(await evaluate("Array.from(document.querySelectorAll('a')).find(a=>a.textContent.includes('View pull request')).href"),fixture.pr_url);
+  await wait("document.querySelector('[aria-labelledby=\"publication-success-title\"]')?.open===true",'Publication celebration absent');
+  assert.equal(await evaluate("document.querySelector('#publication-success-title').textContent"),'DONE! YOUR PR IS NOW PUBLISHED');
+  assert.equal(await evaluate("document.querySelector('[aria-label=\"Celebration\"]').textContent"),'🎉');
+  assert.equal(await evaluate("document.querySelectorAll('[aria-label=\"Workflow progress\"] [aria-label=\"Completed\"]').length"),8);
+  assert.ok(await evaluate("Array.from(document.querySelectorAll('[aria-label=\"Workflow progress\"] [aria-label=\"Completed\"]')).every(icon=>icon.classList.contains('bg-emerald-600'))"));
+  await evaluate("document.querySelector('[aria-labelledby=\"publication-success-title\"]').close()");
+  await send('Page.navigate',{url:'http://localhost:3000/workspace'});
+  await wait("document.querySelectorAll('[aria-label=\"Workflow progress\"] [aria-label=\"Completed\"]').length===8",'Saved completion absent');
+  assert.ok(await evaluate("!document.querySelector('[aria-labelledby=\"publication-success-title\"]').open"),'Old completed run reopened celebration');
   failed=true;
   await send('Page.navigate',{url:'http://localhost:3000/workspace'});
   await wait("document.body.innerText.includes('Fixture provider failure')",'Persisted failure absent');
   assert.ok(await evaluate("document.body.innerText.includes('Not verified') && !Array.from(document.querySelectorAll('a')).some(a=>a.textContent.includes('View pull request'))"));
-  await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect GitHub').click()");
+  await wait("document.querySelector('[aria-label=\"Workflow progress\"] [aria-label=\"Failed\"]')!==null",'Failed stage X absent');
+  assert.ok(await evaluate("document.querySelector('[aria-label=\"Workflow progress\"] [aria-label=\"Failed\"]').classList.contains('bg-red-600')"));
+  assert.ok(await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect').classList.contains('bg-red-600')"));
+  await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect').click()");
   assert.ok(await evaluate("document.querySelector('dialog').open"));
   await evaluate("Array.from(document.querySelector('dialog').querySelectorAll('button')).find(button=>button.textContent==='Keep connected').click()");
   assert.ok(await evaluate("!document.querySelector('dialog').open && document.body.innerText.includes('Hello, fixture-user')"));
-  await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect GitHub').click()");
+  await evaluate("Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Disconnect').click()");
   await evaluate("Array.from(document.querySelector('dialog').querySelectorAll('button')).find(button=>button.textContent==='Disconnect').click()");
   await wait("location.pathname==='/'",'Disconnect did not return to landing');
   await wait("Array.from(document.querySelectorAll('button')).some(button=>button.textContent.includes('Connect GitHub'))",'Landing connect button absent');
