@@ -21,7 +21,7 @@ def prepare_dependencies(workspace, image, package_root='', manager='npm'):
     args = ['docker', 'run', '--rm', '--init', '--name', name, '--read-only',
             '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', '65534:65534',
             '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128',
-            '--tmpfs', '/tmp:rw,nosuid,nodev,size=768m',
+            '--tmpfs', '/tmp:rw,exec,nosuid,nodev,size=768m',
             '--mount', f'type=bind,src={workspace},dst=/workspace', '--workdir', '/workspace' + ('/'+package_root if manager == 'npm' and package_root else ''),
             image]
     if manager == 'pnpm':
