@@ -93,3 +93,7 @@ Python detection includes requirements.txt alongside Python tests and excludes J
 The v4 managed runner preserves repository identity even if preparation fails and installs wheels with the coordinator UID so permission normalization and cleanup work. The credential-free hosted Encore smoke workflow exercises this Linux ownership path.
 
 Native Python wheel extensions load from the read-only dependency bind mount rather than the no-exec temporary filesystem; dependencies are excluded from the temporary project copy.
+
+## Verified automatic workspace support
+
+Managed repository jobs now use the immutable `torque-repository-runner-v5` tag, retaining the Python fixes described above. The credential-free [hosted regression run](https://github.com/davre001/Torque/actions/runs/38562224807) passed both Encore's Python validation and Somnix's nested pnpm/Vitest validation. Node lockfiles may be up to 1 MB; other frozen/source files remain limited to 100 KB each, with a 2 MB validation-file total. Installation uses a separate cache mount, 2 GB memory and a 180-second deadline. A detected test suite must still pass before the repository becomes ready. If a previous setup attempt failed, **Reconfirm Torque access** retries automatic detection; users do not need to enter source paths, test paths or dependency commands for these supported layouts.
