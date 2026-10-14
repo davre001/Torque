@@ -28,14 +28,16 @@ class SetupConfig(BaseModel):
     def independent(self):
         if set(self.test_files) & set(self.editable_files):
             raise ValueError('Test files cannot also be editable files')
-        if any(p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'} for p in self.editable_files):
+        if any(p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'} for p in self.editable_files):
             raise ValueError('Dependency and test configuration cannot be edited by the agent')
         for path in self.editable_files:
             name = path.rsplit('/', 1)[-1]
             if any(part.lower() in {'test', 'tests', '__tests__'} for part in path.split('/')) or re.search(r'\.(test|spec)\.', name) or name.startswith(('test_', 'vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig')) or name.endswith('_test.py'):
                 raise ValueError('Test files and test configuration cannot be edited by the agent')
-        if self.framework == 'npm' and not {'package.json', 'package-lock.json'} <= set(self.test_files):
-            raise ValueError('Include package.json and package-lock.json in the frozen test files')
+        if self.framework == 'npm':
+            manifests = [p for p in self.test_files if p.rsplit('/', 1)[-1] == 'package.json']
+            if not manifests or not ('pnpm-lock.yaml' in self.test_files or any(p[:-12]+'package-lock.json' in self.test_files for p in manifests)):
+                raise ValueError('Include package manifests and an npm or pnpm lockfile in the frozen tests')
         if self.framework == 'pytest' and not any(p.endswith('.py') and p.rsplit('/', 1)[-1] != 'conftest.py' for p in self.test_files):
             raise ValueError('Include at least one Python test file')
         return self

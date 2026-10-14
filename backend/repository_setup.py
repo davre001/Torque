@@ -60,13 +60,14 @@ def start_setup(store, auth, user, repository, config):
         raise HTTPException(422, 'Repository tree exceeds supported validation scope')
     entries = {item['path']: item for item in tree.get('tree', [])}
     total = 0
+    from backend.node_repository import frozen_file_limit
     for path in config.test_files + config.editable_files:
         item = entries.get(path, {})
-        if item.get('type') != 'blob' or item.get('mode') not in {'100644', '100755'} or item.get('size', 0) > 100000:
-            raise HTTPException(422, 'Choose regular files smaller than 100 KB: ' + path)
+        if item.get('type') != 'blob' or item.get('mode') not in {'100644', '100755'} or item.get('size', 0) > frozen_file_limit(path):
+            raise HTTPException(422, 'File exceeds supported validation size: ' + path)
         total += item.get('size', 0)
-    if total > 250000:
-        raise HTTPException(422, 'Selected files exceed the 250 KB limit')
+    if total > 2000000:
+        raise HTTPException(422, 'Selected validation files exceed the 2 MB limit')
     from backend.tools.repository_runner import RepositoryRunner
     request_id = uuid.uuid4().hex
     row = {'config': config.model_dump_json(), 'source_sha': sha}

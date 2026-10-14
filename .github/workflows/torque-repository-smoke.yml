@@ -1,4 +1,4 @@
-name: Managed Python repository smoke (native wheel regression)
+name: Managed repository smoke (Python wheels and pnpm workspace)
 on:
   push:
     branches: [main]
@@ -35,5 +35,37 @@ jobs:
           result = execute('davre-tech/encore', sha, json.dumps(config), bundle)
           print(result['result']['output'])
           assert result['result']['exit_code'] == 0, 'Managed Python validation failed'
+          assert result['result']['assertions_passed'] == 1
+          PY
+  pnpm-repository:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install httpx==0.28.1 pydantic==2.14.0 python-dotenv==1.2.4
+      - name: Validate public Somnix workspace without credentials
+        env:
+          PYTHON_DOTENV_DISABLED: '1'
+        run: |
+          python - <<'PY'
+          import base64, json, zlib
+          from backend.repository_test_job import execute
+          sha = 'cfeea7c659a4e5c5b9300d1ae5cc5e8c9b1ef8fb'
+          config = {'framework':'npm', 'suite_sha':sha,
+                    'test_files':['frontend/package.json','frontend/pnpm-lock.yaml','frontend/tsconfig.json',
+                                  'frontend/vitest.config.ts','package.json','pnpm-lock.yaml','pnpm-workspace.yaml',
+                                  'frontend/src/app/api/__tests__/routes.test.ts',
+                                  'frontend/src/components/__tests__/LockPanel.test.tsx',
+                                  'frontend/src/components/__tests__/RecentsList.test.tsx'],
+                    'editable_files':['frontend/src/app/api/lock/route.ts']}
+          bundle = base64.b64encode(zlib.compress(b'{}')).decode()
+          result = execute('davre001/Somnix', sha, json.dumps(config), bundle)
+          print(result['result']['output'])
+          assert result['result']['exit_code'] == 0, 'Managed pnpm validation failed'
           assert result['result']['assertions_passed'] == 1
           PY

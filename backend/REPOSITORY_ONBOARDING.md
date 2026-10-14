@@ -1,6 +1,6 @@
 # Automatic repository onboarding
 
-The workspace automatically requests test detection for newly connected repositories without a reviewed recipe or saved setup. The CSRF-protected `POST /api/repositories/{owner}/{repo}/setup/automatic` endpoint detects root npm manifests or pytest test files and starts the existing hosted validator. Repeated requests reuse saved validation instead of dispatching another workflow. Detection never executes a command on the API host.
+The workspace automatically requests test detection for newly connected repositories without a reviewed recipe or saved setup. The CSRF-protected `POST /api/repositories/{owner}/{repo}/setup/automatic` endpoint detects npm/pnpm test packages (including nested workspace packages) or pytest test files and starts the hosted validator. Common Vitest and Jest defaults are normalized to a single managed test run. Repeated requests reuse saved validation instead of dispatching another workflow. Detection never executes a command on the API host.
 
 Repositories show **Connected — detecting tests**, **Checking tests**, then **Ready to run** only after successful validation. Unsupported commands, missing tests, or unrecognized test configurations require manual setup. Detection automatically freezes a bounded subset of up to 10 test/configuration files; validation covers that subset, not every test in a large repository. Validation capacity is retried while the workspace remains open; failed validation is not automatically resubmitted. Manual Repository tests controls appear only when detection or validation needs help. Existing public-repository, authorization, spending, file-size, and validation-rate limits remain in force.
 
@@ -25,7 +25,7 @@ including a run awaiting publication.
 
 | Environment | Requirements |
 | --- | --- |
-| Node.js 22 / npm | Root-level `package.json` and `package-lock.json`; `scripts.test` exactly `vitest run`, `jest --runInBand` or `node --test`. Include both manifests, explicit `.test`/`.spec` files and test configuration/helpers in the frozen file list. |
+| Node.js 24 / npm or pnpm | Automatically finds a package with Vitest, Jest or `node --test`, including packages below the workspace root. Freezes package manifests, lockfiles, configuration and a bounded test subset. pnpm requires a pinned `packageManager` version and root `pnpm-lock.yaml`. Installs dependencies with lifecycle scripts disabled, then runs tests without networking. |
 | Python 3.11 / pytest 8.3.5 | Explicit Python test files plus test configuration/helpers. Python standard library and pytest are available; project-specific third-party dependencies are not installed. |
 
 The Node setup installs locked dependencies with lifecycle hooks disabled in a

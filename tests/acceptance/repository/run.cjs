@@ -3,14 +3,19 @@ const fs = require('node:fs');
 const { spawnSync } = require('node:child_process');
 const config = JSON.parse(fs.readFileSync('/acceptance/config.json', 'utf8'));
 // Keep package caches and generated configuration in the bounded writable tmpfs.
-fs.cpSync('/workspace', '/tmp/project', {recursive:true, filter:p=>!p.startsWith('/workspace/node_modules')});
-fs.mkdirSync('/tmp/project/node_modules', {recursive:true});
-for (const name of fs.readdirSync('/workspace/node_modules')) {
-  fs.symlinkSync('/workspace/node_modules/' + name, '/tmp/project/node_modules/' + name);
+fs.cpSync('/workspace', '/tmp/project', {recursive:true, filter:p=>!p.replaceAll('\\', '/').split('/').includes('node_modules')});
+const packageRoot = config.package_root || '';
+for (const directory of new Set(['', packageRoot])) {
+  const source = '/workspace/'+(directory ? directory+'/' : '')+'node_modules';
+  const destination = '/tmp/project/'+(directory ? directory+'/' : '')+'node_modules';
+  if (fs.existsSync(source)) {
+    fs.mkdirSync(destination, {recursive:true});
+    for (const name of fs.readdirSync(source)) fs.symlinkSync(source+'/'+name, destination+'/'+name, fs.statSync(source+'/'+name).isDirectory() ? 'junction' : 'file');
+  }
 }
-process.chdir('/tmp/project');
+process.chdir('/tmp/project'+(packageRoot ? '/'+packageRoot : ''));
 const start = Date.now();
-const tests = config.test_files.filter(p => /\.(?:test|spec)\.[cm]?[jt]sx?$/.test(p));
+const tests = config.test_files.filter(p => /\.(?:test|spec)\.[cm]?[jt]sx?$/.test(p)).map(p=>packageRoot ? p.slice(packageRoot.length+1) : p);
 let command, args;
 if (config.engine === 'vitest') {
   command = './node_modules/.bin/vitest'; args = ['run', '--reporter=json', '--outputFile=/tmp/results.json', ...tests];

@@ -6,6 +6,29 @@ from test_repository_setup import configured, HEADERS, Runner
 from test_github_auth import seed
 
 
+@pytest.mark.parametrize('command,engine', [('vitest','vitest'), ('vitest run','vitest'), ('jest','jest'), ('jest --runInBand','jest'), ('node --test','node')])
+def test_common_node_scripts_are_normalized_without_shell_execution(command, engine):
+    from backend.node_repository import test_engine
+    assert test_engine({'scripts':{'test':command}}) == engine
+
+
+@pytest.mark.parametrize('command', ['vitest && curl example.com', 'npm run custom', 'jest; env', 'vitest $(env)'])
+def test_node_detection_never_executes_arbitrary_scripts(command):
+    from backend.node_repository import test_engine
+    with pytest.raises(ValueError): test_engine({'scripts':{'test':command}})
+
+
+def test_pnpm_workspace_finds_nested_test_package_and_frozen_lock():
+    from backend.node_repository import node_layout
+    paths = ['package.json','pnpm-lock.yaml','pnpm-workspace.yaml','frontend/package.json',
+             'frontend/vitest.config.ts','frontend/src/math.test.ts','frontend/src/math.ts','other/src/other.test.ts']
+    config = detect_configuration(paths, {'scripts':{'test':'vitest'}}, 'frontend')
+    assert node_layout(config.test_files) == ('frontend','pnpm')
+    assert config.editable_files == ['frontend/src/math.ts']
+    assert 'pnpm-lock.yaml' in config.test_files
+    assert 'other/src/other.test.ts' not in config.test_files
+
+
 def test_npm_detection_freezes_tests_and_excludes_generated_and_hidden_files():
     config = detect_configuration(['package.json', 'package-lock.json', 'tests/math.test.ts',
         'vitest.config.ts', 'src/math.ts', '.env', 'node_modules/other.ts', 'dist/math.js'],

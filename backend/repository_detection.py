@@ -25,19 +25,25 @@ def validation_source(auth, user, repository, configuration):
     return source[:10]
 
 
-def detect_configuration(paths, package=None):
+def detect_configuration(paths, package=None, package_root=''):
     paths = sorted(paths)
     npm = package is not None
-    if npm and package.get('scripts', {}).get('test') not in {'vitest run', 'jest --runInBand', 'node --test'}:
-        raise HTTPException(422, 'Test command needs manual setup; supported commands are vitest run, jest --runInBand and node --test')
+    if npm:
+        from backend.node_repository import test_engine
+        try: test_engine(package)
+        except ValueError as exc: raise HTTPException(422, str(exc)) from None
     tests, source = [], []
     for path in paths:
+        try: SetupConfig.paths([path])
+        except ValueError: continue
         parts = path.split('/')
         name = parts[-1]
+        if npm and package_root and not path.startswith(package_root+'/') and path not in {'package.json','pnpm-lock.yaml','pnpm-workspace.yaml'}:
+            continue
         if any(p.startswith('.') or p in {'node_modules', 'venv', '__pycache__', 'dist', 'build', 'coverage'} for p in parts):
             continue
         is_test = any(p.lower() in {'test', 'tests', '__tests__'} for p in parts) or bool(re.search(r'\.(test|spec)\.', name)) or name.startswith('test_') or name.endswith('_test.py')
-        config = name in {'package.json', 'package-lock.json'} or name.startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig')) if npm else name in {'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'}
+        config = name in {'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml'} or name.startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig')) if npm else name in {'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'}
         supported = path.endswith(('.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs')) if npm else path.endswith('.py')
         if (is_test and supported) or config:
             tests.append(path)
@@ -48,7 +54,7 @@ def detect_configuration(paths, package=None):
     try:
         # Choose a bounded frozen test subset automatically. Source paths here
         # only bootstrap validation; each issue gets its own investigated scope.
-        configuration = [p for p in tests if p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'} or p.rsplit('/', 1)[-1].startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig'))]
+        configuration = [p for p in tests if p.rsplit('/', 1)[-1] in {'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'conftest.py', 'pytest.ini', 'pyproject.toml', 'requirements.txt'} or p.rsplit('/', 1)[-1].startswith(('vitest.config.', 'jest.config.', 'vite.config.', 'tsconfig'))]
         cases = [p for p in tests if p not in configuration]
         if len(configuration) >= 10:
             raise ValueError('Configuration exceeds scope')
@@ -80,4 +86,23 @@ def detect_repository(auth, user, repository):
                 raise ValueError()
         except (KeyError, ValueError, TypeError):
             raise HTTPException(422, 'Package manifest could not be detected; use manual setup') from None
+    if package is not None:
+        from backend.node_repository import test_engine
+        try:
+            test_engine(package)
+            return detect_configuration(entries, package)
+        except ValueError:
+            # Follow package boundaries instead of executing a workspace script.
+            for path in sorted(entries):
+                if path == 'package.json' or not path.endswith('/package.json') or len(path.split('/')) > 4 or any(p.startswith('.') or p == 'node_modules' for p in path.split('/')):
+                    continue
+                if entries[path].get('size', 0) > 100000: continue
+                payload = auth.api(token, root + '/contents/' + quote(path, safe='/') + '?ref=' + sha)
+                try:
+                    child = json.loads(base64.b64decode(payload['content']))
+                    test_engine(child)
+                    return detect_configuration(entries, child, path[:-13])
+                except (KeyError, ValueError, TypeError, AttributeError):
+                    continue
+            raise HTTPException(422, 'No supported test package detected automatically') from None
     return detect_configuration(entries, package)

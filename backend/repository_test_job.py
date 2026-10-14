@@ -16,14 +16,23 @@ from backend.tools.files import safe_path
 from backend.tools.sandbox import DockerRunner
 
 
-def prepare_dependencies(workspace, image):
+def prepare_dependencies(workspace, image, package_root='', manager='npm'):
     name = 'torque-install-' + uuid.uuid4().hex
     args = ['docker', 'run', '--rm', '--init', '--name', name, '--read-only',
             '--cap-drop=ALL', '--security-opt=no-new-privileges', '--user', '65534:65534',
             '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128',
-            '--tmpfs', '/tmp:rw,nosuid,nodev,size=256m',
-            '--mount', f'type=bind,src={workspace},dst=/workspace', '--workdir', '/workspace',
-            image, 'npm', 'ci', '--ignore-scripts', '--no-audit', '--no-fund', '--cache', '/tmp/npm-cache']
+            '--tmpfs', '/tmp:rw,nosuid,nodev,size=768m',
+            '--mount', f'type=bind,src={workspace},dst=/workspace', '--workdir', '/workspace' + ('/'+package_root if manager == 'npm' and package_root else ''),
+            image]
+    if manager == 'pnpm':
+        root_package = json.loads((workspace/'package.json').read_text())
+        pinned = root_package.get('packageManager', '')
+        if not re.fullmatch(r'pnpm@\d+\.\d+\.\d+', pinned):
+            raise ValueError('pnpm requires a pinned packageManager version')
+        args += ['npx', '--yes', '--ignore-scripts', '--registry=https://registry.npmjs.org', '--cache=/tmp/npm-cache', pinned,
+                 '--filter', './'+(package_root or '.'), 'install', '--frozen-lockfile', '--ignore-scripts', '--store-dir=/tmp/pnpm-store']
+    else:
+        args += ['npm', 'ci', '--ignore-scripts', '--no-audit', '--no-fund', '--cache', '/tmp/npm-cache']
     # Public registry access is needed only in this credential-free install container.
     with tempfile.TemporaryFile() as log:
         process = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT)
@@ -108,7 +117,8 @@ def execute(repository, sha, encoded_config, encoded_files):
         for name in config.test_files:
             source = safe_path(frozen, name)
             total += source.stat().st_size
-            if not source.is_file() or source.stat().st_size > 100000 or total > 250000:
+            from backend.node_repository import frozen_file_limit
+            if not source.is_file() or source.stat().st_size > frozen_file_limit(name) or total > 2000000:
                 raise ValueError('Frozen tests exceed limit')
             target = safe_path(workspace, name)
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -131,13 +141,12 @@ def execute(repository, sha, encoded_config, encoded_files):
         # Temp ancestors must be traversable by the unprivileged container UID.
         root.chmod(0o755)
         if framework == 'npm':
-            package = json.loads((workspace/'package.json').read_text())
-            scripts = {'vitest run': 'vitest', 'jest --runInBand': 'jest', 'node --test': 'node'}
-            engine = scripts.get(package.get('scripts', {}).get('test', ''))
-            if not engine:
-                raise ValueError('Use a supported deterministic npm test script')
-            config_data = {**config.model_dump(), 'engine': engine}
-            prepare_dependencies(workspace, image)
+            from backend.node_repository import node_layout, test_engine
+            package_root, manager = node_layout(config.test_files)
+            package = json.loads(safe_path(workspace, (package_root+'/' if package_root else '')+'package.json').read_text())
+            engine = test_engine(package)
+            config_data = {**config.model_dump(), 'engine': engine, 'package_root':package_root}
+            prepare_dependencies(workspace, image, package_root, manager)
             command = ['node', '/acceptance/run.cjs']
             shutil.copyfile(template/'run.cjs', suite/'run.cjs')
         else:
